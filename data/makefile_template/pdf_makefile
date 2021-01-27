@@ -1,0 +1,44 @@
+pandocflags  = -f markdown -t latex -s -o "$base".tex 
+pandocflags += --natbib --template=$auto_template_loc --lua-filter include-files.lua --lua-filter pandoc-gls.lua
+pandocflags += --filter ./pandoc-siunit.py --filter pandoc-crossref 
+pandocflags += -M "crossrefYaml=$XDG_DATA_HOME/pandoc/templates/pandoc-crossref.yaml" -V 'lang=fr-CA' -V 'idhome=$HOME'
+
+build/pdf/main.pdf : $(wildcard doc/*.bib) $(wildcard doc/*.md) $(tikzpdf) $(pythonpdf) $(codevfigeps_corr_pdf)
+	builder doc/main.md
+	-@ mkdir -p build/pdf
+	-@ cp -r doc/pdf/main.pdf build/pdf
+	-@ rm -r doc/pdf/ 
+
+build/tikzfigures/tikz_stamp : $(tikzfiles)
+	cd doc;auto_tikz -y tikz/auto_tikz.yaml
+	builder doc/auto_tikz.tex
+	-@ mkdir -p build/tikzfigures
+	-@ mv doc/auto_tikz.tex doc/log/auto_tikz_backup.tex
+	-@ rm doc/auto_tikz.pdf 
+	-@ cp doc/log/*.pdf build/tikzfigures
+	touch build/tikzfigures/tikz_stamp
+
+$(tikzpdf): build/tikzfigures/tikz_stamp $(tikzfile)
+
+build/pythonfigures/mtf_efle.pdf: src/python/mtf_efle.py build/codevoutput/data/mtf_efle.dat
+	-@ mkdir build/pythonfigures
+	builder src/python/mtf_efle.py
+
+build/codevoutput/codev_stamp : $(wildcard src/codev/*/*) src/codev/run_sequence.seq
+	cd src/codev;codev-remote
+	-@ mv src/codev/output/ build/codevoutput/
+	touch build/codevoutput/codev_stamp
+
+$(codevfigeps) $(codevdata): build/codevoutput/codev_stamp
+
+$(codevfigeps_corr_eps): $(codevfigeps)
+	-@ mkdir build/codevfigures
+	codev-style-vie $< > $@
+
+$(codevfigeps_corr_pdf): $(codevfigeps_corr_eps)
+	pstopdf $< -o $@
+
+clean:
+	-@ rm -r doc/log doc/pdf build
+open:
+	-open build/pdf/main.pdf

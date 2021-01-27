@@ -1,0 +1,36 @@
+yamlfile = 
+logdir = 
+builddir = 
+tikzfiles = 
+
+tikzfname = $(notdir $(tikzfiles))
+tikzbname = $(tikzfname:%.tikz=%)
+tikzpdf = $(addprefix $(builddir)/,$(addsuffix .pdf,$(tikzbname)))
+tikzpng = $(addprefix $(builddir)/,$(addsuffix .png,$(tikzbname)))
+tikzpdflog = $(addprefix $(logdir)/,$(addsuffix .pdf,$(tikzbname)))
+
+texflag = -xelatex -f -cd -quiet -latexoption="-interaction=nonstopmode --shell-escape" -outdir="log"
+
+.PHONY: all clean
+
+all : $(tikzpng)
+
+clean: 
+	-@ rm -r log $(builddir)
+
+$(tikzpng): %.png: %.pdf 
+	-@ mogrify -density 600 -format png $<
+
+$(tikzpdf): $(builddir)/tikz_stamp
+	$(Make)
+
+$(builddir)/tikz_stamp: $(logdir)/tikz_stamp 
+	-@ mkdir -p $(builddir)
+	rsync -aP $(tikzpdflog) $(builddir)
+	touch $(builddir)/tikz_stamp
+
+$(logdir)/tikz_stamp: $(tikzfiles)
+	auto_tikz -y $(yamlfile) -o auto_tikz_backup.tex
+	latexmk $(texflag) auto_tikz_backup.tex
+	-@ mv auto_tikz_backup.tex $(logdir)/auto_tikz_backup.tex
+	touch $(logdir)/tikz_stamp
