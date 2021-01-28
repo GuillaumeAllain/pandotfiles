@@ -1,0 +1,20 @@
+\pagestyle{empty}
+\usepackage[acronym,nomain,nonumberlist]{glossaries}
+\makeglossaries
+\import{\HOME/.local/share/visual-id/latex/}{couleurs.tex}
+\sectionfont{\color{acolor}}
+\subsectionfont{\color{bcolor}}
+\pagestyle{fancy}
+\addtolength{\headheight}{30pt}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyhead{}
+\fancyhead[L]{\footnotesize\includegraphics[height=1cm]{\HOME/.local/share/visual-id/monogramme/tikz/build/monogramme_gradient.pdf}}
+\fancyhead[R]{\rule[-2.5ex]{0pt}{2.5ex}\footnotesize \titleprint}
+\fancyfoot{}
+\fancyfoot[L]{\rule[1.5ex]{0pt}{1.5ex}\footnotesize \authorprint}
+\fancyfoot[R]{\rule[1.5ex]{0pt}{1.5ex}\footnotesize \thepage/\pageref*{LastPage}}
+
+% \logo{\includegraphics{\HOME/.local/share/visual-id/monogramme/tikz/build/monogramme_gradient.pdf}}
+
+% \renewcommand{\maketitle}{\maketitle\\ }}
