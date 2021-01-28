@@ -9,14 +9,14 @@ tikzpdf = $(addprefix $(builddir)/,$(addsuffix .pdf,$(tikzbname)))
 tikzpng = $(addprefix $(builddir)/,$(addsuffix .png,$(tikzbname)))
 tikzpdflog = $(addprefix $(logdir)/,$(addsuffix .pdf,$(tikzbname)))
 
-texflag = -xelatex -f -cd -quiet -latexoption="-interaction=nonstopmode --shell-escape" -outdir="log"
+texflag = -xelatex -f -cd -quiet -latexoption="-interaction=nonstopmode --shell-escape" -outdir="$(logdir)"
 
 .PHONY: all clean
 
 all : $(tikzpng)
 
 clean: 
-	-@ rm -r log $(builddir)
+	-@ rm -r $(logdir) $(builddir)
 
 $(tikzpng): %.png: %.pdf 
 	-@ mogrify -density 600 -format png $<
