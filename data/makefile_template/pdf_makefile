@@ -1,44 +1,41 @@
-pandocflags  = -f markdown -t latex -s -o "$base".tex 
-pandocflags += --natbib --template=$auto_template_loc --lua-filter include-files.lua --lua-filter pandoc-gls.lua
-pandocflags += --filter ./pandoc-siunit.py --filter pandoc-crossref 
-pandocflags += -M "crossrefYaml=$XDG_DATA_HOME/pandoc/templates/pandoc-crossref.yaml" -V 'lang=fr-CA' -V 'idhome=$HOME'
+logdir = 
+builddir = 
+pandocfiles = 
+mainfile = 
 
-build/pdf/main.pdf : $(wildcard doc/*.bib) $(wildcard doc/*.md) $(tikzpdf) $(pythonpdf) $(codevfigeps_corr_pdf)
-	builder doc/main.md
-	-@ mkdir -p build/pdf
-	-@ cp -r doc/pdf/main.pdf build/pdf
-	-@ rm -r doc/pdf/ 
+PD := /usr/local/bin/pandoc
 
-build/tikzfigures/tikz_stamp : $(tikzfiles)
-	cd doc;auto_tikz -y tikz/auto_tikz.yaml
-	builder doc/auto_tikz.tex
-	-@ mkdir -p build/tikzfigures
-	-@ mv doc/auto_tikz.tex doc/log/auto_tikz_backup.tex
-	-@ rm doc/auto_tikz.pdf 
-	-@ cp doc/log/*.pdf build/tikzfigures
-	touch build/tikzfigures/tikz_stamp
+mainfname = $(notdir $(mainfile))
+mainbname = $(mainfname:%.md=%)
+mainpdf = $(addprefix $(builddir)/,$(addsuffix .pdf,$(mainbname)))
 
-$(tikzpdf): build/tikzfigures/tikz_stamp $(tikzfile)
+auto_template_loc = $(logdir)/latextemplate.template
 
-build/pythonfigures/mtf_efle.pdf: src/python/mtf_efle.py build/codevoutput/data/mtf_efle.dat
-	-@ mkdir build/pythonfigures
-	builder src/python/mtf_efle.py
+pandocflags  = -f markdown -t latex -s
+pandocflags += --natbib --template=$(auto_template_loc) --lua-filter include-files.lua --lua-filter pandoc-gls.lua
+pandocflags += --filter ./siunitx-filter.py --filter pandoc-crossref 
+pandocflags += -M "crossrefYaml=~/.local/share/pandoc/defaults/pandoc-crossref-pandotfiles.yaml" -V 'lang=fr-CA' -V 'idhome=$HOME'
+pandocflags += ~/.local/share/pandoc/defaults/latex_default-pandotfiles.yaml
 
-build/codevoutput/codev_stamp : $(wildcard src/codev/*/*) src/codev/run_sequence.seq
-	cd src/codev;codev-remote
-	-@ mv src/codev/output/ build/codevoutput/
-	touch build/codevoutput/codev_stamp
+texflag = -xelatex -f -cd -quiet -latexoption="-interaction=nonstopmode --shell-escape" -outdir="$(logdir)"
 
-$(codevfigeps) $(codevdata): build/codevoutput/codev_stamp
+.PHONY: all clean
 
-$(codevfigeps_corr_eps): $(codevfigeps)
-	-@ mkdir build/codevfigures
-	codev-style-vie $< > $@
+all : $(mainpdf)
 
-$(codevfigeps_corr_pdf): $(codevfigeps_corr_eps)
-	pstopdf $< -o $@
+clean: 
+	-@ rm -r $(logdir) $(builddir)
 
-clean:
-	-@ rm -r doc/log doc/pdf build
+$(mainpdf): $(mainfile) $(pandocfiles) $(EXTTARGETS) $(auto_template_loc)
+	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile)
+	latexmk $(texflag) pandoc_backup.tex
+	-@ mv pandoc_backup.tex $(logdir)
+	-@ mkdir -p $(builddir)
+	-@ mv $(logdir)/pandoc_backup.pdf $(mainpdf)
+
+$(auto_template_loc): 
+	-@ mkdir -p $(logdir)
+	gen_latex_template > $(auto_template_loc)
+
 open:
-	-open build/pdf/main.pdf
+	-open $(mainpdf)
