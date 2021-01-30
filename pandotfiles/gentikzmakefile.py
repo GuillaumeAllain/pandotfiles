@@ -3,6 +3,7 @@ from re import sub
 from xdg import xdg_data_home
 
 from pandotfiles.util.parser import tikzyamlparse
+from pandotfiles.util.makefile_mod import tikzmakefilemod
 
 parser = argparse.ArgumentParser(
     description='''Generate a Makefile to compile all tikz (*.tikz) file from a repo.''',
@@ -34,10 +35,11 @@ def main():
     logdir = yaml_config['log_folder']
     tikzfiles = yaml_config['files_makestring']
 
-    makefile = sub(r'(yamlfile\s=)(.*)','\\1 '+args.yamlfile, makefile)
-    makefile = sub(r'(builddir\s=)(.*)','\\1 '+args.builddir, makefile)
-    makefile = sub(r'(logdir\s=)(.*)','\\1 '+logdir, makefile)
-    makefile = sub(r'(tikzfiles\s=)(.*)','\\1 '+tikzfiles, makefile)
+    makefile = tikzmakefilemod(makefile,
+            args.yamlfile,
+            args.builddir,
+            logdir,
+            tikzfiles)
 
     if args.output is not None:
         try:

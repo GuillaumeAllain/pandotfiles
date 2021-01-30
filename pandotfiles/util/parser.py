@@ -28,9 +28,15 @@ def tikzyamlparse(file_path):
             warnings.warn("No explicit source folder defined for tikz file, using 'tikz'")
             yaml_config["src_folder"] = 'tikz'
         warnings.warn(warning_string)
-        yaml_config['files'] = [yaml_config['src_folder']+'/'+x for x in
-                                listdir(yaml_config['src_folder']) if splitext(x)[1] == '.tikz']
-        yaml_config['files_makestring'] = "$(wildcard " + yaml_config['src_folder'] + "/*.tikz)"
+        try:
+            yaml_config['files'] = [yaml_config['src_folder']+'/'+x for x in
+                                    listdir(yaml_config['src_folder']) if splitext(x)[1] == '.tikz']
+            yaml_config['files_makestring'] = "$(wildcard " + yaml_config['src_folder'] + "/*.tikz)"
+        except FileNotFoundError:
+            warnings.warn("No tikz files found in folder")
+            yaml_config['files'] = ['',]
+            yaml_config['files_makestring'] = "$(wildcard *.tikz)"
+
 
 
     if 'font_size' not in yaml_config.keys():

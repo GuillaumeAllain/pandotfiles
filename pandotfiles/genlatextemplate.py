@@ -15,7 +15,7 @@ from xdg import xdg_data_home
 
 def main():
 
-    with open(str(xdg_data_home()/"pandoc/templates/latex_custom_injection.tex")) as file:
+    with open(str(xdg_data_home()/"pandoc/templates/injection/latex_custom_injection.tex")) as file:
         injection = file.read()
 
     result = run('/usr/local/bin/pandoc -D latex',shell=True,capture_output=True)
