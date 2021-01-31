@@ -64,8 +64,8 @@ def main():
                 file_output = open("doc/Makefile",'w')
             file_output.write(makefile)
             file_output.close()
-
-            MAKEFILE_CONTENT += '''build/pdf/main.pdf: $(FIGURETARGETS)\n\t$(MAKE) -C doc \n'''
+            sources = '$(wildcard doc/*.md) '+' $(wildcard doc/*.bib)' + '$(FIGURETARGETS)'
+            MAKEFILE_CONTENT += 'build/pdf/main.pdf: ' + sources + '\n\t$(MAKE) -C doc \n'
             CLEAN += "\t$(MAKE) -C doc clean\n"
             TARGETS += 'TARGETS += build/pdf/main.pdf\n'
 
@@ -109,7 +109,8 @@ def main():
             file_output.write(makefile)
             file_output.close()
 
-            MAKEFILE_CONTENT += builddir+'/tikz_stamp: \n\t$(MAKE) -C '+srcdir+' \n'
+            sources = '$(wildcard src/tikz/*.tikz)'
+            MAKEFILE_CONTENT += builddir+'/tikz_stamp:'+sources+' \n\t$(MAKE) -C '+srcdir+' \n'
 
             TARGETS += 'TARGETS += '+builddir+'/tikz_stamp\n'
             FIGURETARGETS += 'FIGURETARGETS += '+builddir+'/tikz_stamp\n'
@@ -135,7 +136,8 @@ def main():
             file_output.write(makefile)
             file_output.close()
 
-            MAKEFILE_CONTENT += builddir+'/python_stamp: \n\t$(MAKE) -C '+srcdir+'\n'
+            sources = '$(wildcard src/python/*.py)'
+            MAKEFILE_CONTENT += builddir+'/python_stamp: '+sources+' \n\t$(MAKE) -C '+srcdir+'\n'
 
             TARGETS += 'TARGETS += '+builddir+'/python_stamp\n'
             FIGURETARGETS += 'FIGURETARGETS += '+builddir+'/python_stamp\n'
@@ -175,7 +177,8 @@ def main():
             file_output.write(makefile)
             file_output.close()
 
-            MAKEFILE_CONTENT += builddir+'/codev_stamp: \n\t$(MAKE) -C '+srcdir+'\n'
+            sources = '$(wildcard src/codev/*/*.seq)'
+            MAKEFILE_CONTENT += builddir+'/codev_stamp:'+sources+' \n\t$(MAKE) -C '+srcdir+'\n'
 
             TARGETS += 'TARGETS += '+builddir+'/codev_stamp\n'
             FIGURETARGETS += 'FIGURETARGETS += '+builddir+'/codev_stamp\n'

@@ -33,7 +33,7 @@ $(mainpdf): $(mainfile) $(pandocfiles) $(auto_template_loc) $(FIGURETARGETSLOC)
 	latexmk $(texflag) pandoc_backup.tex
 	-@ mv pandoc_backup.tex $(logdir)
 	-@ mkdir -p $(builddir)
-	-@ mv $(logdir)/pandoc_backup.pdf $(mainpdf)
+	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
 
 $(auto_template_loc): 
 	-@ mkdir -p $(logdir)
