@@ -1,31 +1,33 @@
-## Auto Tikz
+# Pandotfiles
 
-This is a simple python script used to generate a LaTeX file that may be used to pre-compute all tikz file in a directory. 
-
-Uses YAML configuration file to pass general LaTeX options, tikzlibraries and files locations.
+Dotfiles to create Pandoc project templates and makefile
 
 ## Installation
 
-Install with
+Clone and install with 
+
 ```console
-foo@bar:auto-tikz$ pip install .
+foo@bar:pandotfiles$ pip install .
 ```
 ou
 
 ```console
-foo@bar:auto-tikz$ pip install git+https://github.com/GuillaumeAllain/auto-tikz.git
+foo@bar:pandotfiles$ pip install git+https://github.com/GuillaumeAllain/pandotfiles.git
 ```
 
 ## How to use
 
-auto_tikz -y {YAML_FILE_LOCATION} -o {OUTPUT_FILE_NAME}
+Intended use is with the high level template script "pandot". Initialize and new (or existing) project with:
 
-By default will output to terminal.
+```console
+foo@bar: pandot init pdf+tikz+python -o Makefile
+```
 
-Default YAML file location is ./auto_tikz.tex
+The script will create all necessary makefiles and directories to compile all the different sources required by the document.
+
 
 ## Todo
 
-- [ ] Copy all PDF to a chosen directory in YAML file
+- [ ] add .gitignore to pandot project templates.
 
 

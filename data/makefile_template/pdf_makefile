@@ -19,6 +19,8 @@ pandocflags += ~/.local/share/pandoc/defaults/latex_default-pandotfiles.yaml
 
 texflag = -xelatex -f -cd -quiet -latexoption="-interaction=nonstopmode --shell-escape" -outdir="$(logdir)"
 
+FIGURETARGETSLOC = $(addprefix ../,$(FIGURETARGETS))
+
 .PHONY: all clean
 
 all : $(mainpdf)
@@ -26,7 +28,7 @@ all : $(mainpdf)
 clean: 
 	-@ rm -r $(logdir) $(builddir)
 
-$(mainpdf): $(mainfile) $(pandocfiles) $(EXTTARGETS) $(auto_template_loc)
+$(mainpdf): $(mainfile) $(pandocfiles) $(auto_template_loc) $(FIGURETARGETSLOC)
 	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile)
 	latexmk $(texflag) pandoc_backup.tex
 	-@ mv pandoc_backup.tex $(logdir)

@@ -13,7 +13,7 @@ texflag = -xelatex -f -cd -quiet -latexoption="-interaction=nonstopmode --shell-
 
 .PHONY: all clean
 
-all : $(tikzpng)
+all : $(builddir)/tikz_stamp $(tikzpng)
 
 clean: 
 	-@ rm -r $(logdir) $(builddir)

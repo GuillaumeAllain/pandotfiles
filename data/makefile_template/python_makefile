@@ -1,0 +1,22 @@
+builddir = 
+
+pythonfiles = $(wildcard ./*.py)
+
+pythonfname = $(notdir $(pythonfiles))
+pythonbname = $(pythonfname:%.py=%)
+pythonflag = $(addprefix $(builddir)/,$(addsuffix .flag,$(pythonbname)))
+
+DATATARGETSLOC = $(addprefix ../../,$(DATATARGETS))
+
+.PHONY: clean all
+
+all : $(pythonflag)
+	touch $(builddir)/python_stamp
+clean :
+	-@ rm -rf $(builddir)
+
+$(builddir)/%.flag : %.py $(DATATARGETSLOC)
+	python $<
+	-@ mkdir -p $(builddir)
+	touch $@
+

@@ -1,0 +1,30 @@
+builddir = 
+outputdir =
+
+codevfigeps = $(wildcard $(builddir)/figbrute/*_plt.eps)
+codevfigepsname = $(notdir $(codevfigeps))
+codevfigepsdest = $(addprefix $(builddir)/fig/, $(notdir $(codevfigeps)))
+codevfigpdf = $(codevfigepsname:%_plt.eps=%.pdf)
+completecodevpdf = $(addprefix $(builddir)/fig/, $(codevfigpdf))
+
+.PHONY: clean all
+
+all : $(builddir)/codev_stamp $(completecodevpdf)
+
+clean: 
+	-@ rm -r $(outputdir) $(builddir)
+
+$(builddir)/codev_stamp : $(wildcard */*.seq) 
+	codev-remote -v
+	-@ mv output/fig output/figbrute
+	-@ rsync -aP output/ $(builddir)
+	touch $(builddir)/codev_stamp
+	$(MAKE)
+
+$(codevfigepsdest): $(builddir)/fig/%.eps : $(builddir)/figbrute/%.eps
+	-@ mkdir $(builddir)/fig
+	codev-style-vie $< > $@
+
+$(completecodevpdf) : %.pdf : %_plt.eps
+	echo $<
+	pstopdf $< -o $@

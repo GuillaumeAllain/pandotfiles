@@ -3,10 +3,9 @@ import os
 import warnings
 
 from pathlib import Path
-from shutil import copy
-# from re import sub
+from re import sub
 #
-from xdg import xdg_data_home, xdg_cache_home
+from xdg import xdg_data_home
 
 from pandotfiles.util.parser import tikzyamlparse
 from pandotfiles.util.makefile_mod import pdfmakefilemod, tikzmakefilemod
@@ -24,13 +23,19 @@ parser.add_argument(
         'option', type=str
         )
 
+parser.add_argument(
+                '-o','--output', type=str,
+                help='Output file location. Default: output to terminal (T)',
+                default=None)
+
 args = parser.parse_args()
 
-VALIDOPTION = ['pdf','tikz','reactjs']
+VALIDOPTION = ['pdf','tikz','reactjs','python','codev']
 
 def main():
     option_list = args.option.split('+')
     FIGURETARGETS = ''
+    DATATARGETS = ''
     TARGETS = ''
     MAKEFILE_CONTENT = ''
     CLEAN = ''
@@ -54,14 +59,14 @@ def main():
                     "main.md")
 
             try:
-                file_output = open("doc/Makefilepdf",'x')
+                file_output = open("doc/Makefile",'x')
             except FileExistsError:
-                file_output = open("doc/Makefilepdf",'w')
+                file_output = open("doc/Makefile",'w')
             file_output.write(makefile)
             file_output.close()
 
-            MAKEFILE_CONTENT += '''build/pdf/main.pdf: $(FIGURETARGETS)\n\t$(MAKE) -C doc -f Makefilepdf\n'''
-            CLEAN += "\t$(MAKE) -C doc -f Makefilepdf clean\n"
+            MAKEFILE_CONTENT += '''build/pdf/main.pdf: $(FIGURETARGETS)\n\t$(MAKE) -C doc \n'''
+            CLEAN += "\t$(MAKE) -C doc clean\n"
             TARGETS += 'TARGETS += build/pdf/main.pdf\n'
 
         elif option == "tikz":
@@ -89,51 +94,105 @@ def main():
             yaml_config = tikzyamlparse(srcdir+'/auto_tikz.yaml')
             logdir = yaml_config['log_folder']
             tikzfiles = yaml_config['files_makestring']
-            builddir = '../../build/tikzpictures'
+            builddir = 'build/tikz'
 
             makefile = tikzmakefilemod(makefile,
                     'auto_tikz.yaml',
-                    builddir,
+                    '../../'+builddir,
                     logdir,
                     tikzfiles)
 
             try:
-                file_output = open(srcdir+"/Makefiletikz",'x')
+                file_output = open(srcdir+"/Makefile",'x')
             except FileExistsError:
-                file_output = open(srcdir+"/Makefiletikz",'w')
+                file_output = open(srcdir+"/Makefile",'w')
             file_output.write(makefile)
             file_output.close()
 
-            MAKEFILE_CONTENT += '''build/tikz/tikz_stamp: \n\t$(MAKE) -C src/tikz -f Makefiletikz\n'''
+            MAKEFILE_CONTENT += builddir+'/tikz_stamp: \n\t$(MAKE) -C '+srcdir+' \n'
 
-            TARGETS += 'TARGETS += build/tikz/tikz_stamp\n'
-            FIGURETARGETS += 'FIGURETARGETS += build/tikz/tikz_stamp\n'
-            CLEAN += "\t$(MAKE) -C src/tikz -f Makefiletikz clean\n"
+            TARGETS += 'TARGETS += '+builddir+'/tikz_stamp\n'
+            FIGURETARGETS += 'FIGURETARGETS += '+builddir+'/tikz_stamp\n'
+            CLEAN += '\t$(MAKE) -C '+srcdir+' clean\n'
 
-    print(TARGETS+FIGURETARGETS+'\n\nall: $(TARGETS)\n\n'+MAKEFILE_CONTENT+'\n\nclean:\n'+CLEAN)
+        elif option == "python":
 
+            srcdir = "src/python"
+            builddir = 'build/python'
 
+            os.makedirs(srcdir, exist_ok=True)
 
-    # with open(str(xdg_data_home())+'/pandoc/templates/makefile_template/auto_tikz_makefile') as file:
-    #     makefile = file.read()
-    #
-    # yaml_config = tikzyamlparse(args.yamlfile)
-    # logdir = yaml_config['log_folder']
-    # tikzfiles = yaml_config['files_makestring']
-    #
-    # makefile = sub(r'(yamlfile\s=)(.*)','\\1 '+args.yamlfile, makefile)
-    # makefile = sub(r'(builddir\s=)(.*)','\\1 '+args.builddir, makefile)
-    # makefile = sub(r'(logdir\s=)(.*)','\\1 '+logdir, makefile)
-    # makefile = sub(r'(tikzfiles\s=)(.*)','\\1 '+tikzfiles, makefile)
+            with open(str(xdg_data_home())+
+                    '/pandoc/templates/makefile_template/python_makefile') as file:
+                makefile = file.read()
 
-    # if args.output is not None:
-    #     try:
-    #         file_output = open(args.output,'x')
-    #     except FileExistsError:
-    #         file_output = open(args.output,'w')
-    #     file_output.write(makefile)
-    #     file_output.close()
-    # else: print(makefile)
+            makefile = sub(r'(builddir\s=)(.*)','\\1 ../../'+str(builddir), makefile)
+
+            try:
+                file_output = open(srcdir+"/Makefile",'x')
+            except FileExistsError:
+                file_output = open(srcdir+"/Makefile",'w')
+            file_output.write(makefile)
+            file_output.close()
+
+            MAKEFILE_CONTENT += builddir+'/python_stamp: \n\t$(MAKE) -C '+srcdir+'\n'
+
+            TARGETS += 'TARGETS += '+builddir+'/python_stamp\n'
+            FIGURETARGETS += 'FIGURETARGETS += '+builddir+'/python_stamp\n'
+            CLEAN += '\t$(MAKE) -C '+srcdir+' clean\n'
+
+        elif option == "codev":
+
+            srcdir = "src/codev"
+            builddir = 'build/codev'
+            outputdir = 'output'
+
+            os.makedirs(srcdir, exist_ok=True)
+
+            # copy yaml defaults
+            try:
+                file_output = open(srcdir+'/codev_remote.yaml','x')
+                with open(str(xdg_data_home())+
+                        '/pandoc/defaults/codev_remote_default-pandotfiles.yaml') as file:
+                    codev_remote = file.read()
+                file_output.write(codev_remote)
+                file_output.close()
+            except FileExistsError:
+                warnings.warn("Using existing codev_remote.yaml config file")
+
+            with open(str(xdg_data_home())+
+                    '/pandoc/templates/makefile_template/codev_makefile') as file:
+                makefile = file.read()
+
+            makefile = sub(r'(builddir\s=)(.*)','\\1 ../../'+str(builddir), makefile)
+            makefile = sub(r'(outputdir\s=)(.*)','\\1 '+str(outputdir), makefile)
+
+            try:
+                file_output = open(srcdir+"/Makefile",'x')
+            except FileExistsError:
+                file_output = open(srcdir+"/Makefile",'w')
+
+            file_output.write(makefile)
+            file_output.close()
+
+            MAKEFILE_CONTENT += builddir+'/codev_stamp: \n\t$(MAKE) -C '+srcdir+'\n'
+
+            TARGETS += 'TARGETS += '+builddir+'/codev_stamp\n'
+            FIGURETARGETS += 'FIGURETARGETS += '+builddir+'/codev_stamp\n'
+            CLEAN += '\t$(MAKE) -C '+srcdir+' clean\n'
+
+    projectmakefile = (TARGETS+FIGURETARGETS+DATATARGETS+
+                       'export TARGETS\nexport FIGURETARGETS\nexport DATATARGETS'+
+                       '\n\n\nall: $(TARGETS)\n\n'+MAKEFILE_CONTENT+'\n\nclean:\n'+CLEAN)
+
+    if (args.output is not None) and (args.output != 'T'):
+        try:
+            file_output = open(args.output,'x')
+        except FileExistsError:
+            file_output = open(args.output,'w')
+        file_output.write(projectmakefile)
+        file_output.close()
+    else: print(projectmakefile)
 
 if __name__ == "__main__":
     main()
