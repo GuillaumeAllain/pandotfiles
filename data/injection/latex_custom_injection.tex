@@ -36,18 +36,15 @@
   \makeatother
 
 % Docstyle injection
-$if(idhome)$
-  $if(docstyle)$
-    \usepackage{graphicx}
-    \usepackage{ifthen}
-    \input{\XDGDATAHOME/pandoc/templates/docstyle_latex/docstyle-$docstyle$.tex}
-      $if(acronym)$
-      $for(acronym)$
-      \newacronym{$acronym.cmd$}{$acronym.short$}{$acronym.long$}
-      $endfor$
-      $endif$
-  $endif$
-$else$
+$if(docstyle)$
+  \usepackage{graphicx}
+  \usepackage{ifthen}
+  \input{\XDGDATAHOME/pandot/templates/docstyle_latex/docstyle-$docstyle$.tex}
+    $if(acronym)$
+    $for(acronym)$
+    \newacronym{$acronym.cmd$}{$acronym.short$}{$acronym.long$}
+    $endfor$
+    $endif$
 $endif$
 
 $if(nordstyle)$

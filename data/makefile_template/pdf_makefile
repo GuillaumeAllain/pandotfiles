@@ -11,13 +11,13 @@ mainpdf = $(addprefix $(builddir)/,$(addsuffix .pdf,$(mainbname)))
 
 auto_template_loc = $(logdir)/latextemplate.template
 
-pandocflags  = -f markdown -t latex -s
+pandocflags  = -f markdown -t latex -s --data-dir="$(XDG_DATA_HOME)/pandot"
 pandocflags += --natbib --template=$(auto_template_loc) --lua-filter include-files.lua --lua-filter pandoc-gls.lua
 pandocflags += --filter ./siunitx-filter.py --filter pandoc-crossref 
-pandocflags += -M "crossrefYaml=~/.local/share/pandoc/defaults/pandoc-crossref-pandotfiles.yaml" -V 'lang=fr-CA' -V 'idhome=$HOME'
-pandocflags += ~/.local/share/pandoc/defaults/latex_default-pandotfiles.yaml
+pandocflags += -M "crossrefYaml=$XDG_DATA_HOME/pandot/defaults/pandoc-crossref-pandotfiles.yaml" -V 'lang=fr-CA' -V 'idhome=$HOME'
+pandocflags += ~/.local/share/pandot/defaults/latex_default-pandotfiles.yaml
 
-texflag = -xelatex -f -cd -quiet -latexoption="-interaction=nonstopmode --shell-escape" -outdir="$(logdir)"
+texflag = -xelatex -cd -quiet -latexoption="-interaction=nonstopmode --shell-escape" -outdir="$(logdir)"
 
 FIGURETARGETSLOC = $(addprefix ../,$(FIGURETARGETS))
 
@@ -29,6 +29,7 @@ clean:
 	-@ rm -r $(logdir) $(builddir)
 
 $(mainpdf): $(mainfile) $(pandocfiles) $(auto_template_loc) $(FIGURETARGETSLOC)
+	-@ rm log/pandoc_backup.tex
 	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile)
 	latexmk $(texflag) pandoc_backup.tex
 	-@ mv pandoc_backup.tex $(logdir)

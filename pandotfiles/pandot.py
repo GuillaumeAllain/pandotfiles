@@ -49,7 +49,7 @@ def main():
             Path("doc/main.md").touch()
 
             with open(str(xdg_data_home())+
-                    '/pandoc/templates/makefile_template/pdf_makefile') as file:
+                    '/pandot/templates/makefile_template/pdf_makefile') as file:
                 makefile = file.read()
 
             makefile =pdfmakefilemod(makefile,
@@ -64,7 +64,7 @@ def main():
                 file_output = open("doc/Makefile",'w')
             file_output.write(makefile)
             file_output.close()
-            sources = '$(wildcard doc/*.md) '+' $(wildcard doc/*.bib)' + '$(FIGURETARGETS)'
+            sources = '$(wildcard doc/*.md) '+' $(wildcard doc/*.bib) ' + '$(FIGURETARGETS)'
             MAKEFILE_CONTENT += 'build/pdf/main.pdf: ' + sources + '\n\t$(MAKE) -C doc \n'
             CLEAN += "\t$(MAKE) -C doc clean\n"
             TARGETS += 'TARGETS += build/pdf/main.pdf\n'
@@ -76,7 +76,7 @@ def main():
             os.makedirs(srcdir, exist_ok=True)
 
             with open(str(xdg_data_home())+
-                    '/pandoc/templates/makefile_template/auto_tikz_makefile') as file:
+                    '/pandot/templates/makefile_template/auto_tikz_makefile') as file:
                 makefile = file.read()
 
 
@@ -84,7 +84,7 @@ def main():
             try:
                 file_output = open(srcdir+'/auto_tikz.yaml','x')
                 with open(str(xdg_data_home())+
-                        '/pandoc/defaults/auto_tikz_default-pandotfiles.yaml') as file:
+                        '/pandot/defaults/auto_tikz_default-pandotfiles.yaml') as file:
                     autoyaml = file.read()
                 file_output.write(autoyaml)
                 file_output.close()
@@ -124,7 +124,7 @@ def main():
             os.makedirs(srcdir, exist_ok=True)
 
             with open(str(xdg_data_home())+
-                    '/pandoc/templates/makefile_template/python_makefile') as file:
+                    '/pandot/templates/makefile_template/python_makefile') as file:
                 makefile = file.read()
 
             makefile = sub(r'(builddir\s=)(.*)','\\1 ../../'+str(builddir), makefile)
@@ -136,7 +136,7 @@ def main():
             file_output.write(makefile)
             file_output.close()
 
-            sources = '$(wildcard src/python/*.py)'
+            sources = '$(wildcard src/python/*.py) $(DATATARGETS)'
             MAKEFILE_CONTENT += builddir+'/python_stamp: '+sources+' \n\t$(MAKE) -C '+srcdir+'\n'
 
             TARGETS += 'TARGETS += '+builddir+'/python_stamp\n'
@@ -155,7 +155,7 @@ def main():
             try:
                 file_output = open(srcdir+'/codev_remote.yaml','x')
                 with open(str(xdg_data_home())+
-                        '/pandoc/defaults/codev_remote_default-pandotfiles.yaml') as file:
+                        '/pandot/defaults/codev_remote_default-pandotfiles.yaml') as file:
                     codev_remote = file.read()
                 file_output.write(codev_remote)
                 file_output.close()
@@ -163,7 +163,7 @@ def main():
                 warnings.warn("Using existing codev_remote.yaml config file")
 
             with open(str(xdg_data_home())+
-                    '/pandoc/templates/makefile_template/codev_makefile') as file:
+                    '/pandot/templates/makefile_template/codev_makefile') as file:
                 makefile = file.read()
 
             makefile = sub(r'(builddir\s=)(.*)','\\1 ../../'+str(builddir), makefile)
@@ -181,6 +181,7 @@ def main():
             MAKEFILE_CONTENT += builddir+'/codev_stamp:'+sources+' \n\t$(MAKE) -C '+srcdir+'\n'
 
             TARGETS += 'TARGETS += '+builddir+'/codev_stamp\n'
+            DATATARGETS += 'DATATARGETS+= '+builddir+'/codev_stamp\n'
             FIGURETARGETS += 'FIGURETARGETS += '+builddir+'/codev_stamp\n'
             CLEAN += '\t$(MAKE) -C '+srcdir+' clean\n'
 

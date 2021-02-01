@@ -35,7 +35,7 @@ args = parser.parse_args()
 
 def main():
 
-    with open(str(xdg_data_home())+'/pandoc/templates/makefile_template/pdf_makefile') as file:
+    with open(str(xdg_data_home())+'/pandot/templates/makefile_template/pdf_makefile') as file:
         makefile = file.read()
 
     pdfmakefilemod(makefile, args.logdir, args.builddir, args.srcdir, args.mainfile)

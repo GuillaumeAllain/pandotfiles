@@ -39,7 +39,7 @@
 \renewcommand{\headrulewidth}{0.5pt}
 \renewcommand{\footrulewidth}{0.5pt}
 \fancyhead{}
-\fancyhead[L]{\footnotesize\includegraphics[height=1cm]{\XDGDATAHOME/pandoc/templates/docstyle_latex/img/logo_LRIO.pdf}}
+\fancyhead[L]{\footnotesize\includegraphics[height=1cm]{\XDGDATAHOME/pandot/templates/docstyle_latex/img/logo_LRIO.pdf}}
 \fancyhead[R]{\rule[-2.5ex]{0pt}{2.5ex}\footnotesize \titleprint}
 \fancyfoot{}
 \fancyfoot[L]{\rule[1.5ex]{0pt}{1.5ex}\footnotesize \authorprint}
@@ -50,8 +50,9 @@
 \renewcommand{\maketitle}{
   \thispagestyle{fancy}
   \begin{center}
-    {\huge\textbf{\titleprint}\\\vspace{0.5cm}\Large\authorprint}
+    {\huge\textbf{\titleprint}\\\vspace{0.5cm}\large\subtitleprint\\\vspace{0.5cm}\Large\authorprint}
   \end{center}
+  \printglossary[type=\acronymtype,title=Acronymes]
 }
 
 % \renewcommand{\maketitle}{
