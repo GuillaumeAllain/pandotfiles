@@ -39,12 +39,14 @@ def main():
     TARGETS = ''
     MAKEFILE_CONTENT = ''
     CLEAN = ''
+    OPEN = ''
     for option in option_list:
         if option not in VALIDOPTION:
             raise ValueError(option+" is not a valid document output")
         elif option == 'reactjs':
             raise NotImplementedError(option+' is not yet implemented')
         elif option == 'pdf':
+            builddir = "build/pdf"
             os.makedirs("doc",exist_ok=True)
             Path("doc/main.md").touch()
 
@@ -54,7 +56,7 @@ def main():
 
             makefile =pdfmakefilemod(makefile,
                     "log",
-                    "../build/pdf",
+                    "../"+builddir,
                     "",
                     "main.md")
 
@@ -65,9 +67,10 @@ def main():
             file_output.write(makefile)
             file_output.close()
             sources = '$(wildcard doc/*.md) '+' $(wildcard doc/*.bib) ' + '$(FIGURETARGETS)'
-            MAKEFILE_CONTENT += 'build/pdf/main.pdf: ' + sources + '\n\t$(MAKE) -C doc \n'
+            MAKEFILE_CONTENT += builddir+'/main.pdf: ' + sources + '\n\t$(MAKE) -C doc \n'
             CLEAN += "\t$(MAKE) -C doc clean\n"
-            TARGETS += 'TARGETS += build/pdf/main.pdf\n'
+            TARGETS += 'TARGETS += '+builddir+'/main.pdf\n'
+            OPEN += "\topen "+builddir+"/main.pdf\n"
 
         elif option == "tikz":
 
@@ -187,7 +190,10 @@ def main():
 
     projectmakefile = (TARGETS+FIGURETARGETS+DATATARGETS+
                        'export TARGETS\nexport FIGURETARGETS\nexport DATATARGETS'+
-                       '\n\n\nall: $(TARGETS)\n\n'+MAKEFILE_CONTENT+'\n\nclean:\n'+CLEAN)
+                       '\n\n.PHONY: all clean open\n\nall: $(TARGETS)\n\n'+
+                       '\n\nclean:\n'+CLEAN+
+                       '\n\nopen:\n'+OPEN+
+                       MAKEFILE_CONTENT)
 
     if (args.output is not None) and (args.output != 'T'):
         try:
