@@ -2,6 +2,12 @@
 
 Dotfiles to create Pandoc project templates and makefile
 
+## Requirements
+
+You need up-to-date [pandoc](https://github.com/jgm/pandoc) and [pandoc-crossref](https://github.com/lierdakil/pandoc-crossref).
+
+Some python packages are required for the scripts, but these requirements are handled with pip.
+
 ## Installation
 
 Clone and install with 
