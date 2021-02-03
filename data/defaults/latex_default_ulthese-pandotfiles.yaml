@@ -8,4 +8,5 @@ classoption:
         - numbers
 natbiboptions:
 has-frontmatter: ~
+biblio-style: \XDGDATAHOME/pandot/templates/docstyle_latex/bst/frplain.bst
 ---
