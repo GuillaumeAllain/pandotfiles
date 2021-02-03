@@ -25,6 +25,16 @@
   \newcommand{\subtitleprint}{$subtitle$}
   \newcommand{\authorprint}{$author$}
   \newcommand{\dateprint}{$if(date)$ $date$ $else$ ~ $endif$}
+  \newcommand{\yearprint}{$if(year)$ $year$ $else$ \the\year{} $endif$}
+  \newcommand{\uldirector}{$uldirector$}
+  \newcommand{\acronym}{$uldirector$}
+  \newcommand{\uldepot}{$uldepot$}
+  \newcommand{\ulprogram}{$ulprogram$}
+  \newcommand{\ulabstract}{$ulabstract$}
+  \newcommand{\ulresume}{$ulresume$}
+  \newcommand{\ulepigraphe}{$ulepigraphe$}
+  \newcommand{\uldedicace}{$uldedicace$}
+  \newcommand{\ulremerciements}{$ulremerciements$}
   \newcommand{\docstyleprint}{$docstyle$}
   \newcommand{\idonly}{$if(id)$ $id$ $endif$}
   \newcommand{\idprint}{$if(id)$ id: \idonly $else$ ~ $endif$}
@@ -39,7 +49,7 @@
 $if(docstyle)$
   \usepackage{graphicx}
   \usepackage{ifthen}
-  \input{\XDGDATAHOME/pandot/templates/docstyle_latex/docstyle-$docstyle$.tex}
+  \input{\XDGDATAHOME/pandot/templates/docstyle-latex/docstyle-$docstyle$.tex}
     $if(acronym)$
     $for(acronym)$
     \newacronym{$acronym.cmd$}{$acronym.short$}{$acronym.long$}
