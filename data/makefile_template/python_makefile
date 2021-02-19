@@ -8,17 +8,27 @@ pythonflag = $(addprefix $(builddir)/,$(addsuffix .flag,$(pythonbname)))
 
 DATATARGETSLOC = $(addprefix ../../,$(DATATARGETS))
 
-.PHONY: clean all
+.PHONY: clean all env
 
 all : $(pythonflag)
 	touch $(builddir)/python_stamp
+
+env: $(builddir)/env/touchfile
+
+$(builddir)/env/touchfile: environment.yaml
+	test -d $(builddir)/env || mamba env create --prefix $(builddir)/env --file environment.yaml \
+	&& mamba env update --prefix $(builddir)/env --file environment.yaml 
+	touch $(builddir)/env/touchfile
+
 clean :
+	rm -rf $(builddir)/env
 	-@ rm -rf $(builddir) output
 
-$(builddir)/%.flag : %.py $(DATATARGETSLOC)
+$(builddir)/%.flag : %.py $(DATATARGETSLOC) env
 	-@ mkdir output
 	rsync -aP output $(builddir)
-	python $<
+	conda run -p $(builddir)/env python $<
 	-@ mkdir -p $(builddir)
 	touch $@
+
 

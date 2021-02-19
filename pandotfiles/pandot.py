@@ -24,13 +24,13 @@ parser.add_argument(
         )
 
 parser.add_argument(
-                '-o','--output', type=str,
+                '-o', '--output', type=str,
                 help='Output file location. Default: output to terminal (T)',
                 default=None)
 
 args = parser.parse_args()
 
-VALIDOPTION = ['pdf','tikz','reactjs','python','codev']
+VALIDOPTION = ['pdf', 'tikz', 'reactjs', 'python', 'codev']
 
 def main():
     option_list = args.option.split('+')
@@ -50,20 +50,20 @@ def main():
             os.makedirs("doc",exist_ok=True)
             Path("doc/main.md").touch()
 
-            with open(str(xdg_data_home())+
+            with open(str(xdg_data_home()) +
                     '/pandot/templates/makefile_template/pdf_makefile') as file:
                 makefile = file.read()
 
-            makefile =pdfmakefilemod(makefile,
-                    "log",
-                    "../"+builddir,
-                    ".",
-                    "main.md")
+            makefile = pdfmakefilemod(makefile,
+                                      "log",
+                                      "../"+builddir,
+                                      ".",
+                                      "main.md")
 
             try:
-                file_output = open("doc/Makefile",'x')
+                file_output = open("doc/Makefile", 'x')
             except FileExistsError:
-                file_output = open("doc/Makefile",'w')
+                file_output = open("doc/Makefile", 'w')
             file_output.write(makefile)
             file_output.close()
             sources = '$(wildcard doc/*.md) '+' $(wildcard doc/*.bib) ' + '$(FIGURETARGETS)'
@@ -78,15 +78,15 @@ def main():
 
             os.makedirs(srcdir, exist_ok=True)
 
-            with open(str(xdg_data_home())+
+            with open(str(xdg_data_home()) +
                     '/pandot/templates/makefile_template/auto_tikz_makefile') as file:
                 makefile = file.read()
 
 
             # copy yaml defaults
             try:
-                file_output = open(srcdir+'/auto_tikz.yaml','x')
-                with open(str(xdg_data_home())+
+                file_output = open(srcdir+'/auto_tikz.yaml', 'x')
+                with open(str(xdg_data_home()) +
                         '/pandot/defaults/auto_tikz_default-pandotfiles.yaml') as file:
                     autoyaml = file.read()
                 file_output.write(autoyaml)
@@ -100,15 +100,15 @@ def main():
             builddir = 'build/tikz'
 
             makefile = tikzmakefilemod(makefile,
-                    'auto_tikz.yaml',
-                    '../../'+builddir,
-                    logdir,
-                    tikzfiles)
+                                       'auto_tikz.yaml',
+                                       '../../'+builddir,
+                                       logdir,
+                                       tikzfiles)
 
             try:
-                file_output = open(srcdir+"/Makefile",'x')
+                file_output = open(srcdir+"/Makefile", 'x')
             except FileExistsError:
-                file_output = open(srcdir+"/Makefile",'w')
+                file_output = open(srcdir+"/Makefile", 'w')
             file_output.write(makefile)
             file_output.close()
 
@@ -126,16 +126,20 @@ def main():
 
             os.makedirs(srcdir, exist_ok=True)
 
-            with open(str(xdg_data_home())+
-                    '/pandot/templates/makefile_template/python_makefile') as file:
+            Path(srcdir+"/environment.yaml").touch()
+
+            with open(str(xdg_data_home()) +
+                      '/pandot/templates/makefile_template/python_makefile') as file:
                 makefile = file.read()
 
-            makefile = sub(r'(builddir\s=)(.*)','\\1 ../../'+str(builddir), makefile)
+            makefile = sub(r'(builddir\s=)(.*)',
+                           '\\1 ../../'+str(builddir),
+                           makefile)
 
             try:
-                file_output = open(srcdir+"/Makefile",'x')
+                file_output = open(srcdir+"/Makefile", 'x')
             except FileExistsError:
-                file_output = open(srcdir+"/Makefile",'w')
+                file_output = open(srcdir+"/Makefile", 'w')
             file_output.write(makefile)
             file_output.close()
 
