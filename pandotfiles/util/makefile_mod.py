@@ -6,7 +6,7 @@ def pdfmakefilemod(makefile_string, logdir, builddir, srcdir, mainfile):
     makefile_string = sub(r'(logdir\s=)(.*)','\\1 '+str(logdir), makefile_string)
     makefile_string = sub(r'(builddir\s=)(.*)','\\1 '+str(builddir), makefile_string)
     makefile_string = sub(r'(pandocfiles\s=)(.*)',"\\1 $(wildcard " + str(srcdir) + '/*.md)'+
-                    '$(wildcard ' + str(srcdir) + '/*.bib)', makefile_string)
+                    ' $(wildcard ' + str(srcdir) + '/*.bib)', makefile_string)
     makefile_string = sub(r'(mainfile\s=)(.*)','\\1 '+str(mainfile), makefile_string)
 
     return makefile_string

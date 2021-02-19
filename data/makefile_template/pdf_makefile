@@ -14,8 +14,9 @@ template_default_loc = $(logdir)/template_default.yaml
 
 pandocflags  = -f markdown -t latex -s --data-dir="$(XDG_DATA_HOME)/pandot"
 pandocflags += --natbib --template=$(auto_template_loc) --lua-filter include-files.lua --lua-filter pandoc-gls.lua
-pandocflags += --filter ./siunitx-filter.py --filter pandoc-crossref 
-pandocflags += -M "crossrefYaml=$XDG_DATA_HOME/pandot/defaults/pandoc-crossref-pandotfiles.yaml" -V 'lang=fr-CA' -V 'idhome=$HOME'
+pandocflags += --filter ./siunitx-filter.py 
+pandocflags += --filter pandoc-crossref -M "crossrefYaml=$XDG_DATA_HOME/pandot/defaults/pandoc-crossref-pandotfiles.yaml" 
+pandocflags += -V 'idhome=$HOME'
 pandocflags += ~/.local/share/pandot/defaults/latex_default-pandotfiles.yaml
 
 ifneq ($(wildcard $(logdir)/template_default*.yaml),)
@@ -42,7 +43,8 @@ $(auto_template_loc): $(mainfile)
 
 pdf:
 	-@ rm log/pandoc_backup.tex
-	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(wildcard *.yaml) $(wildcard $(logdir)/template_default*.yaml)
+	cat $(mainfile) | sed s/tagsv:.\*//g | sed "/tagsh/ s/#/\\\\#/g" |\
+	$(PD) $(pandocflags) -o pandoc_backup.tex /dev/stdin $(wildcard *.yaml) $(wildcard $(logdir)/template_default*.yaml)
 	latexmk $(texflag) pandoc_backup.tex
 	-@ mv pandoc_backup.tex $(logdir)
 	-@ mkdir -p $(builddir)

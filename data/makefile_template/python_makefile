@@ -1,6 +1,6 @@
 builddir = 
 
-pythonfiles = $(wildcard ./*.py)
+pythonfiles = $(wildcard *.py)
 
 pythonfname = $(notdir $(pythonfiles))
 pythonbname = $(pythonfname:%.py=%)
@@ -13,9 +13,11 @@ DATATARGETSLOC = $(addprefix ../../,$(DATATARGETS))
 all : $(pythonflag)
 	touch $(builddir)/python_stamp
 clean :
-	-@ rm -rf $(builddir)
+	-@ rm -rf $(builddir) output
 
 $(builddir)/%.flag : %.py $(DATATARGETSLOC)
+	-@ mkdir output
+	rsync -aP output $(builddir)
 	python $<
 	-@ mkdir -p $(builddir)
 	touch $@

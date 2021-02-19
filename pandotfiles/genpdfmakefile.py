@@ -38,7 +38,7 @@ def main():
     with open(str(xdg_data_home())+'/pandot/templates/makefile_template/pdf_makefile') as file:
         makefile = file.read()
 
-    pdfmakefilemod(makefile, args.logdir, args.builddir, args.srcdir, args.mainfile)
+    makefile = pdfmakefilemod(makefile, args.logdir, args.builddir, args.srcdir, args.mainfile)
 
     if args.output is not None:
         try:

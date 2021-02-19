@@ -57,7 +57,7 @@ def main():
             makefile =pdfmakefilemod(makefile,
                     "log",
                     "../"+builddir,
-                    "",
+                    ".",
                     "main.md")
 
             try:

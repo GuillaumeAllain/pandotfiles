@@ -17,4 +17,5 @@ lstPrefix:
 secPrefix:
         - "section"
         - "sections"
+lang: fr-CA
 ---

@@ -27,4 +27,4 @@ $(codevfigepsdest): $(builddir)/fig/%.eps : $(builddir)/figbrute/%.eps
 
 $(completecodevpdf) : %.pdf : %_plt.eps
 	echo $<
-	pstopdf $< -o $@
+	pstopdf $< -o $@ -p
