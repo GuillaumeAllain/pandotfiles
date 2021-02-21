@@ -64,7 +64,15 @@
   \rule{\textwidth}{2pt}
   \vskip 0.75em%
   \begin{center}
-    {\Huge\textbf{\titleprint}\\\vspace{0.5cm}\LARGE\subtitleprint\par}%
+    \ifthenelse{\equal{\titleprint}{}}{
+      }{
+      \Huge\textbf{\titleprint}\\\vspace{0.5cm}
+    }
+    \ifthenelse{\equal{\subtitleprint}{}}{
+      }{
+      \LARGE{\subtitleprint}
+    }
+    \par
   \end{center}
   \vskip 0.75em%
   \noindent%

@@ -48,7 +48,22 @@
 \renewcommand{\maketitle}{
   \thispagestyle{fancy}
   \begin{center}
-    {\huge\textbf{\titleprint}\\\vspace{0.5cm}\large\subtitleprint\\\vspace{0.5cm}\Large\authorprint\\\vspace{0.5cm}\normalsize\dateprint}
+    \ifthenelse{\equal{\titleprint}{}}{
+      }{
+      \huge\textbf{\titleprint}\\\vspace{0.5cm}
+    }
+    \ifthenelse{\equal{\subtitleprint}{}}{
+      }{
+      \large{\subtitleprint}\\\vspace{0.5cm}
+    }
+    \ifthenelse{\equal{\authorprint}{}}{
+      }{
+      \Large{\authorprint}\\\vspace{0.5cm}
+    }
+    \ifthenelse{\equal{\dateprint}{}}{
+      }{
+      \normalsize{\dateprint}
+    }
   \end{center}
   \printglossary[type=\acronymtype,title=Acronymes]
 }
@@ -81,7 +96,7 @@
 %   \vskip \stretch{3}%
 %   \hfill  \authorprint\par%
 %   \vskip 0.5em%
-%   \hfill  \dateprint%
+%   \hfill  \fdateprint%
 %   \vskip \stretch{1}%
 %   \setcounter{page}{1}%
 %   \normalfont
