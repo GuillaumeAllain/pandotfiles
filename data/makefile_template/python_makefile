@@ -11,6 +11,7 @@ DATATARGETSLOC = $(addprefix ../../,$(DATATARGETS))
 .PHONY: clean all env
 
 all : $(pythonflag)
+	-@ mkdir -p $(builddir)
 	touch $(builddir)/python_stamp
 
 env: $(builddir)/env/touchfile
