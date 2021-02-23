@@ -27,9 +27,9 @@ clean :
 
 $(builddir)/%.flag : %.py $(DATATARGETSLOC) env
 	-@ mkdir output
-	rsync -aP output $(builddir)
 	conda run -p $(builddir)/env python $<
 	-@ mkdir -p $(builddir)
+	rsync -aP output $(builddir)
 	touch $@
 
 
