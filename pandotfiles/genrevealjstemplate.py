@@ -11,23 +11,23 @@ Description: Inject your own template into pandoc's default
 import re
 from codecs import decode
 from subprocess import run
-from xdg import xdg_data_home
+
 
 def main():
 
     # with open(str(xdg_data_home()/"pandoc/templates/latex_custom_injection.tex")) as file:
     #     injection = file.read()
 
-    result = run('/usr/local/bin/pandoc -D revealjs',shell=True,capture_output=True)
+    result = run("/usr/local/bin/pandoc -D revealjs", shell=True, capture_output=True)
 
     base_template = decode(result.stdout)
 
     base_template = re.sub(
-            r'<p class="subtitle">(.*)</p>',
-            r'<h3 class="subtitle">\1</h3>',
-            base_template)
+        r'<p class="subtitle">(.*)</p>', r'<h3 class="subtitle">\1</h3>', base_template
+    )
 
     return base_template
+
 
 if __name__ == "__main__":
     print(main())

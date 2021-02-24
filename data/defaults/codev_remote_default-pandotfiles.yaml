@@ -1,6 +1,7 @@
+---
 remote_directory: C:\Users\codev\projets\codev_remote_default
 
-sync_project_list: [./run_sequence.seq, ./zmx/, ./len/ , ./seq/]
+sync_project_list: [./run_sequence.seq, ./zmx/, ./len/, ./seq/]
 
 sync_local_download_directory: output
 

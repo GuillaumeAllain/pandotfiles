@@ -29,7 +29,7 @@ $(builddir)/tikz_stamp: $(logdir)/tikz_stamp
 	rsync -aP $(tikzpdflog) $(builddir)
 	touch $(builddir)/tikz_stamp
 
-$(logdir)/tikz_stamp: $(tikzfiles)
+$(logdir)/tikz_stamp: $(tikzfiles) $(yamlfile)
 	auto_tikz -y $(yamlfile) -o auto_tikz_backup.tex
 	latexmk $(texflag) auto_tikz_backup.tex
 	-@ mv auto_tikz_backup.tex $(logdir)/auto_tikz_backup.tex

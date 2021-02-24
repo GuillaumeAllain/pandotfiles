@@ -17,8 +17,8 @@ all : $(pythonflag)
 env: $(builddir)/env/touchfile
 
 $(builddir)/env/touchfile: environment.yaml
-	test -d $(builddir)/env || conda env create --prefix $(builddir)/env --file environment.yaml -q\
-	&& conda env update --prefix $(builddir)/env --file environment.yaml --prune -q
+	test -d $(builddir)/env || conda env create --prefix $(builddir)/env --file environment.yaml \
+	&& conda env update --prefix $(builddir)/env --file environment.yaml --prune
 	touch $(builddir)/env/touchfile
 
 clean :

@@ -33,7 +33,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 VALIDOPTIONINIT = ["pdf", "tikz", "reactjs", "python", "codev"]
-VALIDOPTIONNEWFILE = ["python"]
+VALIDOPTIONNEWFILE = ["python", "tikz"]
 
 
 def main():
@@ -287,6 +287,7 @@ def main():
             + "\n\n.PHONY: all clean open\n\nall: $(TARGETS)\n\n"
             + "\n\nclean:\n"
             + CLEAN
+            + "\t-@ rm -r build/"
             + "\n\nopen:\n"
             + OPEN
             + MAKEFILE_CONTENT
@@ -328,6 +329,16 @@ def main():
                     file_output.write(
                         "#!/usr/bin/env conda run -p " "../../build/python/env ipython"
                     )
+                    file_output.close()
+            except FileExistsError:
+                raise FileExistsError("Won't overwrite file if it already exists")
+
+        elif args.option == "tikz":
+            print("Enter filename (without extension)")
+            filename = input()
+            try:
+                with open(filename + ".tikz", "x") as file_output:
+                    file_output.write("\\begin{tikzpicture}\n\\end{tikzpicture}")
                     file_output.close()
             except FileExistsError:
                 raise FileExistsError("Won't overwrite file if it already exists")

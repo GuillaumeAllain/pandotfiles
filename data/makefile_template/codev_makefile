@@ -15,6 +15,7 @@ clean:
 	-@ rm -r $(outputdir) $(builddir)
 
 $(builddir)/codev_stamp : $(wildcard */*.seq) 
+	-@ mkdir -p $(builddir)
 	codev-remote -v
 	-@ mv output/fig output/figbrute
 	-@ rsync -aP output/ $(builddir)
