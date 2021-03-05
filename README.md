@@ -5,13 +5,17 @@ Dotfiles to create Pandoc project templates and makefile
 ## Requirements
 
 For PDF:
+
     - [pandoc](https://github.com/jgm/pandoc)
     - [pandoc-crossref](https://github.com/lierdakil/pandoc-crossref)
+    - [mermaid-filter](https://github.com/raghur/mermaid-filter)
 
 For CODEV:
+
     - Unreleased library CODEV-TOOLS
 
 For Python:
+
     - [conda](https://github.com/conda/conda)
 
 Some python packages are required for the scripts, but these requirements are handled with pip.

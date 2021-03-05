@@ -1,0 +1,205 @@
+:root {
+    --nord0: #2E3440;
+    --nord1: #3B4252;
+    --nord2: #434C5E;
+    --nord3: #4C566A;
+    --nord4: #D8DEE9;
+    --nord5: #E5E9F0;
+    --nord6: #ECEFF4;
+    --nord7: #8FBCBB;
+    --nord8: #88C0D0;
+    --nord9: #81A1C1;
+    --nord10: #5E81AC;
+    --nord11: #BF616A;
+    --nord12: #D08770;
+    --nord13: #EBCB8B;
+    --nord14: #A3BE8C;
+    --nord15: #B48EAD;
+}
+
+/* .mermaid-main-font { */
+/*   font-family: "trebuchet ms", verdana, arial; */
+/*   font-family: var(--mermaid-font-family); */
+/* } */
+
+/* .section { */
+/*   stroke: none; */
+/*   opacity: 0.2; */
+/* } */
+
+.section0 {
+    fill: var(--nord4) !important;
+}
+
+.section2 {
+    fill: var(--nord4) !important;
+}
+
+.section1,
+.section3 {
+  fill: white !important;
+  opacity: 0.2;
+}
+
+/* .sectionTitle0 { */
+/*   fill: var(--nord0) !important; */
+/* } */
+
+/* .sectionTitle1 { */
+/*   fill: var(--nord0) !important; */
+/* } */
+
+/* .sectionTitle2 { */
+/*   fill: var(--nord0) !important; */
+/* } */
+
+/* .sectionTitle3 { */
+/*   fill: var(--nord0) !important; */
+/* } */
+
+/* .sectionTitle { */
+/*   text-anchor: start; */
+/*   font-size: 11px; */
+/*   text-height: 14px; */
+/*   font-family: 'trebuchet ms', verdana, arial; */
+/*   font-family: var(--mermaid-font-family); */
+
+/* } */
+
+.textColor {
+    fill: var(--nord4) !important;
+}
+
+.taskText.clickable {
+    cursor: pointer;
+    fill: var(--nord6) !important;
+    font-weight: bold;
+}
+
+.taskTextOutsideLeft.clickable {
+    cursor: pointer;
+    fill: var(--nord0) !important;
+    font-weight: bold;
+}
+
+.taskTextOutsideRight.clickable {
+    cursor: pointer;
+    fill: var(--nord0) !important;
+    font-weight: bold;
+}
+
+/* Specific task settings for the sections*/
+
+.taskText0,
+.taskText1,
+.taskText2,
+.taskText3 {
+    fill: var(--nord6) !important;
+}
+
+.task0,
+.task1,
+.task2,
+.task3 {
+    fill: var(--nord10) !important;
+    stroke: var(--nord10) !important;
+}
+
+.taskTextOutside0,
+.taskTextOutside2
+{
+    fill: var(--nord0) !important;
+}
+
+.taskTextOutside1,
+.taskTextOutside3 {
+    fill: var(--nord0) !important;
+}
+
+/* Active task */
+
+.active0,
+.active1,
+.active2,
+.active3 {
+    fill: var(--nord9) !important;
+    stroke: var(--nord10) !important;
+}
+
+.activeText0,
+.activeText1,
+.activeText2,
+.activeText3 {
+    fill: var(--nord6) !important;
+}
+
+/* Completed task */
+
+.done0,
+.done1,
+.done2,
+.done3 {
+    stroke: var(--nord4) !important;
+    fill: var(--nord5) !important;
+    stroke-width: 2;
+}
+
+.doneText0,
+.doneText1,
+.doneText2,
+.doneText3 {
+    fill: var(--nord5) !important;
+}
+
+/* Gantt */
+.crit0,
+.crit1,
+.crit2,
+.crit3 {
+    stroke: var(--nord11) !important;
+    fill: var(--nord11) !important;
+    stroke-width: 2;
+}
+
+.activeCrit0,
+.activeCrit1,
+.activeCrit2,
+.activeCrit3 {
+    stroke: var(--nord11) !important;
+    fill: var(--nord12) !important;
+    stroke-width: 2;
+}
+
+.doneCrit0,
+.doneCrit1,
+.doneCrit2,
+.doneCrit3 {
+    stroke: var(--nord11) !important;
+    fill: var(--nord13) !important;
+    stroke-width: 2;
+    cursor: pointer;
+    shape-rendering: crispEdges;
+}
+
+
+.doneCritText0,
+.doneCritText1,
+.doneCritText2,
+.doneCritText3 {
+    fill: var(--nord5) !important;
+}
+
+.activeCritText0,
+.activeCritText1,
+.activeCritText2,
+.activeCritText3 {
+    fill: var(--nord5) !important;
+}
+
+.titleText {
+    text-anchor: middle;
+    font-size: 18px;
+    fill: var(--nord0) !important;
+    font-family: 'trebuchet ms', verdana, arial;
+    font-family: var(--mermaid-font-family);
+}
