@@ -265,7 +265,7 @@ def main():
                 except FileExistsError:
                     warnings.warn("Codev init: Won't overwrite gitignore file")
 
-                sources = "$(wildcard src/codev/*/*.seq)"
+                sources = "$(wildcard src/codev/*/*.seq) $(wildcard src/codev/*.seq)"
                 MAKEFILE_CONTENT += (
                     builddir
                     + "/codev_stamp:"

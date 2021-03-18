@@ -11,6 +11,12 @@ tikzpdflog = $(addprefix $(logdir)/,$(addsuffix .pdf,$(tikzbname)))
 
 texflag = -xelatex -f -cd -quiet -latexoption="-interaction=nonstopmode --shell-escape" -outdir="$(logdir)"
 
+V = 0
+ACTUAL_CC = codev-remote 
+CC_0 = @ $(ACTUAL_CC)
+CC_1 = $(ACTUAL_CC) -v
+CC = $(CC_$(V))
+
 .PHONY: all clean
 
 all : $(builddir)/tikz_stamp $(tikzpng)
@@ -26,11 +32,11 @@ $(tikzpdf): $(builddir)/tikz_stamp
 
 $(builddir)/tikz_stamp: $(logdir)/tikz_stamp 
 	-@ mkdir -p $(builddir)
-	rsync -aP $(tikzpdflog) $(builddir)
+	rsync -aP $(tikzpdflog) $(builddir) -q
 	touch $(builddir)/tikz_stamp
 
 $(logdir)/tikz_stamp: $(tikzfiles) $(yamlfile)
 	auto_tikz -y $(yamlfile) -o auto_tikz_backup.tex
-	latexmk $(texflag) auto_tikz_backup.tex
+	$(CC) $(texflag) auto_tikz_backup.tex
 	-@ mv auto_tikz_backup.tex $(logdir)/auto_tikz_backup.tex
 	touch $(logdir)/tikz_stamp
