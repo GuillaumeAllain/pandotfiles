@@ -46,6 +46,7 @@ The script will create all necessary makefiles and directories to compile all th
 
 ## Todo
 
-- [ ] add .gitignore to pandot project templates.
+- [x] add .gitignore to pandot project templates.
+- [ ] Add ReactJS support
 
 
