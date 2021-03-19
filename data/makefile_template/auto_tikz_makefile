@@ -37,6 +37,6 @@ $(builddir)/tikz_stamp: $(logdir)/tikz_stamp
 
 $(logdir)/tikz_stamp: $(tikzfiles) $(yamlfile)
 	auto_tikz -y $(yamlfile) -o auto_tikz_backup.tex
-	$(CC) $(texflag) auto_tikz_backup.tex
+	latexmk $(texflag) auto_tikz_backup.tex
 	-@ mv auto_tikz_backup.tex $(logdir)/auto_tikz_backup.tex
 	touch $(logdir)/tikz_stamp
