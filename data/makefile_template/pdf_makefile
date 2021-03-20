@@ -49,6 +49,8 @@ pdf:
 	export MERMAID_FILTER_THEME=default;\
 	cat $(mainfile) | sed s/tagsv:.\*//g | sed "/tagsh/ s/#/\\\\#/g" |\
 	$(PD) $(pandocflags) -o pandoc_backup.tex /dev/stdin $(wildcard *.yaml) $(wildcard $(logdir)/template_default*.yaml)
+	sed 's/\(cite.*\){interne-/\1interne{/g' pandoc_backup.tex > pandoc_sed_output.tex;\
+	mv pandoc_sed_output.tex pandoc_backup.tex
 	latexmk $(texflag) pandoc_backup.tex
 	-@ mv pandoc_backup.tex $(logdir)
 	-@ mv mermaid-filter.err $(logdir)

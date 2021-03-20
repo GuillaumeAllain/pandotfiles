@@ -66,6 +66,12 @@
     }
   \end{center}
   \printglossary[type=\acronymtype,title=Acronymes]
+  \ifthenelse{\equal{\bibliographyinternefile}{}}{}{
+    % \newcites{interne}{Documents internes}
+    % \bibliographystyleinterne{unsrtnat}
+    \bibliographyinterne{\bibliographyinternefile}
+  % \printbibliography[title=interne, keyword=secondary]
+  }
 }
 
 % \renewcommand{\maketitle}{
