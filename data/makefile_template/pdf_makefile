@@ -5,6 +5,9 @@ mainfile =
 
 PD := /usr/local/bin/pandoc
 
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+
 mainfname = $(notdir $(mainfile))
 mainbname = $(mainfname:%.md=%)
 mainpdf = $(addprefix $(builddir)/,$(addsuffix .pdf,$(mainbname)))
@@ -36,14 +39,14 @@ clean:
 	-@ rm -r $(logdir) $(builddir)
 
 $(mainpdf): $(mainfile) $(pandocfiles) $(auto_template_loc) $(FIGURETARGETSLOC)
-	$(MAKE) pdf
+	$(MAKE) -f $(mkfile_path) pdf
 
 $(auto_template_loc): $(mainfile)
 	-@ mkdir -p $(logdir)
 	gen_latex_template -o $(auto_template_loc) -y $(template_default_loc) -m $(mainfile)
 
 pdf:
-	-@ rm log/pandoc_backup.tex
+	-@ rm $(logdir)/pandoc_backup.tex
 	export MERMAID_FILTER_LOC=$(logdir);\
 	export MERMAID_FILTER_FORMAT=pdf;\
 	export MERMAID_FILTER_THEME=default;\
