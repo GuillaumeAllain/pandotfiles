@@ -1,5 +1,5 @@
 function Para (content)
-    if content.c[1].text~='TODO' then
+    if content.c[1].text~='TODO' and content.c[1].text~='DONE' then
         return content
     else 
         return {}
