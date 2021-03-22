@@ -51,7 +51,9 @@ def main():
 
             if option not in VALIDOPTIONINIT:
 
-                raise ValueError(option + " is not a valid document output")
+                raise ValueError(
+                    option + " is not a valid document output:\n" + str(VALIDOPTIONINIT)
+                )
 
             elif option == "reactjs":
 
@@ -298,7 +300,9 @@ def main():
     elif args.command == "newfile":
 
         if args.option not in VALIDOPTIONNEWFILE:
-            raise ValueError(option + " is not a valid document output")
+            raise ValueError(
+                option + " is not a valid document output:\n" + str(VALIDOPTIONNEWFILE)
+            )
 
         elif args.option == "python":
             print("Enter filename (without extension)")
