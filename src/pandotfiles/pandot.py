@@ -1,5 +1,5 @@
 import argparse
-import os
+from os import makedirs
 import warnings
 
 from pathlib import Path
@@ -61,32 +61,27 @@ def main():
 
                 builddir = "build/pdf"
                 srcdir = "doc"
-                os.makedirs("doc", exist_ok=True)
+                makedirs("doc", exist_ok=True)
                 Path("doc/main.md").touch()
-                with open(
-                    str(xdg_data_home())
-                    + "/pandot/templates/makefile_template/pdf_makefile"
-                ) as file:
-                    makefile = file.read()
-                makefile = pdfmakefilemod(
-                    makefile, "log", "../" + builddir, ".", "main.md"
-                )
-
-                try:
-                    file_output = open("doc/Makefile", "x")
-                except FileExistsError:
-                    file_output = open("doc/Makefile", "w")
-                file_output.write(makefile)
-                file_output.close()
-
-                try:
-                    file_output = open(srcdir + "/.gitignore", "x")
+                with open("doc/Makefile", "w+") as file_output:
                     with open(
-                        str(xdg_data_home()) + "/pandot/gitignore/doc.gitignore"
+                        str(xdg_data_home())
+                        + "/pandot/templates/makefile_template/pdf_makefile"
                     ) as file:
-                        gitignore = file.read()
-                    file_output.write(gitignore)
-                    file_output.close()
+                        makefile = file.read()
+                    makefile = pdfmakefilemod(
+                        makefile, "log", "../" + builddir, ".", "main.md"
+                    )
+
+                    file_output.write(makefile)
+
+                try:
+                    with open(srcdir + "/.gitignore", "x") as file_output:
+                        with open(
+                            str(xdg_data_home()) + "/pandot/gitignore/doc.gitignore"
+                        ) as file:
+                            gitignore = file.read()
+                        file_output.write(gitignore)
                 except FileExistsError:
                     warnings.warn("Pdf init: Won't overwrite gitignore file")
 
@@ -105,22 +100,16 @@ def main():
             elif option == "tikz":
 
                 srcdir = "src/tikz"
-                os.makedirs(srcdir, exist_ok=True)
-                with open(
-                    str(xdg_data_home())
-                    + "/pandot/templates/makefile_template/auto_tikz_makefile"
-                ) as file:
-                    makefile = file.read()
+                makedirs(srcdir, exist_ok=True)
                 # copy yaml defaults
                 try:
-                    file_output = open(srcdir + "/auto_tikz.yaml", "x")
-                    with open(
-                        str(xdg_data_home())
-                        + "/pandot/defaults/auto_tikz_default-pandotfiles.yaml"
-                    ) as file:
-                        autoyaml = file.read()
-                    file_output.write(autoyaml)
-                    file_output.close()
+                    with open(srcdir + "/auto_tikz.yaml", "x") as file_output:
+                        with open(
+                            str(xdg_data_home())
+                            + "/pandot/defaults/auto_tikz_default-pandotfiles.yaml"
+                        ) as file:
+                            autoyaml = file.read()
+                        file_output.write(autoyaml)
                 except FileExistsError:
                     warnings.warn("Using existing auto_tikz.yaml config file")
 
@@ -128,24 +117,30 @@ def main():
                 logdir = yaml_config["log_folder"]
                 tikzfiles = yaml_config["files_makestring"]
                 builddir = "build/tikz"
-                makefile = tikzmakefilemod(
-                    makefile, "auto_tikz.yaml", "../../" + builddir, logdir, tikzfiles
-                )
-                try:
-                    file_output = open(srcdir + "/Makefile", "x")
-                except FileExistsError:
-                    file_output = open(srcdir + "/Makefile", "w")
-                file_output.write(makefile)
-                file_output.close()
+
+                with open(srcdir + "/Makefile", "w+") as file_output:
+                    with open(
+                        str(xdg_data_home())
+                        + "/pandot/templates/makefile_template/auto_tikz_makefile"
+                    ) as file:
+                        makefile = file.read()
+
+                    makefile = tikzmakefilemod(
+                        makefile,
+                        "auto_tikz.yaml",
+                        "../../" + builddir,
+                        logdir,
+                        tikzfiles,
+                    )
+                    file_output.write(makefile)
 
                 try:
-                    file_output = open(srcdir + "/.gitignore", "x")
-                    with open(
-                        str(xdg_data_home()) + "/pandot/gitignore/tikz.gitignore"
-                    ) as file:
-                        gitignore = file.read()
-                    file_output.write(gitignore)
-                    file_output.close()
+                    with open(srcdir + "/.gitignore", "x") as file_output:
+                        with open(
+                            str(xdg_data_home()) + "/pandot/gitignore/tikz.gitignore"
+                        ) as file:
+                            gitignore = file.read()
+                        file_output.write(gitignore)
                 except FileExistsError:
                     warnings.warn("Tikz init: Won't overwrite gitignore file")
 
@@ -166,7 +161,7 @@ def main():
 
                 srcdir = "src/python"
                 builddir = "build/python"
-                os.makedirs(srcdir, exist_ok=True)
+                makedirs(srcdir, exist_ok=True)
                 with open(
                     str(xdg_data_home())
                     + "/pandot/templates/makefile_template/python_makefile"
@@ -175,32 +170,26 @@ def main():
                 makefile = sub(
                     r"(builddir\s=)(.*)", "\\1 ../../" + str(builddir), makefile
                 )
-                try:
-                    file_output = open(srcdir + "/Makefile", "x")
-                except FileExistsError:
-                    file_output = open(srcdir + "/Makefile", "w")
-                file_output.write(makefile)
-                file_output.close()
+                with open(srcdir + "/Makefile", "w+") as file_output:
+                    file_output.write(makefile)
 
                 try:
-                    file_output = open(srcdir + "/.gitignore", "x")
-                    with open(
-                        str(xdg_data_home()) + "/pandot/gitignore/python.gitignore"
-                    ) as file:
-                        gitignore = file.read()
-                    file_output.write(gitignore)
-                    file_output.close()
+                    with open(srcdir + "/.gitignore", "x") as file_output:
+                        with open(
+                            str(xdg_data_home()) + "/pandot/gitignore/python.gitignore"
+                        ) as file:
+                            gitignore = file.read()
+                        file_output.write(gitignore)
                 except FileExistsError:
                     warnings.warn("Python init: Won't overwrite gitignore file")
 
                 try:
-                    file_output = open(srcdir + "/environment.yaml", "x")
-                    with open(
-                        str(xdg_data_home()) + "/pandot/defaults/environment.yaml"
-                    ) as file:
-                        environment = file.read()
-                    file_output.write(environment)
-                    file_output.close()
+                    with open(srcdir + "/environment.yaml", "x") as file_output:
+                        with open(
+                            str(xdg_data_home()) + "/pandot/defaults/environment.yaml"
+                        ) as file:
+                            environment = file.read()
+                        file_output.write(environment)
                 except FileExistsError:
                     warnings.warn("Python init: Won't overwrite environment file")
 
@@ -223,45 +212,41 @@ def main():
                 srcdir = "src/codev"
                 builddir = "build/codev"
                 outputdir = "output"
-                os.makedirs(srcdir, exist_ok=True)
+                makedirs(srcdir, exist_ok=True)
                 # copy yaml defaults
                 try:
-                    file_output = open(srcdir + "/codev_remote.yaml", "x")
-                    with open(
-                        str(xdg_data_home())
-                        + "/pandot/defaults/codev_remote_default-pandotfiles.yaml"
-                    ) as file:
-                        codev_remote = file.read()
-                    file_output.write(codev_remote)
-                    file_output.close()
+                    with open(srcdir + "/codev_remote.yaml", "x") as file_output:
+                        with open(
+                            str(xdg_data_home())
+                            + "/pandot/defaults/codev_remote_default-pandotfiles.yaml"
+                        ) as file:
+                            codev_remote = file.read()
+                        file_output.write(codev_remote)
                 except FileExistsError:
                     warnings.warn("Using existing codev_remote.yaml config file")
-                with open(
-                    str(xdg_data_home())
-                    + "/pandot/templates/makefile_template/codev_makefile"
-                ) as file:
-                    makefile = file.read()
-                makefile = sub(
-                    r"(builddir\s=)(.*)", "\\1 ../../" + str(builddir), makefile
-                )
-                makefile = sub(r"(outputdir\s=)(.*)", "\\1 " + str(outputdir), makefile)
 
-                try:
-                    file_output = open(srcdir + "/Makefile", "x")
-                except FileExistsError:
-                    file_output = open(srcdir + "/Makefile", "w")
-
-                file_output.write(makefile)
-                file_output.close()
-
-                try:
-                    file_output = open(srcdir + "/.gitignore", "x")
+                with open(srcdir + "/Makefile", "w+") as file_output:
                     with open(
-                        str(xdg_data_home()) + "/pandot/gitignore/codev.gitignore"
+                        str(xdg_data_home())
+                        + "/pandot/templates/makefile_template/codev_makefile"
                     ) as file:
-                        gitignore = file.read()
-                    file_output.write(gitignore)
-                    file_output.close()
+                        makefile = file.read()
+                    makefile = sub(
+                        r"(builddir\s=)(.*)", "\\1 ../../" + str(builddir), makefile
+                    )
+                    makefile = sub(
+                        r"(outputdir\s=)(.*)", "\\1 " + str(outputdir), makefile
+                    )
+
+                    file_output.write(makefile)
+
+                try:
+                    with open(srcdir + "/.gitignore", "x") as file_output:
+                        with open(
+                            str(xdg_data_home()) + "/pandot/gitignore/codev.gitignore"
+                        ) as file:
+                            gitignore = file.read()
+                        file_output.write(gitignore)
                 except FileExistsError:
                     warnings.warn("Codev init: Won't overwrite gitignore file")
 
@@ -294,25 +279,19 @@ def main():
         )
         if (args.output is not None) and (args.output != "T"):
 
-            try:
-                file_output = open(args.output, "x")
-            except FileExistsError:
-                file_output = open(args.output, "w")
-
-            file_output.write(projectmakefile)
-            file_output.close()
+            with open(args.output, "w+") as file_output:
+                file_output.write(projectmakefile)
 
         else:
             print(projectmakefile)
 
         try:
-            file_output = open(".gitignore", "x")
-            with open(
-                str(xdg_data_home()) + "/pandot/gitignore/project.gitignore"
-            ) as file:
-                gitignore = file.read()
-            file_output.write(gitignore)
-            file_output.close()
+            with open(".gitignore", "x") as file_output:
+                with open(
+                    str(xdg_data_home()) + "/pandot/gitignore/project.gitignore"
+                ) as file:
+                    gitignore = file.read()
+                file_output.write(gitignore)
         except FileExistsError:
             warnings.warn("Project init: Won't overwrite gitignore file")
 

@@ -117,12 +117,8 @@ def main():
 
             yamldefault = sub("ULDIPLOMA", uldiploma, yamldefault)
 
-            try:
-                file_output = open(args.output_yaml, "x")
-            except FileExistsError:
-                file_output = open(args.output_yaml, "w")
-            file_output.write(yamldefault)
-            file_output.close()
+            with open(args.output_yaml, "w+") as file_output:
+                file_output.write(yamldefault)
 
     if (args.output is not None) and (args.output != "T"):
         try:

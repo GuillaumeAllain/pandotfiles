@@ -52,12 +52,8 @@ def main():
     )
 
     if args.output is not None:
-        try:
-            file_output = open(args.output, "x")
-        except FileExistsError:
-            file_output = open(args.output, "w")
-        file_output.write(makefile)
-        file_output.close()
+        with open(args.output, "w+") as file_output:
+            file_output.write(makefile)
     else:
         print(makefile)
 
