@@ -1,7 +1,7 @@
-yamlfile = 
-logdir = 
-builddir = 
-tikzfiles = 
+yamlfile = {yamlfile}
+logdir = {logdir}
+builddir = {builddir}
+tikzfiles = {tikzfiles}
 
 tikzfname = $(notdir $(tikzfiles))
 tikzbname = $(tikzfname:%.tikz=%)

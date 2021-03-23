@@ -1,7 +1,7 @@
-logdir = 
-builddir = 
-pandocfiles = 
-mainfile = 
+logdir = {logdir}
+builddir = {builddir}
+pandocfiles = {pandocfiles}
+mainfile = {mainfile}
 
 PD := /usr/local/bin/pandoc
 
@@ -28,7 +28,7 @@ ifneq ($(wildcard $(logdir)/template_default*.yaml),)
     pandocflags += --top-level-division=chapter 
 endif
 
-texflag = -pdfxe -pdfxelatex='xelatex %O "\\def\\OUTPUTDIRECTORY{$(logdir)}\\input{%S}"' -cd -quiet -latexoption='-interaction=nonstopmode --shell-escape' -outdir="$(logdir)" -r $(XDG_DATA_HOME)/pandot/defaults/latexmkrc 
+texflag = -pdfxe -pdfxelatex='xelatex %O "\\def\\OUTPUTDIRECTORY{{$(logdir)}}\\input{{%S}}"' -cd -quiet -latexoption='-interaction=nonstopmode --shell-escape' -outdir="$(logdir)" -r $(XDG_DATA_HOME)/pandot/defaults/latexmkrc 
 
 FIGURETARGETSLOC = $(addprefix ../,$(FIGURETARGETS))
 
@@ -54,7 +54,7 @@ pdf:
 	export MERMAID_FILTER_THEME=default;\
 	cat $(mainfile) | sed s/tagsv:.\*//g | sed "/tagsh/ s/#/\\\\#/g" |\
 	$(PD) $(pandocflags) -o pandoc_backup.tex /dev/stdin $(wildcard *.yaml) $(wildcard $(logdir)/template_default*.yaml)
-	sed 's/\(cite.*\){interne-/\1interne{/g' pandoc_backup.tex > pandoc_sed_output.tex;\
+	sed 's/\(cite.*\){{interne-/\1interne{{/g' pandoc_backup.tex > pandoc_sed_output.tex;\
 	mv pandoc_sed_output.tex pandoc_backup.tex
 	latexmk $(texflag) pandoc_backup.tex
 	-@ mv pandoc_backup.tex $(logdir)

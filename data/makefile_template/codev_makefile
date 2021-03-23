@@ -1,5 +1,5 @@
-builddir = 
-outputdir =
+builddir = {builddir}
+outputdir = {outputdir}
 
 codevfigeps = $(wildcard $(builddir)/fig/*_plt.eps)
 codevfigepsname = $(notdir $(codevfigeps))

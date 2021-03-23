@@ -18,12 +18,11 @@ function remove_todo_blocks (blocks)
               top_header_level = 60
           end
       elseif not looking_at_todo then 
-          if (block.t == 'Para' 
-              and block.c[1].text~='TODO' 
+          if (block.c[1].text~='TODO' 
               and block.c[1].text~='DONE') then
               body_blocks[#body_blocks + 1] = block
           else 
-              body_blocks[#body_blocks + 1] = block
+              -- body_blocks[#body_blocks + 1] = block
           end
       end
   end

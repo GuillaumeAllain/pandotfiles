@@ -1,15 +1,16 @@
 import argparse
 from os import makedirs
+from subprocess import run, PIPE
 import warnings
+import datetime
 
 from pathlib import Path
-from re import sub
 
-#
 from xdg import xdg_data_home
 
 from pandotfiles.util.parser import tikzyamlparse
-from pandotfiles.util.makefile_mod import pdfmakefilemod, tikzmakefilemod
+
+from pandotfiles.util.filenames import get_project_name
 
 parser = argparse.ArgumentParser(
     description=""" Pandot can init document templates and makefiles for
@@ -20,7 +21,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument("command", choices=["init", "newfile"])
 
-parser.add_argument("option", type=str)
+parser.add_argument("option", type=str, default="")
 
 parser.add_argument(
     "-o",
@@ -33,7 +34,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 VALIDOPTIONINIT = ["pdf", "tikz", "reactjs", "python", "codev"]
-VALIDOPTIONNEWFILE = ["python", "tikz"]
+VALIDOPTIONNEWFILE = ["python", "tikz", "diary"]
 
 
 def main():
@@ -41,12 +42,7 @@ def main():
     if args.command == "init":
 
         option_list = args.option.split("+")
-        FIGURETARGETS = ""
-        DATATARGETS = ""
-        TARGETS = ""
-        MAKEFILE_CONTENT = ""
-        CLEAN = ""
-        OPEN = ""
+
         for option in option_list:
 
             if option not in VALIDOPTIONINIT:
@@ -59,7 +55,15 @@ def main():
 
                 raise NotImplementedError(option + " is not yet implemented")
 
-            elif option == "pdf":
+        FIGURETARGETS = ""
+        DATATARGETS = ""
+        TARGETS = ""
+        MAKEFILE_CONTENT = ""
+        CLEAN = ""
+        OPEN = ""
+        for option in option_list:
+
+            if option == "pdf":
 
                 builddir = "build/pdf"
                 srcdir = "doc"
@@ -71,10 +75,21 @@ def main():
                         + "/pandot/templates/makefile_template/pdf_makefile"
                     ) as file:
                         makefile = file.read()
-                    makefile = pdfmakefilemod(
-                        makefile, "log", "../" + builddir, ".", "main.md"
-                    )
+                    # makefile = pdfmakefilemod(
+                    #     makefile, "log", "../" + builddir, ".", "main.md"
+                    # )
 
+                    makefile = str(makefile).format(
+                        logdir="log",
+                        builddir="../" + builddir,
+                        pandocfiles="$(wildcard "
+                        + str(".")
+                        + "/*.md)"
+                        + " $(wildcard "
+                        + str(".")
+                        + "/*.bib)",
+                        mainfile="main.md",
+                    )
                     file_output.write(makefile)
 
                 try:
@@ -127,12 +142,19 @@ def main():
                     ) as file:
                         makefile = file.read()
 
-                    makefile = tikzmakefilemod(
-                        makefile,
-                        "auto_tikz.yaml",
-                        "../../" + builddir,
-                        logdir,
-                        tikzfiles,
+                    # makefile = tikzmakefilemod(
+                    #     makefile,
+                    #     "auto_tikz.yaml",
+                    #     "../../" + builddir,
+                    #     logdir,
+                    #     tikzfiles,
+                    # )
+
+                    makefile = str(makefile).format(
+                        yamlfile="auto_tikz.yaml",
+                        builddir="../../" + builddir,
+                        logdir=logdir,
+                        tikzfiles=tikzfiles.replace(r"wildcard\ ", "wildcard "),
                     )
                     file_output.write(makefile)
 
@@ -169,9 +191,10 @@ def main():
                     + "/pandot/templates/makefile_template/python_makefile"
                 ) as file:
                     makefile = file.read()
-                makefile = sub(
-                    r"(builddir\s=)(.*)", "\\1 ../../" + str(builddir), makefile
-                )
+                # makefile = sub(
+                #     r"(builddir\s=)(.*)", "\\1 ../../" + str(builddir), makefile
+                # )
+                makefile = makefile.format(builddir=str("../../" + builddir))
                 with open(srcdir + "/Makefile", "w+") as file_output:
                     file_output.write(makefile)
 
@@ -233,13 +256,15 @@ def main():
                         + "/pandot/templates/makefile_template/codev_makefile"
                     ) as file:
                         makefile = file.read()
-                    makefile = sub(
-                        r"(builddir\s=)(.*)", "\\1 ../../" + str(builddir), makefile
+                    makefile = makefile.format(
+                        builddir="../../" + str(builddir), outputdir=str(outputdir),
                     )
-                    makefile = sub(
-                        r"(outputdir\s=)(.*)", "\\1 " + str(outputdir), makefile
-                    )
-
+                    # makefile = sub(
+                    #     r"(builddir\s=)(.*)", "\\1 ../../" + str(builddir), makefile
+                    # )
+                    # makefile = sub(
+                    #     r"(outputdir\s=)(.*)", "\\1 " + str(outputdir), makefile
+                    # )
                     file_output.write(makefile)
 
                 try:
@@ -248,7 +273,6 @@ def main():
                             str(xdg_data_home()) + "/pandot/gitignore/codev.gitignore"
                         ) as file:
                             gitignore = file.read()
-                        file_output.write(gitignore)
                 except FileExistsError:
                     warnings.warn("Codev init: Won't overwrite gitignore file")
 
@@ -299,12 +323,16 @@ def main():
 
     elif args.command == "newfile":
 
-        if args.option not in VALIDOPTIONNEWFILE:
+        optionnewfile = args.option
+
+        if optionnewfile not in VALIDOPTIONNEWFILE:
             raise ValueError(
-                option + " is not a valid document output:\n" + str(VALIDOPTIONNEWFILE)
+                optionnewfile
+                + " is not a valid document output:\n"
+                + str(VALIDOPTIONNEWFILE)
             )
 
-        elif args.option == "python":
+        elif optionnewfile == "python":
             print("Enter filename (without extension)")
             filename = input()
             try:
@@ -316,15 +344,49 @@ def main():
             except FileExistsError:
                 raise FileExistsError("Won't overwrite file if it already exists")
 
-        elif args.option == "tikz":
+        elif optionnewfile == "tikz":
             print("Enter filename (without extension)")
             filename = input()
             try:
                 with open(filename + ".tikz", "x") as file_output:
                     file_output.write("\\begin{tikzpicture}\n\\end{tikzpicture}")
-                    file_output.close()
             except FileExistsError:
                 raise FileExistsError("Won't overwrite file if it already exists")
+
+        elif optionnewfile == "diary":
+            pwd = (
+                run("echo $PWD", shell=True, stderr=PIPE, stdout=PIPE)
+                .stdout.decode("utf-8")
+                .splitlines()[0]
+            )
+            fullname = (
+                run("id -F", shell=True, stderr=PIPE, stdout=PIPE)
+                .stdout.decode("utf-8")
+                .splitlines()[0]
+            )
+            filename = pwd + "/" + datetime.datetime.now().strftime("%Y%m%d") + ".md"
+            projectname = get_project_name(filename, pwd)
+            try:
+                with open(filename, "x") as file_output:
+                    with open(
+                        str(xdg_data_home())
+                        + "/pandot/templates/document_templates/diary.md"
+                    ) as file:
+                        diary_template = file.read()
+                    file_output.write(
+                        diary_template.format(
+                            fullname=fullname,
+                            diaryname="Notes du "
+                            + datetime.datetime.now().strftime("%Y-%m-%d"),
+                            date=datetime.datetime.now().strftime("%Y-%m-%d"),
+                            projectname=projectname,
+                            docstyle="diary",
+                        )
+                    )
+            except FileExistsError:
+                warnings.warn(
+                    "Diary file {filename} already exists".format(filename=filename)
+                )
 
 
 if __name__ == "__main__":

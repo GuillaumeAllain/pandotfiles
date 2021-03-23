@@ -1,7 +1,8 @@
 import argparse
 from subprocess import run, PIPE
 from pathlib import Path
-from datetime import date
+import datetime
+from pandotfiles.util.filenames import get_todo_filenames, get_project_name
 
 
 parser = argparse.ArgumentParser(
@@ -31,13 +32,6 @@ parser.add_argument(
 args = parser.parse_args()
 
 
-def get_todo_filenames(PATH):
-    rgoutput = run(
-        'rg -ln "\t*# (TODO|DONE)" ' + PATH, shell=True, stdout=PIPE, stderr=PIPE
-    )
-    return rgoutput.stdout.decode("utf-8").splitlines()
-
-
 def get_line(FILENAME, STRING_TO_FIND, TRESHOLD=0):
     rgoutput = run(
         "rg -nI '" + STRING_TO_FIND + "' " + FILENAME,
@@ -55,8 +49,6 @@ def get_line(FILENAME, STRING_TO_FIND, TRESHOLD=0):
 
 
 def remove_todo(PATH):
-
-    # pandoc main.md -t markdown+yaml_metadata_block --wrap=preserve -s > main2.md
     PANDOC_ORG_COMMAND = """pandoc \
                         {filename} \
                         -t markdown+yaml_metadata_block \
@@ -80,7 +72,7 @@ def get_org(PATH):
     return pandocoutput.stdout.decode("utf-8")
 
 
-def extract():
+def extracttodo():
     DIR = (
         run("echo " + args.input, shell=True, stderr=PIPE, stdout=PIPE)
         .stdout.decode("utf-8")
@@ -97,14 +89,13 @@ def extract():
         newtodo = ""
         if allfiles:
             for file in allfiles:
-                local_org_file = Path(file.split(DIR + "/")[1]).parts[0] + ".org"
+                projectname = get_project_name(file, DIR)
+                local_org_file = projectname + ".org"
                 absolute_org_file = str(ORGDIR) + "/" + local_org_file
                 newtodo += (
                     "# "
                     + file
-                    + " <"
-                    + date.today().strftime("%d/%m/%Y")
-                    + ">"
+                    + datetime.datetime.now().strftime("<%Y-%m-%d %H:%M:%S %A>")
                     + "\n"
                     + get_org(file)
                     + "\n"
@@ -120,4 +111,4 @@ def extract():
 
 
 if __name__ == "__main__":
-    extract()
+    extracttodo()

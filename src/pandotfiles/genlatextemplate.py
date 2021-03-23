@@ -121,12 +121,8 @@ def main():
                 file_output.write(yamldefault)
 
     if (args.output is not None) and (args.output != "T"):
-        try:
-            file_output = open(args.output, "x")
-        except FileExistsError:
-            file_output = open(args.output, "w")
-        file_output.write(template_final)
-        file_output.close()
+        with open(args.output, "w+") as file_output:
+            file_output.write(template_final)
     else:
         pass
     # print(template_final)

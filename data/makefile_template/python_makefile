@@ -1,4 +1,4 @@
-builddir = 
+builddir = {builddir}
 
 pythonfiles = $(wildcard *.py)
 
