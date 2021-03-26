@@ -4,6 +4,3 @@
 [submodule "data/extfilters/pandoc-gls"]
 	path = data/extfilters/pandoc-gls
 	url = https://github.com/tomncooper/pandoc-gls.git
-[submodule "data/extfilters/my-pandoc-filters"]
-	path = data/extfilters/my-pandoc-filters
-	url = https://github.com/GuillaumeAllain/my-pandoc-filters.git
