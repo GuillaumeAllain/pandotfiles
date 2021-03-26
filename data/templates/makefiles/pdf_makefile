@@ -19,7 +19,7 @@ pandocflags  = -f markdown -t latex -s --data-dir="$(XDG_DATA_HOME)/pandot"
 pandocflags += --natbib --template=$(auto_template_loc) --lua-filter include-files.lua 
 pandocflags += --lua-filter pandoc-gls.lua --lua-filter remove-todo.lua
 pandocflags += --lua-filter ulresume-to-meta.lua --lua-filter ulabstract-to-meta.lua
-pandocflags += -F ./siunitx-filter.py -F mermaid-filter
+pandocflags += --lua-filter siunitx.lua -F mermaid-filter
 pandocflags += -F pandoc-crossref -M "crossrefYaml=$XDG_DATA_HOME/pandot/defaults/pandoc-crossref-pandotfiles.yaml" 
 pandocflags += -V 'idhome=$HOME'
 pandocflags += ~/.local/share/pandot/defaults/latex_default-pandotfiles.yaml

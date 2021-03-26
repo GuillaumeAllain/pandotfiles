@@ -27,7 +27,6 @@
   \newcommand{\dateprint}{$if(date)$ $date$ $else$ ~ $endif$}
   \newcommand{\yearprint}{$if(year)$ $year$ $else$ \the\year{} $endif$}
   \newcommand{\uldirector}{$uldirector$}
-  \newcommand{\acronym}{$uldirector$}
   \newcommand{\uldepot}{$uldepot$}
   \newcommand{\ulprogram}{$ulprogram$}
   \newcommand{\ulabstract}{$ulabstract$}
@@ -52,9 +51,9 @@ $if(docstyle)$
   \immediate\write18{cp \XDGDATAHOME/pandot/templates/docstyle_latex/docstyle-$docstyle$.tex \OUTPUTDIRECTORY/template.tex}
   \input{\OUTPUTDIRECTORY/template.tex}
 
-    $if(acronym)$
-    $for(acronym)$
-    \newacronym{$acronym.cmd$}{$acronym.short$}{$acronym.long$}
+    $if(acronyms)$
+    $for(acronyms)$
+    \newacronym{$acronyms.cmd$}{$acronyms.short$}{$acronyms.long$}
     $endfor$
     $endif$
 $endif$

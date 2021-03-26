@@ -39,7 +39,7 @@ args = parser.parse_args()
 def main():
 
     with open(
-        str(xdg_data_home()) + "/pandot/templates/makefile_template/auto_tikz_makefile"
+        str(xdg_data_home()) + "/pandot/templates/makefiles/auto_tikz_makefile"
     ) as file:
         makefile = file.read()
 

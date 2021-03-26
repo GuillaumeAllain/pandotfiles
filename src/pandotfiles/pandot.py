@@ -72,7 +72,7 @@ def main():
                 with open("doc/Makefile", "w+") as file_output:
                     with open(
                         str(xdg_data_home())
-                        + "/pandot/templates/makefile_template/pdf_makefile"
+                        + "/pandot/templates/makefiles/pdf_makefile"
                     ) as file:
                         makefile = file.read()
                     # makefile = pdfmakefilemod(
@@ -138,7 +138,7 @@ def main():
                 with open(srcdir + "/Makefile", "w+") as file_output:
                     with open(
                         str(xdg_data_home())
-                        + "/pandot/templates/makefile_template/auto_tikz_makefile"
+                        + "/pandot/templates/makefiles/auto_tikz_makefile"
                     ) as file:
                         makefile = file.read()
 
@@ -187,8 +187,7 @@ def main():
                 builddir = "build/python"
                 makedirs(srcdir, exist_ok=True)
                 with open(
-                    str(xdg_data_home())
-                    + "/pandot/templates/makefile_template/python_makefile"
+                    str(xdg_data_home()) + "/pandot/templates/makefiles/python_makefile"
                 ) as file:
                     makefile = file.read()
                 # makefile = sub(
@@ -253,7 +252,7 @@ def main():
                 with open(srcdir + "/Makefile", "w+") as file_output:
                     with open(
                         str(xdg_data_home())
-                        + "/pandot/templates/makefile_template/codev_makefile"
+                        + "/pandot/templates/makefiles/codev_makefile"
                     ) as file:
                         makefile = file.read()
                     makefile = makefile.format(
@@ -364,13 +363,17 @@ def main():
                 .stdout.decode("utf-8")
                 .splitlines()[0]
             )
-            filename = pwd + "/" + datetime.datetime.now().strftime("%Y%m%d") + ".md"
-            projectname = get_project_name(filename, pwd)
+
+            filename = str(
+                Path(pwd).joinpath(datetime.datetime.now().strftime("%Y%m%d") + ".md")
+            )
+
+            projectname = Path(filename).parts[-2]
+
             try:
                 with open(filename, "x") as file_output:
                     with open(
-                        str(xdg_data_home())
-                        + "/pandot/templates/document_templates/diary.md"
+                        str(xdg_data_home()) + "/pandot/templates/documents/diary.md"
                     ) as file:
                         diary_template = file.read()
                     file_output.write(
@@ -383,6 +386,7 @@ def main():
                             docstyle="diary",
                         )
                     )
+
             except FileExistsError:
                 warnings.warn(
                     "Diary file {filename} already exists".format(filename=filename)
