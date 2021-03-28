@@ -55,8 +55,12 @@ def remove_todo(PATH):
                         --wrap=preserve \
                         -s \
                         -L ~/.local/share/pandot/filters/remove-todo.lua \
-                        --atx-header \
-                        -o {filename}\
+                        --markdown-headings=atx \
+                        -o {filename} \
+                        -V header-includes= \
+                        -V include-before= \
+                        -V include-after= \
+                        | sed '/^$/N;/^\\n$/D'
                         """
     run(PANDOC_ORG_COMMAND.format(filename=PATH), shell=True)
 
