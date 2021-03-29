@@ -2,7 +2,7 @@ import argparse
 from subprocess import run, PIPE
 from pathlib import Path
 import datetime
-from pandotfiles.util.filenames import get_todo_filenames, get_project_name
+from pandotfiles.util.filenames import get_todo_filenames, get_project_name, escape
 
 
 parser = argparse.ArgumentParser(
@@ -32,41 +32,29 @@ parser.add_argument(
 args = parser.parse_args()
 
 
-def get_line(FILENAME, STRING_TO_FIND, TRESHOLD=0):
-    rgoutput = run(
-        "rg -nI '" + STRING_TO_FIND + "' " + FILENAME,
-        shell=True,
-        stdout=PIPE,
-        stderr=PIPE,
-    )
-    return [
-        x
-        for x in [
-            int(x.split(":")[0]) for x in rgoutput.stdout.decode("utf-8").splitlines()
-        ]
-        if x > TRESHOLD
-    ]
-
-
 def remove_todo(PATH):
-    PANDOC_ORG_COMMAND = """pandoc \
+    PANDOC_ORG_COMMAND = """/usr/local/bin/pandoc \
                         {filename} \
                         -t markdown+yaml_metadata_block \
                         --wrap=preserve \
+                        -o {filename} \
                         -s \
                         -L ~/.local/share/pandot/filters/remove-todo.lua \
                         --markdown-headings=atx \
-                        -o {filename} \
                         -V header-includes= \
                         -V include-before= \
                         -V include-after= \
-                        | sed '/^$/N;/^\\n$/D'
+                        ; sed '/^$/N;/^\\n$/D' {filename} \
+                        | sed 's/^```\\s*$/```\\n/g' \
+                        | awk '{{if (NR==1 && NF==0) next}};1' \
+                        | awk 'NR > 1{{print t}} {{t = $0}}END{{if (NF) print }}' > tmp \
+                        ;mv tmp {filename}
                         """
     run(PANDOC_ORG_COMMAND.format(filename=PATH), shell=True)
 
 
 def get_org(PATH):
-    PANDOC_ORG_COMMAND = """pandoc \
+    PANDOC_ORG_COMMAND = """/usr/local/bin/pandoc \
                         -t org \
                         -L ~/.local/share/pandot/filters/get-todo.lua \
                         --wrap=preserve"""
@@ -77,12 +65,12 @@ def get_org(PATH):
 
 
 def extracttodo():
-    DIR = (
+    DIR = escape(
         run("echo " + args.input, shell=True, stderr=PIPE, stdout=PIPE)
         .stdout.decode("utf-8")
         .splitlines()[0]
     )
-    ORGDIR = (
+    ORGDIR = escape(
         run("echo " + args.output, shell=True, stderr=PIPE, stdout=PIPE)
         .stdout.decode("utf-8")
         .splitlines()[0]
