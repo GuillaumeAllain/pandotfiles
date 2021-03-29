@@ -35,7 +35,7 @@ args = parser.parse_args()
 def remove_todo(PATH):
     PANDOC_ORG_COMMAND = """/usr/local/bin/pandoc \
                         {filename} \
-                        -t markdown+yaml_metadata_block \
+                        -t markdown+yaml_metadata_block-grid_tables-simple_tables-multiline_tables \
                         --wrap=preserve \
                         -o {filename} \
                         -s \
