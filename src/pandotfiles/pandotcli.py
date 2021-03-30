@@ -10,8 +10,6 @@ from xdg import xdg_data_home
 
 from pandotfiles.util.parser import tikzyamlparse
 
-from pandotfiles.util.filenames import get_project_name
-
 parser = argparse.ArgumentParser(
     description=""" Pandot can init document templates and makefiles for
                            compiling academic documents or presentations.

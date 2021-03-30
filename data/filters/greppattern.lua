@@ -30,10 +30,12 @@ function get_greppattern_blocks (blocks)
             current_block = {}
             current_block[#current_block+1] = block
         else
-            for _, inlines in ipairs(block.content) do
-                if inlines.text then
-                    if inlines.text:find(greppattern) then
-                        contains_pattern = true
+            if block.content then
+                for _, inlines in ipairs(block.content) do
+                    if inlines.text then
+                        if inlines.text:find(greppattern) then
+                            contains_pattern = true
+                        end
                     end
                 end
             end
