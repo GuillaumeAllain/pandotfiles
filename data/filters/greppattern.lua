@@ -23,7 +23,6 @@ function get_greppattern_blocks (blocks)
                 end
             end
             for _, inlines in ipairs(block.content) do
-                print(inlines)
                 if inlines.text then
                     if inlines.text:find(greppattern) then
                         contains_pattern = true
