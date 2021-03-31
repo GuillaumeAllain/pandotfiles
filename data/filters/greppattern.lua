@@ -22,10 +22,13 @@ function get_greppattern_blocks (blocks)
                     table.insert(body_blocks, v)
                 end
             end
-            if block.content:find(greppattern) then
-                contains_pattern = true
-            else
-                contains_pattern = false
+            for _, inlines in ipairs(block.content) do
+                print(inlines)
+                if inlines.text then
+                    if inlines.text:find(greppattern) then
+                        contains_pattern = true
+                    end
+                end
             end
             current_block = {}
             current_block[#current_block+1] = block
