@@ -1,10 +1,10 @@
-function remove_todo_blocks (blocks)
+function remove_todo_blocks (doc)
 
   local body_blocks = {}
   local top_header_level = 60
   local looking_at_todo = false
 
-  for _, block in ipairs(blocks) do
+  for _, block in ipairs(doc.blocks) do
       if block.t == 'Header' then
           if block.content[1].text=='TODO' or block.content[1].text=='DONE' then
               looking_at_todo = true
@@ -27,10 +27,10 @@ function remove_todo_blocks (blocks)
       end
   end
 
-  return body_blocks
+  return pandoc.Pandoc(body_blocks,doc.meta)
 end
 
 
 return {{
-    Blocks = remove_todo_blocks,
+    Pandoc = remove_todo_blocks,
 }}
