@@ -14,13 +14,16 @@ parser = argparse.ArgumentParser(
     description="""Panotes is a program designed to manage notes and todos.
                    Manages $NOTES_DIR by default.
 
+                   journal: Opens today's diary in $EDITOR
                    newdiary: Creates a dated diary file: $NOTES_DIR/journal/YYYYmmdd.md
                    exporttodo: Extract and writes todo from all files ($NOTES_DIR/SUBDIR/*) to ~/org/SUBDIR.org
                    extracttag: Returns to Stdout all blocks with the occurence of a given tag (-t option defaults to empty string)""",
     formatter_class=argparse.RawTextHelpFormatter,
 )
 
-parser.add_argument("command", choices=["newdiary", "exporttodo", "extracttag"])
+parser.add_argument(
+    "command", choices=["journal", "newdiary", "exporttodo", "extracttag"]
+)
 
 parser.add_argument("-t", "--tag", help="Tag used for extracttag", type=str, default="")
 
@@ -32,7 +35,7 @@ args = parser.parse_args()
 
 
 def main():
-    if args.command == "newdiary":
+    if args.command == "newdiary" or args.command == "journal":
         notesdir = (
             run("echo " + args.dir, shell=True, stderr=PIPE, stdout=PIPE)
             .stdout.decode("utf-8")
@@ -73,10 +76,15 @@ def main():
                 )
 
         except FileExistsError:
-            warnings.warn(
-                "Diary file {filename} already exists".format(filename=filename)
-            )
-        print(filename)
+            if not args.command == "journal":
+                warnings.warn(
+                    "Diary file {filename} already exists".format(filename=filename)
+                )
+        if args.command == "journal":
+            run("$EDITOR {filename}".format(filename=filename), shell=True)
+        else:
+            print(filename)
+
     elif args.command == "exporttodo":
         extract_todo(args.dir, "$HOME/org")
     elif args.command == "extracttag":

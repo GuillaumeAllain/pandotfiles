@@ -6,7 +6,11 @@ from pandotfiles.panotes.file_management import (
     get_filename_regex,
     get_relative_parent_name,
 )
-from pandotfiles.util.markdown import PANDOC_MARKDOWN_OUTPUT_COMMANDS, CLEAN_WHITESPACE
+from pandotfiles.util.markdown import (
+    PANDOC_MARKDOWN_OUTPUT_COMMANDS,
+    CLEAN_WHITESPACE,
+    CLEAN_TAGS,
+)
 
 
 def remove_todo(PATH):
@@ -14,6 +18,7 @@ def remove_todo(PATH):
         "/usr/local/bin/pandoc {filename} -L ~/.local/share/pandot/filters/remove-todo.lua "
         + PANDOC_MARKDOWN_OUTPUT_COMMANDS
         + CLEAN_WHITESPACE
+        + CLEAN_TAGS
         + " > tmp ; mv tmp {filename}"
     )
     run(LOCAL_PANDOC_MARKDOWN_COMMAND.format(filename=PATH), shell=True)
@@ -51,12 +56,12 @@ def extract_todo(dir, orgdir):
                 local_org_file = projectname + ".org"
                 absolute_org_file = str(ORGDIR) + "/" + local_org_file
                 newtodo += (
-                    "# "
-                    + file
-                    + datetime.datetime.now().strftime("<%Y-%m-%d %H:%M:%S %A>")
+                    get_org(file)
                     + "\n"
-                    + get_org(file)
-                    + "\n"
+                    # + "# "
+                    # + file
+                    # + datetime.datetime.now().strftime("<%Y-%m-%d %H:%M:%S %A>")
+                    # + "\n"
                 )
                 remove_todo(file)
 
