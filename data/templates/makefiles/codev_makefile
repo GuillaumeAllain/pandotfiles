@@ -1,6 +1,10 @@
 builddir = {builddir}
 outputdir = {outputdir}
 
+forsrcdir = ../fortran/subroutines/src
+formoddir = $(forsrcdir)/modules
+forsrcfiles = $(wildcard $(forsrcdir)/*.f90) $(wildcard $(formoddir)/*.f90)
+
 codevfigeps = $(wildcard $(builddir)/fig/*_plt.eps)
 codevfigepsname = $(notdir $(codevfigeps))
 codevfigpdf = $(codevfigepsname:%_plt.eps=%.pdf)
@@ -15,13 +19,12 @@ CC = $(CC_$(V))
 .PHONY: clean all
 
 all : $(builddir)/codev_stamp $(completecodevpdf)
-	echo $(completecodevpdf)
 
 clean: 
 	-@ rm -r $(outputdir) $(builddir)
 	$(CC) -c
 
-$(builddir)/codev_stamp : $(wildcard */*.seq) $(wildcard *.seq)
+$(builddir)/codev_stamp : $(wildcard */*.seq) $(wildcard *.seq) $(forsrcfiles)
 	-@ mkdir -p $(builddir)
 	$(CC) -u
 	$(CC) 

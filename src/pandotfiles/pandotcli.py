@@ -270,6 +270,7 @@ def main():
                             str(xdg_data_home()) + "/pandot/gitignore/codev.gitignore"
                         ) as file:
                             gitignore = file.read()
+                        file_output.write(gitignore)
                 except FileExistsError:
                     warnings.warn("Codev init: Won't overwrite gitignore file")
 

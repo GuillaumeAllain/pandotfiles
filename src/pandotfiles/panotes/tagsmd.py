@@ -13,17 +13,6 @@ from pandotfiles.panotes.file_management import (
 )
 
 
-def get_org(PATH):
-    PANDOC_ORG_COMMAND = """/usr/local/bin/pandoc \
-                        -t org \
-                        -L ~/.local/share/pandot/filters/get-todo.lua \
-                        --wrap=preserve"""
-    pandocoutput = run(
-        PANDOC_ORG_COMMAND + " " + PATH, shell=True, stdout=PIPE, stderr=PIPE
-    )
-    return pandocoutput.stdout.decode("utf-8")
-
-
 def get_regex_blocks(filename, regex):
     LOCAL_PANDOC_MARKDOWN_COMMAND = (
         "/usr/local/bin/pandoc {filename}"
