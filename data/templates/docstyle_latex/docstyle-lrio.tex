@@ -108,7 +108,10 @@
   \tableofcontents                % production de la TdM
   \listoffigures                  % production de la liste des figures
   \listoftables                   % production de la liste des tableaux
+  % \printglossary[type=\acronymtype,title=Acronymes]
+  \ifthenelse{\equal{\acronyms}{}}{}{
   \printglossary[type=\acronymtype,title=Acronymes]
+  }
 
   \ifthenelse{\equal{\bibliographyinternefile}{}}{}{
     % \newcites{interne}{Documents internes}
