@@ -1,10 +1,6 @@
 import argparse
 from xdg import xdg_data_home
 
-# from pandotfiles.util.makefile_mod import pdfmakefilemod
-# from pandotfiles.util.filenames import escape
-# from re import escape
-
 parser = argparse.ArgumentParser(
     description="""Generate a Makefile to compile all tikz (*.tikz) file from a repo.""",
     formatter_class=argparse.RawTextHelpFormatter,
@@ -47,11 +43,10 @@ args = parser.parse_args()
 
 def main():
 
-    with open(str(xdg_data_home()) + "/pandot/templates/makefiles/pdf_makefile") as file:
+    with open(
+        str(xdg_data_home()) + "/pandot/templates/makefiles/pdf_makefile"
+    ) as file:
         makefile = file.read()
-    # makefile = pdfmakefilemod(
-    #     makefile, "log", "../" + builddir, ".", "main.md"
-    # )
 
     makefile = str(makefile).format(
         logdir=args.logdir,
@@ -64,14 +59,6 @@ def main():
         + "/*.bib)",
         mainfile=args.mainfile,
     )
-    # with open(
-    #     str(xdg_data_home()) + "/pandot/templates/makefiles/pdf_makefile"
-    # ) as file:
-    #     makefile = file.read()
-
-    # makefile = pdfmakefilemod(
-    #     makefile, args.logdir, args.builddir, args.srcdir, args.mainfile
-    # )
 
     if args.output is not None:
 

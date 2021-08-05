@@ -19,7 +19,7 @@ pandocflags  = -f markdown -t latex -s --data-dir="$(XDG_DATA_HOME)/pandot"
 pandocflags += --natbib --template=$(auto_template_loc) --lua-filter include-files.lua 
 pandocflags += --lua-filter pandoc-gls.lua --lua-filter remove-todo.lua
 pandocflags += --lua-filter ulresume-to-meta.lua --lua-filter ulabstract-to-meta.lua
-pandocflags += --lua-filter siunitx.lua -F mermaid-filter
+pandocflags += --lua-filter siunitx.lua 
 pandocflags += -F pandoc-crossref -M "crossrefYaml=$XDG_DATA_HOME/pandot/defaults/pandoc-crossref-pandotfiles.yaml" 
 pandocflags += -V 'idhome=$HOME'
 pandocflags += ~/.local/share/pandot/defaults/latex_default-pandotfiles.yaml
@@ -49,16 +49,12 @@ $(auto_template_loc): $(mainfile)
 
 pdf:
 	-@ rm $(logdir)/pandoc_backup.tex
-	export MERMAID_FILTER_LOC=$(logdir);\
-	export MERMAID_FILTER_FORMAT=pdf;\
-	export MERMAID_FILTER_THEME=default;\
 	cat $(mainfile) | sed s/tagsv:.\*//g | sed "/tagsh/ s/#/\\\\#/g" |\
 	$(PD) $(pandocflags) -o pandoc_backup.tex /dev/stdin $(wildcard *.yaml) $(wildcard $(logdir)/template_default*.yaml)
 	sed 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex > pandoc_sed_output.tex;\
 	mv pandoc_sed_output.tex pandoc_backup.tex
 	latexmk $(texflag) pandoc_backup.tex
 	-@ mv pandoc_backup.tex $(logdir)
-	-@ mv mermaid-filter.err $(logdir)
 	-@ mkdir -p $(builddir)
 	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
 
