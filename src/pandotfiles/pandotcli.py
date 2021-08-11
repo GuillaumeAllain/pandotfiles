@@ -336,7 +336,11 @@ def main():
             try:
                 with open(filename + ".py", "x") as file_output:
                     file_output.write(
-                        "#!/usr/bin/env conda run -p " "../../build/python/env ipython"
+                        "#! shebangrun()"
+                        " { conda activate ../../build/python/env > /dev/null;"
+                        "ipython $1;"
+                        "conda deactivate > /dev/null; };"
+                        " shebangrun"
                     )
                     file_output.close()
             except FileExistsError:
