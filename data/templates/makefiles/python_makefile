@@ -8,7 +8,8 @@ pythonflag = $(addprefix $(builddir)/,$(addsuffix .flag,$(pythonbname)))
 
 DATATARGETSLOC = $(addprefix ../../,$(DATATARGETS))
 
-.PHONY: clean all env
+SHELL := /usr/bin/env zsh
+.PHONY: cleanenv all env clean
 
 all : $(pythonflag)
 	-@ mkdir -p $(builddir)
@@ -21,13 +22,15 @@ $(builddir)/env/touchfile: environment.yaml
 	&& conda env update --prefix $(builddir)/env --file environment.yaml --prune
 	touch $(builddir)/env/touchfile
 
-clean :
+cleanenv :
 	rm -rf $(builddir)/env
+
+clean:
 	-@ rm -rf $(builddir) output
 
 $(builddir)/%.flag : %.py $(DATATARGETSLOC) env
 	-@ mkdir output
-	conda run -p $(builddir)/env python $<
+	source $(HOME)/.zshrc;conda activate ../../build/python/env; python $<; conda deactivate;
 	-@ mkdir -p $(builddir)
 	rsync -aP output $(builddir)
 	touch $@
