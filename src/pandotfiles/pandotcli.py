@@ -31,8 +31,8 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-VALIDOPTIONINIT = ["pdf", "tikz", "reactjs", "python", "codev"]
-VALIDOPTIONNEWFILE = ["python", "tikz", "diary"]
+VALIDOPTIONINIT = ["pdf", "tikz", "reactjs", "python", "codev", "julia"]
+VALIDOPTIONNEWFILE = ["python", "tikz", "diary", "julia"]
 
 
 def main():
@@ -229,6 +229,46 @@ def main():
                 FIGURETARGETS += "FIGURETARGETS += " + builddir + "/python_stamp\n"
                 CLEAN += "\t$(MAKE) -C " + srcdir + " clean\n"
 
+            elif option == "julia":
+
+                srcdir = "src/julia"
+                builddir = "build/julia"
+                makedirs(srcdir, exist_ok=True)
+                with open(
+                    str(xdg_data_home()) + "/pandot/templates/makefiles/julia_makefile"
+                ) as file:
+                    makefile = file.read()
+                # makefile = sub(
+                #     r"(builddir\s=)(.*)", "\\1 ../../" + str(builddir), makefile
+                # )
+                makefile = makefile.format(builddir=str("../../" + builddir))
+                with open(srcdir + "/Makefile", "w+") as file_output:
+                    file_output.write(makefile)
+
+                try:
+                    with open(srcdir + "/.gitignore", "x") as file_output:
+                        with open(
+                            str(xdg_data_home()) + "/pandot/gitignore/julia.gitignore"
+                        ) as file:
+                            gitignore = file.read()
+                        file_output.write(gitignore)
+                except FileExistsError:
+                    warnings.warn("Python init: Won't overwrite gitignore file")
+
+                sources = "$(wildcard src/julia/*.jl) $(DATATARGETS)"
+                MAKEFILE_CONTENT += (
+                    builddir
+                    + "/julia_stamp: "
+                    + sources
+                    + " \n\t$(MAKE) -C "
+                    + srcdir
+                    + "\n"
+                )
+
+                TARGETS += "TARGETS += " + builddir + "/julia_stamp\n"
+                FIGURETARGETS += "FIGURETARGETS += " + builddir + "/julia_stamp\n"
+                CLEAN += "\t$(MAKE) -C " + srcdir + " clean\n"
+
             elif option == "codev":
 
                 srcdir = "src/codev"
@@ -342,6 +382,16 @@ def main():
                         "conda deactivate > /dev/null; };"
                         " shebangrun"
                     )
+                    file_output.close()
+            except FileExistsError:
+                raise FileExistsError("Won't overwrite file if it already exists")
+
+        elif optionnewfile == "julia":
+            print("Enter filename (without extension)")
+            filename = input()
+            try:
+                with open(filename + ".jl", "x") as file_output:
+                    file_output.write("#! julia --project=.")
                     file_output.close()
             except FileExistsError:
                 raise FileExistsError("Won't overwrite file if it already exists")

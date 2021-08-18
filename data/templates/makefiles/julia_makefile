@@ -1,0 +1,26 @@
+builddir = {builddir}
+
+juliafiles = $(wildcard *.jl)
+
+juliafname = $(notdir $(juliafiles))
+juliabname = $(juliafname:%.jl=%)
+juliaflag = $(addprefix $(builddir)/,$(addsuffix .flag,$(juliabname)))
+
+DATATARGETSLOC = $(addprefix ../../,$(DATATARGETS))
+
+SHELL := /usr/bin/env zsh
+.PHONY: env clean
+
+all : $(juliaflag)
+	-@ mkdir -p $(builddir)
+	touch $(builddir)/julia_stamp
+
+clean:
+	-@ rm -rf $(builddir) output
+
+$(builddir)/%.flag : %.jl $(DATATARGETSLOC) env
+	-@ mkdir output
+	julia --project=. $<
+	-@ mkdir -p $(builddir)
+	rsync -aP output $(builddir)
+	touch $@

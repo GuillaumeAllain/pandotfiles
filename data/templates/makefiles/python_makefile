@@ -30,7 +30,7 @@ clean:
 
 $(builddir)/%.flag : %.py $(DATATARGETSLOC) env
 	-@ mkdir output
-	source $(HOME)/.zshrc;conda activate ../../build/python/env; python $<; conda deactivate;
+	source $(HOME)/.zshrc;conda activate $(builddir)/env; python $<; conda deactivate;
 	-@ mkdir -p $(builddir)
 	rsync -aP output $(builddir)
 	touch $@
