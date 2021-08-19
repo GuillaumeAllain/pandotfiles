@@ -233,14 +233,15 @@ def main():
 
                 srcdir = "src/julia"
                 builddir = "build/julia"
+                run(
+                    "julia --project=" + srcdir + " -e 'using Pkg; Pkg.instantiate()'",
+                    shell=True,
+                )
                 makedirs(srcdir, exist_ok=True)
                 with open(
                     str(xdg_data_home()) + "/pandot/templates/makefiles/julia_makefile"
                 ) as file:
                     makefile = file.read()
-                # makefile = sub(
-                #     r"(builddir\s=)(.*)", "\\1 ../../" + str(builddir), makefile
-                # )
                 makefile = makefile.format(builddir=str("../../" + builddir))
                 with open(srcdir + "/Makefile", "w+") as file_output:
                     file_output.write(makefile)
@@ -253,7 +254,7 @@ def main():
                             gitignore = file.read()
                         file_output.write(gitignore)
                 except FileExistsError:
-                    warnings.warn("Python init: Won't overwrite gitignore file")
+                    warnings.warn("Julia init: Won't overwrite gitignore file")
 
                 sources = "$(wildcard src/julia/*.jl) $(DATATARGETS)"
                 MAKEFILE_CONTENT += (
