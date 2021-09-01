@@ -1,11 +1,18 @@
 from subprocess import run
+from xdg import xdg_data_home
 
 PANDOC_MARKDOWN_OUTPUT_COMMANDS = (
-    "-t markdown+yaml_metadata_block-grid_tables-simple_tables-multiline_tables"
+    "-t markdown+yaml_metadata_block-grid_tables-simple_tables-multiline_tables-latex_macros "
+    + '--data-dir="'
+    + str(xdg_data_home())
+    + '/pandot" -L math_spaces.lua'
     + " -s --markdown-headings=atx --wrap=preserve -V header-includes= -V include-before= -V include-after= "
 )
 PANDOC_MARKDOWN_OUTPUT_COMMANDS_NOYAML = (
-    "-t markdown+yaml_metadata_block-grid_tables-simple_tables-multiline_tables"
+    "-t markdown+yaml_metadata_block-grid_tables-simple_tables-multiline_tables-latex_macros"
+    + '--data-dir="'
+    + str(xdg_data_home())
+    + '/pandot" -L math_spaces.lua'
     + " --markdown-headings=atx --wrap=preserve -V header-includes= -V include-before= -V include-after= "
 )
 CLEAN_WHITESPACE = (
