@@ -8,7 +8,7 @@ local function replace_si(inlinetype, mathtype, sistring)
     if inlinetype=="Str" or inlinetype=="RawInline" then
         if FORMAT=='latex' then
             si_object=pandoc.RawInline ('latex', "\\SI{"..number.."}{"..unit.."}")
-        elseif FORMAT=="html" and FORMAT=="html5" then
+        elseif FORMAT=="html" or FORMAT=="html5" then
             si_object=pandoc.RawInline('html','<span class="phy-quantity"><span class="phy-number">'..number..'</span><span class="phy-unit">'..unit..'</span></span>')
         else
             si_object=pandoc.Str(number.." "..unit)
