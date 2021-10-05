@@ -18,9 +18,6 @@
    }
   \ExplSyntaxOff
 
-  \getenv[\HOME]{HOME}
-  % \getenv[\GABARITLRIO]{GABARITLRIO}
-  \getenv[\XDGDATAHOME]{XDG_DATA_HOME}
   \newcommand{\titleprint}{$title$}
   \newcommand{\subtitleprint}{$subtitle$}
   \newcommand{\authorprint}{$author$}
@@ -49,7 +46,7 @@
 $if(docstyle)$
   \usepackage{graphicx}
   \usepackage{ifthen}
-  \immediate\write18{cp \XDGDATAHOME/pandot/templates/docstyle_latex/docstyle-$docstyle$.tex \OUTPUTDIRECTORY/template.tex}
+  \immediate\write18{cp ../.pandot/latex/docstyle_latex/docstyle-$docstyle$.tex \OUTPUTDIRECTORY/template.tex}
   \input{\OUTPUTDIRECTORY/template.tex}
 
     $if(acronyms)$

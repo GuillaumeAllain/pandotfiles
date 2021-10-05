@@ -1,5 +1,7 @@
 import argparse
 from os import makedirs
+from glob import glob
+from shutil import copytree, copy
 from subprocess import run, PIPE
 import warnings
 import datetime
@@ -59,6 +61,7 @@ def main():
         MAKEFILE_CONTENT = ""
         CLEAN = ""
         OPEN = ""
+        makedirs(".pandot", exist_ok=True)
         for option in option_list:
 
             if option == "pdf":
@@ -111,6 +114,51 @@ def main():
                 CLEAN += "\t$(MAKE) -C doc clean\n"
                 TARGETS += "TARGETS += " + builddir + "/main.pdf\n"
                 OPEN += "\topen " + builddir + "/main.pdf\n"
+
+                # copy docstyle and relevent files for pandoc
+                makedirs(".pandot/latex", exist_ok=True)
+                copytree(
+                    str(xdg_data_home()) + "/pandot/templates/docstyle_latex/",
+                    ".pandot/latex/docstyle_latex",
+                    dirs_exist_ok=True,
+                )
+                makedirs(".pandot/latex/defaults", exist_ok=True)
+                copy(
+                    str(xdg_data_home()) + "/pandot/defaults/latexmkrc",
+                    ".pandot/latex/defaults/",
+                )
+                copy(
+                    str(xdg_data_home())
+                    + "/pandot/defaults/pandoc-crossref-pandotfiles.yaml",
+                    ".pandot/latex/defaults/",
+                )
+                copy(
+                    str(xdg_data_home())
+                    + "/pandot/defaults/latex_default-pandotfiles.yaml",
+                    ".pandot/latex/defaults/",
+                )
+                copy(
+                    str(xdg_data_home())
+                    + "/pandot/defaults/latex_default_ulthese-pandotfiles.yaml",
+                    ".pandot/latex/defaults/",
+                )
+                makedirs(".pandot/pandoc", exist_ok=True)
+                copytree(
+                    str(xdg_data_home()) + "/pandot/filters/",
+                    ".pandot/pandoc/filters",
+                    dirs_exist_ok=True,
+                )
+                makedirs(".pandot/pandoc/injection", exist_ok=True)
+                copy(
+                    str(xdg_data_home())
+                    + "/pandot/templates/injection/latex_custom_injection.tex",
+                    ".pandot/pandoc/injection/",
+                )
+                copy(
+                    str(xdg_data_home())
+                    + "/pandot/templates/injection/genlatextemplate_script.py",
+                    ".pandot/pandoc/injection/",
+                )
 
             elif option == "tikz":
 
@@ -295,7 +343,8 @@ def main():
                     ) as file:
                         makefile = file.read()
                     makefile = makefile.format(
-                        builddir="../../" + str(builddir), outputdir=str(outputdir),
+                        builddir="../../" + str(builddir),
+                        outputdir=str(outputdir),
                     )
                     # makefile = sub(
                     #     r"(builddir\s=)(.*)", "\\1 ../../" + str(builddir), makefile
