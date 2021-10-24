@@ -48,10 +48,8 @@ $(auto_template_loc): $(mainfile)
 
 pdf:
 	-@ rm $(logdir)/pandoc_backup.tex
-	cat $(mainfile) | sed s/tagsv:.\*//g | sed "/tagsh/ s/#/\\\\#/g" |\
-	$(PD) $(pandocflags) -o pandoc_backup.tex /dev/stdin $(wildcard *.yaml) $(wildcard $(logdir)/template_default*.yaml)
-	sed 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex > pandoc_sed_output.tex;\
-	mv pandoc_sed_output.tex pandoc_backup.tex
+	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(wildcard *.yaml) $(wildcard $(logdir)/template_default*.yaml)
+	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
 	latexmk $(texflag) pandoc_backup.tex
 	-@ mv pandoc_backup.tex $(logdir)
 	-@ mkdir -p $(builddir)
