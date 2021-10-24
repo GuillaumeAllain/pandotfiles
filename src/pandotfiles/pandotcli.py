@@ -111,6 +111,10 @@ def main():
                 MAKEFILE_CONTENT += (
                     builddir + "/main.pdf: " + sources + "\n\t$(MAKE) -C doc \n"
                 )
+                MAKEFILE_CONTENT += (
+                    "pdf: $(wildcard doc/*.md) $(wildcard doc/*.bib)\n"
+                    "\t$(MAKE) -C doc FIGURETARGETS=\n"
+                )
                 CLEAN += "\t$(MAKE) -C doc clean\n"
                 TARGETS += "TARGETS += " + builddir + "/main.pdf\n"
                 OPEN += "\topen " + builddir + "/main.pdf\n"
