@@ -46,6 +46,7 @@
 $if(docstyle)$
   \usepackage{graphicx}
   \usepackage{ifthen}
+  \usepackage{shellesc}
   \immediate\write18{cp ../.pandot/latex/docstyle_latex/docstyle-$docstyle$.tex \OUTPUTDIRECTORY/template.tex}
   \input{\OUTPUTDIRECTORY/template.tex}
 

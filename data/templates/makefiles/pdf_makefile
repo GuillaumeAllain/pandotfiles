@@ -27,7 +27,7 @@ ifneq ($(wildcard $(logdir)/template_default*.yaml),)
     pandocflags += --top-level-division=chapter 
 endif
 
-texflag = -pdfxe -pdfxelatex='xelatex %O "\\def\\OUTPUTDIRECTORY{{$(logdir)}}\\input{{%S}}"' -cd -quiet -latexoption='-interaction=nonstopmode --shell-escape' -outdir="$(logdir)" -r ../.pandot/latex/defaults/latexmkrc 
+texflag = -pdflua -pdflualatex='lualatex --interaction=nonstopmode --shell-escape %O "\\def\\OUTPUTDIRECTORY{{$(logdir)}}\\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" -r ../.pandot/latex/defaults/latexmkrc 
 
 FIGURETARGETSLOC = $(addprefix ../,$(FIGURETARGETS))
 
