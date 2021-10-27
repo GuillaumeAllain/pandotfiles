@@ -6,6 +6,7 @@ classoption:
         - semicolon
         - authoryear
         - numbers
+        - nobabel
 natbiboptions:
 has-frontmatter: ~
 ---

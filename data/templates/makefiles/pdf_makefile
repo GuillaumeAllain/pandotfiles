@@ -13,7 +13,7 @@ mainbname = $(mainfname:%.md=%)
 mainpdf = $(addprefix $(builddir)/,$(addsuffix .pdf,$(mainbname)))
 
 auto_template_loc = $(logdir)/latextemplate.template
-template_default_loc = $(logdir)/template_default.yaml
+template_default_loc = $(logdir)
 
 pandocflags  = -f markdown -t latex -s --data-dir="../.pandot/pandoc"
 pandocflags += --natbib --template=$(auto_template_loc) --lua-filter include-files.lua 
@@ -23,7 +23,7 @@ pandocflags += --lua-filter siunitx.lua
 pandocflags += -F pandoc-crossref -M "crossrefYaml=../.pandot/latex/defaults/pandoc-crossref-pandotfiles.yaml" 
 pandocflags += ../.pandot/latex/defaults/latex_default-pandotfiles.yaml
 
-ifneq ($(wildcard $(logdir)/template_default*.yaml),)
+ifneq ($(wildcard $(logdir)/template_default_ulthese.yaml),)
     pandocflags += --top-level-division=chapter 
 endif
 
@@ -44,7 +44,7 @@ $(mainpdf): $(mainfile) $(pandocfiles) $(auto_template_loc) $(FIGURETARGETSLOC)
 $(auto_template_loc): $(mainfile)
 	-@ mkdir -p $(logdir)
 	-@ rm $(logdir)/template_default*.yaml
-	../.pandot/pandoc/injection/genlatextemplate_script.py -o $(auto_template_loc) -y $(template_default_loc) -m $(mainfile)
+	../.pandot/pandoc/injection/genlatextemplate_script.py -o $(auto_template_loc) -y $(template_default_loc)/ -m $(mainfile)
 
 pdf:
 	-@ rm $(logdir)/pandoc_backup.tex

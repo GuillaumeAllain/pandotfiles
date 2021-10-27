@@ -1,4 +1,7 @@
+ensure_path('TEXINPUTS', '../.pandot/latex/cls_sty//' );
+
 add_cus_dep('glo' => 'gls', 0, 'makeglo2gls');
+
 sub makeglo2gls {
         my ($base_name, $path) = fileparse( $_[0] );
         pushd $path;

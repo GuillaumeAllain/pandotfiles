@@ -127,25 +127,41 @@ def main():
                     dirs_exist_ok=True,
                 )
                 makedirs(".pandot/latex/defaults", exist_ok=True)
-                copy(
-                    str(xdg_data_home()) + "/pandot/defaults/latexmkrc",
-                    ".pandot/latex/defaults/",
+                copytree(
+                    str(xdg_data_home()) + "/pandot/defaults/",
+                    ".pandot/latex/defaults",
+                    dirs_exist_ok=True,
                 )
-                copy(
-                    str(xdg_data_home())
-                    + "/pandot/defaults/pandoc-crossref-pandotfiles.yaml",
-                    ".pandot/latex/defaults/",
+                makedirs(".pandot/latex/texmf/tex", exist_ok=True)
+                copytree(
+                    str(xdg_data_home()) + "/pandot/templates/latex_classes",
+                    ".pandot/latex/cls_sty/",
+                    dirs_exist_ok=True,
                 )
-                copy(
-                    str(xdg_data_home())
-                    + "/pandot/defaults/latex_default-pandotfiles.yaml",
-                    ".pandot/latex/defaults/",
-                )
-                copy(
-                    str(xdg_data_home())
-                    + "/pandot/defaults/latex_default_ulthese-pandotfiles.yaml",
-                    ".pandot/latex/defaults/",
-                )
+                # copy(
+                #     str(xdg_data_home()) + "/pandot/defaults/latexmkrc",
+                #     ".pandot/latex/defaults/",
+                # )
+                # copy(
+                #     str(xdg_data_home())
+                #     + "/pandot/defaults/pandoc-crossref-pandotfiles.yaml",
+                #     ".pandot/latex/defaults/",
+                # )
+                # copy(
+                #     str(xdg_data_home())
+                #     + "/pandot/defaults/latex_default-pandotfiles.yaml",
+                #     ".pandot/latex/defaults/",
+                # )
+                # copy(
+                #     str(xdg_data_home())
+                #     + "/pandot/defaults/latex_default_osa-article-pandotfiles.yaml",
+                #     ".pandot/latex/defaults/",
+                # )
+                # copy(
+                #     str(xdg_data_home())
+                #     + "/pandot/defaults/latex_default_ulthese-pandotfiles.yaml",
+                #     ".pandot/latex/defaults/",
+                # )
                 makedirs(".pandot/pandoc", exist_ok=True)
                 copytree(
                     str(xdg_data_home()) + "/pandot/filters/",

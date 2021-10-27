@@ -42,8 +42,8 @@ parser.add_argument(
     "-y",
     "--output_yaml",
     type=str,
-    help="YAML defaults output file location. Default: ./template_default.yaml",
-    default="template_default.yaml",
+    help="YAML defaults output file location. Default: ./",
+    default="./",
 )
 
 args = parser.parse_args()
@@ -51,20 +51,12 @@ args = parser.parse_args()
 
 def main():
 
-    with open(
-        str("../.pandot/pandoc/injection/latex_custom_injection.tex")
-    ) as file:
+    with open(str("../.pandot/pandoc/injection/latex_custom_injection.tex")) as file:
         injection = file.read()
 
     result = run("/usr/local/bin/pandoc -D latex", shell=True, capture_output=True)
 
     base_template = decode(result.stdout)
-
-    template_split = split(r"\\begin{document}", (base_template))
-
-    template_final = (
-        template_split[0] + injection + "\\begin{document}" + template_split[1]
-    )
 
     if args.mainfile is not None:
         try:
@@ -113,8 +105,130 @@ def main():
 
             yamldefault = sub("ULDIPLOMA", uldiploma, yamldefault)
 
-            with open(args.output_yaml, "w+") as file_output:
+            with open(
+                args.output_yaml + "template_default_ulthese.yaml", "w+"
+            ) as file_output:
                 file_output.write(yamldefault)
+
+        elif maindocstyle == "osa-article":
+            with open(
+                str(
+                    "../.pandot/latex/defaults/latex_default_osa-article-pandotfiles.yaml"
+                )
+            ) as file:
+                yamldefault = file.read()
+
+            with open(
+                args.output_yaml + "template_default_osa-article.yaml", "w+"
+            ) as file_output:
+                file_output.write(yamldefault)
+            # template_final = sub(r"\\usepackage{amsmath,amssymb}", r"", template_final)
+            base_template = [
+                r"\documentclass[]{$documentclass$}",
+                r"",
+                r"\begin{document}",
+                r"$if(has-frontmatter)$",
+                r"\frontmatter",
+                r"$endif$",
+                r"$if(title)$",
+                r"$if(beamer)$",
+                r"\frame{\titlepage}",
+                r"$else$",
+                r"\maketitle",
+                r"$endif$",
+                r"$if(abstract)$",
+                r"\begin{abstract}",
+                r"$abstract$",
+                r"\end{abstract}",
+                r"$endif$",
+                r"$endif$",
+                r"$for(include-before)$",
+                r"$include-before$",
+                r"$endfor$",
+                r"$if(toc)$",
+                r"$if(toc-title)$",
+                r"\renewcommand*\contentsname{$toc-title$}",
+                r"$endif$",
+                r"$if(beamer)$",
+                r"\begin{frame}[allowframebreaks]",
+                r"$if(toc-title)$",
+                r"\frametitle{$toc-title$}",
+                r"$endif$",
+                r"\tableofcontents[hideallsubsections]",
+                r"\end{frame}",
+                r"$else$",
+                r"{",
+                r"$if(colorlinks)$",
+                r"\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}",
+                r"$endif$",
+                r"\setcounter{tocdepth}{$toc-depth$}",
+                r"\tableofcontents",
+                r"}",
+                r"$endif$",
+                r"$endif$",
+                r"$if(lof)$",
+                r"\listoffigures",
+                r"$endif$",
+                r"$if(lot)$",
+                r"\listoftables",
+                r"$endif$",
+                r"$if(linestretch)$",
+                r"\setstretch{$linestretch$}",
+                r"$endif$",
+                r"$if(has-frontmatter)$",
+                r"\mainmatter",
+                r"$endif$",
+                r"$body$",
+                r"$if(has-frontmatter)$",
+                r"\backmatter",
+                r"$endif$",
+                r"$if(natbib)$",
+                r"$if(bibliography)$",
+                r"$if(biblio-title)$",
+                r"$if(has-chapters)$",
+                r"\renewcommand\bibname{$biblio-title$}",
+                r"$else$",
+                r"\renewcommand\refname{$biblio-title$}",
+                r"$endif$",
+                r"$endif$",
+                r"$if(beamer)$",
+                r"\begin{frame}[allowframebreaks]{$biblio-title$}",
+                r"\bibliographytrue",
+                r"$endif$",
+                r"\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}",
+                r"$if(beamer)$",
+                r"\end{frame}",
+                r"$endif$",
+                r"",
+                r"$endif$",
+                r"$endif$",
+                r"$if(biblatex)$",
+                r"$if(beamer)$",
+                r"\begin{frame}[allowframebreaks]{$biblio-title$}",
+                r"\bibliographytrue",
+                r"\printbibliography[heading=none]",
+                r"\end{frame}",
+                r"$else$",
+                r"\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$",
+                r"$endif$",
+                r"",
+                r"$endif$",
+                r"$for(include-after)$",
+                r"$include-after$",
+                r"",
+                r"$endfor$",
+                r"\end{document}",
+            ]
+            base_template = "\n".join(base_template)
+
+    template_split = split(r"\\begin{document}", (base_template))
+
+    template_final = (
+        template_split[0] + injection + r"\begin{document}" + template_split[1]
+    )
+
+    # temp fix for lualatex
+    template_final = sub("bidi=basic", "bidi=default", template_final)
 
     if (args.output is not None) and (args.output != "T"):
         with open(args.output, "w+") as file_output:

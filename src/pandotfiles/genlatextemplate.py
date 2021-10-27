@@ -43,8 +43,8 @@ parser.add_argument(
     "-y",
     "--output_yaml",
     type=str,
-    help="YAML defaults output file location. Default: ./template_default.yaml",
-    default="template_default.yaml",
+    help="YAML defaults output file location. Default: ./",
+    default="./",
 )
 
 args = parser.parse_args()
@@ -66,6 +66,8 @@ def main():
     template_final = (
         template_split[0] + injection + "\\begin{document}" + template_split[1]
     )
+    # temp fix for lualatex
+    template_final = sub("bidi=basic", "bidi=default", template_final)
 
     if args.mainfile is not None:
         try:
@@ -79,6 +81,7 @@ def main():
             ]
         except Exception as e:
             maindocstyle = None
+
         if maindocstyle in ["ulthese", "ulthese-min"]:
             with open(
                 str(
@@ -117,8 +120,26 @@ def main():
 
             yamldefault = sub("ULDIPLOMA", uldiploma, yamldefault)
 
-            with open(args.output_yaml, "w+") as file_output:
+            with open(
+                args.output_yaml + "template_default_ulthese.yaml", "w+"
+            ) as file_output:
                 file_output.write(yamldefault)
+
+        elif maindocstyle == "osa-article":
+            with open(
+                str(
+                    xdg_data_home()
+                    / "pandot/defaults/latex_default_osa-article-pandotfiles.yaml"
+                )
+            ) as file:
+                yamldefault = file.read()
+
+            with open(
+                args.output_yaml + "template_default_osa-article.yaml", "w+"
+            ) as file_output:
+                file_output.write(yamldefault)
+            # template_final = sub(r"\\usepackage{amsmath,amssymb}", r"", template_final)
+            # te
 
     if (args.output is not None) and (args.output != "T"):
         with open(args.output, "w+") as file_output:
