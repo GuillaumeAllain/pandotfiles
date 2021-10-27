@@ -111,6 +111,8 @@ def main():
                 file_output.write(yamldefault)
 
         elif maindocstyle == "osa-article":
+            with open(str("../.pandot/pandoc/injection/latex_custom_injection_osa-article.tex")) as file:
+                injection = file.read()
             with open(
                 str(
                     "../.pandot/latex/defaults/latex_default_osa-article-pandotfiles.yaml"
@@ -131,11 +133,7 @@ def main():
                 r"\frontmatter",
                 r"$endif$",
                 r"$if(title)$",
-                r"$if(beamer)$",
-                r"\frame{\titlepage}",
-                r"$else$",
                 r"\maketitle",
-                r"$endif$",
                 r"$if(abstract)$",
                 r"\begin{abstract}",
                 r"$abstract$",
@@ -182,36 +180,8 @@ def main():
                 r"$if(has-frontmatter)$",
                 r"\backmatter",
                 r"$endif$",
-                r"$if(natbib)$",
                 r"$if(bibliography)$",
-                r"$if(biblio-title)$",
-                r"$if(has-chapters)$",
-                r"\renewcommand\bibname{$biblio-title$}",
-                r"$else$",
-                r"\renewcommand\refname{$biblio-title$}",
-                r"$endif$",
-                r"$endif$",
-                r"$if(beamer)$",
-                r"\begin{frame}[allowframebreaks]{$biblio-title$}",
-                r"\bibliographytrue",
-                r"$endif$",
                 r"\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}",
-                r"$if(beamer)$",
-                r"\end{frame}",
-                r"$endif$",
-                r"",
-                r"$endif$",
-                r"$endif$",
-                r"$if(biblatex)$",
-                r"$if(beamer)$",
-                r"\begin{frame}[allowframebreaks]{$biblio-title$}",
-                r"\bibliographytrue",
-                r"\printbibliography[heading=none]",
-                r"\end{frame}",
-                r"$else$",
-                r"\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$",
-                r"$endif$",
-                r"",
                 r"$endif$",
                 r"$for(include-after)$",
                 r"$include-after$",

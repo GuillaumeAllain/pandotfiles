@@ -169,16 +169,21 @@ def main():
                     dirs_exist_ok=True,
                 )
                 makedirs(".pandot/pandoc/injection", exist_ok=True)
-                copy(
-                    str(xdg_data_home())
-                    + "/pandot/templates/injection/latex_custom_injection.tex",
-                    ".pandot/pandoc/injection/",
+                copytree(
+                    str(xdg_data_home()) + "/pandot/templates/injection/",
+                    ".pandot/pandoc/injection",
+                    dirs_exist_ok=True,
                 )
-                copy(
-                    str(xdg_data_home())
-                    + "/pandot/templates/injection/genlatextemplate_script.py",
-                    ".pandot/pandoc/injection/",
-                )
+                # copy(
+                #     str(xdg_data_home())
+                #     + "/pandot/templates/injection/latex_custom_injection.tex",
+                #     ".pandot/pandoc/injection/",
+                # )
+                # copy(
+                #     str(xdg_data_home())
+                #     + "/pandot/templates/injection/genlatextemplate_script.py",
+                #     ".pandot/pandoc/injection/",
+                # )
 
             elif option == "tikz":
 

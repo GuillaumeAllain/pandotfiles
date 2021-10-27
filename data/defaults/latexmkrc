@@ -1,4 +1,5 @@
 ensure_path('TEXINPUTS', '../.pandot/latex/cls_sty//' );
+ensure_path('BSTINPUTS', '../../.pandot/latex/cls_sty//' );
 
 add_cus_dep('glo' => 'gls', 0, 'makeglo2gls');
 

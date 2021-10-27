@@ -46,6 +46,17 @@ $(auto_template_loc): $(mainfile)
 	-@ rm $(logdir)/template_default*.yaml
 	../.pandot/pandoc/injection/genlatextemplate_script.py -o $(auto_template_loc) -y $(template_default_loc)/ -m $(mainfile)
 
+ifneq ($(wildcard $(logdir)/template_default_osa-article.yaml),)
+pdf:
+	-@ rm $(logdir)/pandoc_backup.tex
+	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(wildcard *.yaml) $(wildcard $(logdir)/template_default*.yaml)
+	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
+	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
+	latexmk $(texflag) pandoc_backup.tex
+	-@ mv pandoc_backup.tex $(logdir)
+	-@ mkdir -p $(builddir)
+	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
+else
 pdf:
 	-@ rm $(logdir)/pandoc_backup.tex
 	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(wildcard *.yaml) $(wildcard $(logdir)/template_default*.yaml)
@@ -54,6 +65,7 @@ pdf:
 	-@ mv pandoc_backup.tex $(logdir)
 	-@ mkdir -p $(builddir)
 	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
+endif
 
 open:
 	-open $(mainpdf)
