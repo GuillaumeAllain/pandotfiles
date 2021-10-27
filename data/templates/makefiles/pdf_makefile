@@ -19,6 +19,7 @@ pandocflags  = -f markdown -t latex -s --data-dir="../.pandot/pandoc"
 pandocflags += --natbib --template=$(auto_template_loc) --lua-filter include-files.lua 
 pandocflags += --lua-filter pandoc-gls.lua --lua-filter remove-todo.lua
 pandocflags += --lua-filter ulresume-to-meta.lua --lua-filter ulabstract-to-meta.lua
+pandocflags += --lua-filter abstract-to-meta.lua
 pandocflags += --lua-filter siunitx.lua 
 pandocflags += -F pandoc-crossref -M "crossrefYaml=../.pandot/latex/defaults/pandoc-crossref-pandotfiles.yaml" 
 pandocflags += ../.pandot/latex/defaults/latex_default-pandotfiles.yaml
