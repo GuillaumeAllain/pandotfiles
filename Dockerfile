@@ -1,4 +1,5 @@
 FROM pandoc/latex:latest
+
 RUN apk --no-cache add make python3 perl ncurses
 RUN ln -s /usr/bin/python3 /usr/bin/python & \
     ln -s /usr/bin/pip3 /usr/bin/pip
