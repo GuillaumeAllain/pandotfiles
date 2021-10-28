@@ -2,7 +2,7 @@ FROM pandoc/latex:latest
 RUN apk --no-cache add make python3 perl ncurses
 RUN ln -s /usr/bin/python3 /usr/bin/python & \
     ln -s /usr/bin/pip3 /usr/bin/pip
-RUN tlmgr install latexmk texliveonfly
+RUN tlmgr install latexmk
 
 # CACHE common packages
 RUN tlmgr install selnolig siunitx glossaries mfirstuc xfor datatool tracklang blindtext
