@@ -2,13 +2,13 @@ name: Pandotfile output
 
 on: 
   push:
-    branches: [ release ]
+    branches: [ main ]
 
 jobs:
   convert_via_pandotfile:
     runs-on: ubuntu-latest
     container:
-      image: guillaumeallain/pandotfile
+      image: guillaumeallain/pandotfiles
     steps:
       - uses: actions/checkout@v2
       - name: make pdf

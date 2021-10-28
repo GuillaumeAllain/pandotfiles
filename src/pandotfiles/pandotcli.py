@@ -1,7 +1,7 @@
 import argparse
 from os import makedirs
 from glob import glob
-from shutil import copytree, copy
+from shutil import copytree, copy, ignore_patterns
 from subprocess import run, PIPE
 import warnings
 import datetime
@@ -125,22 +125,26 @@ def main():
                     str(xdg_data_home()) + "/pandot/templates/docstyle_latex/",
                     ".pandot/latex/docstyle_latex",
                     dirs_exist_ok=True,
+                    ignore=ignore_patterns(".*", "_*"),
                 )
                 makedirs(".pandot/latex/defaults", exist_ok=True)
                 copytree(
                     str(xdg_data_home()) + "/pandot/defaults/",
                     ".pandot/latex/defaults",
                     dirs_exist_ok=True,
+                    ignore=ignore_patterns(".*", "_*"),
                 )
                 makedirs(".pandot/latex/texmf/tex", exist_ok=True)
                 copytree(
                     str(xdg_data_home()) + "/pandot/templates/latex_classes",
                     ".pandot/latex/cls_sty/",
                     dirs_exist_ok=True,
+                    ignore=ignore_patterns(".*", "_*"),
                 )
                 makedirs(".github/worflows/", exist_ok=True)
                 copy(
-                    str(xdg_data_home()) + "/pandot/templates/actions/github-actions-pdf.yml",
+                    str(xdg_data_home())
+                    + "/pandot/templates/actions/github-actions-pdf.yml",
                     ".github/workflows/convert-pdf.yml",
                 )
                 # copy(
@@ -172,12 +176,14 @@ def main():
                     str(xdg_data_home()) + "/pandot/filters/",
                     ".pandot/pandoc/filters",
                     dirs_exist_ok=True,
+                    ignore=ignore_patterns(".*", "_*"),
                 )
                 makedirs(".pandot/pandoc/injection", exist_ok=True)
                 copytree(
                     str(xdg_data_home()) + "/pandot/templates/injection/",
                     ".pandot/pandoc/injection",
                     dirs_exist_ok=True,
+                    ignore=ignore_patterns(".*", "_*"),
                 )
                 # copy(
                 #     str(xdg_data_home())
