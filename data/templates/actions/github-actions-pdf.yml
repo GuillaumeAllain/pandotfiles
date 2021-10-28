@@ -3,7 +3,7 @@ name: Pandotfile output
 on: 
   push:
     paths:
-      - 'Dockerfile'
+      - './Dockerfile'
 
 jobs:
   convert_via_pandotfile:
