@@ -3,6 +3,8 @@ name: Pandotfile output
 on: 
   push:
     branches: [ main ]
+    paths:
+      - 'Dockerfile'
 
 jobs:
   convert_via_pandotfile:
