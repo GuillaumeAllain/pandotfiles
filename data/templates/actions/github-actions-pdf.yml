@@ -1,0 +1,19 @@
+name: Pandotfile output
+
+on: 
+  push:
+    branches: [ release ]
+
+jobs:
+  convert_via_pandotfile:
+    runs-on: ubuntu-latest
+    container:
+      image: guillaumeallain/pandotfile
+    steps:
+      - uses: actions/checkout@v2
+      - name: make pdf
+        run: make pdf
+      - uses: actions/upload-artifact@master
+        with:
+          name: Documents
+          path: build/pdf/*.pdf

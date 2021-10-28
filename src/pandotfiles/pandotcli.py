@@ -138,6 +138,11 @@ def main():
                     ".pandot/latex/cls_sty/",
                     dirs_exist_ok=True,
                 )
+                makedirs(".github/worflows/", exist_ok=True)
+                copy(
+                    str(xdg_data_home()) + "/pandot/templates/actions/github-actions-pdf.yml",
+                    ".github/workflows/convert-pdf.yml",
+                )
                 # copy(
                 #     str(xdg_data_home()) + "/pandot/defaults/latexmkrc",
                 #     ".pandot/latex/defaults/",
