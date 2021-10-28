@@ -43,6 +43,8 @@ foo@bar: pandot init pdf+tikz+python -o Makefile
 
 The script will create all necessary makefiles and directories to compile all the different sources required by the document.
 
+A docker image is also available at `guillaumeallain/pandotfiles`
+
 
 ## Todo
 
