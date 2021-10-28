@@ -3,7 +3,9 @@ name: Build Docker
 on:
   push:
     branches:
-      - 'dockerize'
+      - 'main'
+    paths:
+      - 'Dockerfile'
 
 jobs:
   docker:
