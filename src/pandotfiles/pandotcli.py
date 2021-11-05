@@ -73,14 +73,9 @@ def main():
                 Path("doc/main.md").touch()
                 with open("doc/Makefile", "w+") as file_output:
                     with open(
-                        # str(xdg_data_home())
-                        # + "/pandot/templates/makefiles/pdf_makefile"
                         str(data_dir.joinpath("templates", "makefiles", "pdf_makefile"))
                     ) as file:
                         makefile = file.read()
-                    # makefile = pdfmakefilemod(
-                    #     makefile, "log", "../" + builddir, ".", "main.md"
-                    # )
 
                     makefile = str(makefile).format(
                         logdir="log",
@@ -98,7 +93,6 @@ def main():
                 try:
                     with open(srcdir + "/.gitignore", "x") as file_output:
                         with open(
-                            # str(xdg_data_home()) + "/pandot/gitignore/doc.gitignore"
                             str(data_dir.joinpath("gitignore", "doc.gitignore"))
                         ) as file:
                             gitignore = file.read()
@@ -125,7 +119,6 @@ def main():
                 # copy docstyle and relevent files for pandoc
                 makedirs(".pandot/latex", exist_ok=True)
                 copytree(
-                    # str(xdg_data_home()) + "/pandot/templates/docstyle_latex/",
                     str(data_dir.joinpath("templates", "docstyle_latex")),
                     ".pandot/latex/docstyle_latex",
                     dirs_exist_ok=True,
@@ -133,7 +126,6 @@ def main():
                 )
                 makedirs(".pandot/latex/defaults", exist_ok=True)
                 copytree(
-                    # str(xdg_data_home()) + "/pandot/defaults/",
                     str(data_dir.joinpath("defaults")),
                     ".pandot/latex/defaults",
                     dirs_exist_ok=True,
@@ -141,7 +133,6 @@ def main():
                 )
                 makedirs(".pandot/latex/texmf/tex", exist_ok=True)
                 copytree(
-                    # str(xdg_data_home()) + "/pandot/templates/latex_classes",
                     str(data_dir.joinpath("templates", "latex_classes")),
                     ".pandot/latex/cls_sty/",
                     dirs_exist_ok=True,
@@ -149,8 +140,6 @@ def main():
                 )
                 makedirs(".github/workflows/", exist_ok=True)
                 copy(
-                    # str(xdg_data_home())
-                    # + "/pandot/templates/actions/github-actions-pdf.yml",
                     str(
                         data_dir.joinpath(
                             "templates", "actions", "github-actions-pdf.yml"
@@ -158,37 +147,38 @@ def main():
                     ),
                     ".github/workflows/convert-pdf.yml",
                 )
-                # copy(
-                #     str(xdg_data_home()) + "/pandot/defaults/latexmkrc",
-                #     ".pandot/latex/defaults/",
-                # )
-                # copy(
-                #     str(xdg_data_home())
-                #     + "/pandot/defaults/pandoc-crossref-pandotfiles.yaml",
-                #     ".pandot/latex/defaults/",
-                # )
-                # copy(
-                #     str(xdg_data_home())
-                #     + "/pandot/defaults/latex_default-pandotfiles.yaml",
-                #     ".pandot/latex/defaults/",
-                # )
-                # copy(
-                #     str(xdg_data_home())
-                #     + "/pandot/defaults/latex_default_osa-article-pandotfiles.yaml",
-                #     ".pandot/latex/defaults/",
-                # )
-                # copy(
-                #     str(xdg_data_home())
-                #     + "/pandot/defaults/latex_default_ulthese-pandotfiles.yaml",
-                #     ".pandot/latex/defaults/",
-                # )
                 makedirs(".pandot/pandoc", exist_ok=True)
                 copytree(
-                    # str(xdg_data_home()) + "/pandot/filters/",
                     str(data_dir.joinpath("filters")),
                     ".pandot/pandoc/filters",
                     dirs_exist_ok=True,
-                    ignore=ignore_patterns(".*", "_*"),
+                    ignore=ignore_patterns(".*", "_*", "lua-filters", "pandoc-gls"),
+                )
+                copy(
+                    str(
+                        data_dir.joinpath(
+                            "filters",
+                            "lua-filters",
+                            "include-files",
+                            "include-files.lua",
+                        )
+                    ),
+                    ".pandot/pandoc/filters/",
+                )
+                copy(
+                    str(
+                        data_dir.joinpath(
+                            "filters",
+                            "lua-filters",
+                            "abstract-to-meta",
+                            "abstract-to-meta.lua",
+                        )
+                    ),
+                    ".pandot/pandoc/filters/",
+                )
+                copy(
+                    str(data_dir.joinpath("filters", "pandoc-gls", "pandoc-gls.lua")),
+                    ".pandot/pandoc/filters/",
                 )
                 makedirs(".pandot/pandoc/injection", exist_ok=True)
                 copytree(
@@ -198,16 +188,6 @@ def main():
                     dirs_exist_ok=True,
                     ignore=ignore_patterns(".*", "_*"),
                 )
-                # copy(
-                #     str(xdg_data_home())
-                #     + "/pandot/templates/injection/latex_custom_injection.tex",
-                #     ".pandot/pandoc/injection/",
-                # )
-                # copy(
-                #     str(xdg_data_home())
-                #     + "/pandot/templates/injection/genlatextemplate_script.py",
-                #     ".pandot/pandoc/injection/",
-                # )
 
             elif option == "tikz":
 
@@ -217,8 +197,6 @@ def main():
                 try:
                     with open(srcdir + "/auto_tikz.yaml", "x") as file_output:
                         with open(
-                            # str(xdg_data_home())
-                            # + "/pandot/defaults/auto_tikz_default-pandotfiles.yaml"
                             str(
                                 data_dir.joinpath(
                                     "defaults", "auto_tikz_default-pandotfiles.yaml"
@@ -237,8 +215,6 @@ def main():
 
                 with open(srcdir + "/Makefile", "w+") as file_output:
                     with open(
-                        # str(xdg_data_home())
-                        # + "/pandot/templates/makefiles/auto_tikz_makefile"
                         str(
                             data_dir.joinpath(
                                 "templates", "makefiles", "auto_tikz_makefile"
@@ -247,13 +223,6 @@ def main():
                     ) as file:
                         makefile = file.read()
 
-                    # makefile = tikzmakefilemod(
-                    #     makefile,
-                    #     "auto_tikz.yaml",
-                    #     "../../" + builddir,
-                    #     logdir,
-                    #     tikzfiles,
-                    # )
 
                     makefile = str(makefile).format(
                         yamlfile="auto_tikz.yaml",
@@ -266,7 +235,6 @@ def main():
                 try:
                     with open(srcdir + "/.gitignore", "x") as file_output:
                         with open(
-                            # str(xdg_data_home()) + "/pandot/gitignore/tikz.gitignore"
                             str(data_dir.joinpath("gitignore", "tikz.gitignore"))
                         ) as file:
                             gitignore = file.read()
@@ -296,9 +264,6 @@ def main():
                     str(data_dir.joinpath("templates", "makefiles", "python_makefile"))
                 ) as file:
                     makefile = file.read()
-                # makefile = sub(
-                #     r"(builddir\s=)(.*)", "\\1 ../../" + str(builddir), makefile
-                # )
                 makefile = makefile.format(builddir=str("../../" + builddir))
                 with open(srcdir + "/Makefile", "w+") as file_output:
                     file_output.write(makefile)
@@ -347,7 +312,6 @@ def main():
                 )
                 makedirs(srcdir, exist_ok=True)
                 with open(
-                    # str(xdg_data_home()) + "/pandot/templates/makefiles/julia_makefile"
                     str(data_dir.joinpath("templates", "makefiles", "julia_makefile"))
                 ) as file:
                     makefile = file.read()
@@ -358,7 +322,6 @@ def main():
                 try:
                     with open(srcdir + "/.gitignore", "x") as file_output:
                         with open(
-                            # str(xdg_data_home()) + "/pandot/gitignore/julia.gitignore"
                             str(data_dir.joinpath("gitignore", "julia.gitignore"))
                         ) as file:
                             gitignore = file.read()
@@ -390,9 +353,11 @@ def main():
                 try:
                     with open(srcdir + "/codev_remote.yaml", "x") as file_output:
                         with open(
-                            # str(xdg_data_home())
-                            # + "/pandot/defaults/codev_remote_default-pandotfilespyaml"
-                            str(data_dir.joinpath("defaults", "codev_remote_default-pandotfiles.yaml"))
+                            str(
+                                data_dir.joinpath(
+                                    "defaults", "codev_remote_default-pandotfiles.yaml"
+                                )
+                            )
                         ) as file:
                             codev_remote = file.read()
                         file_output.write(codev_remote)
@@ -401,27 +366,22 @@ def main():
 
                 with open(srcdir + "/Makefile", "w+") as file_output:
                     with open(
-                        # str(xdg_data_home())
-                        # + "/pandot/templates/makefiles/codev_makefile"
-                        str(data_dir.joinpath("templates", "makefiles", "codev_makefile"))
+                        str(
+                            data_dir.joinpath(
+                                "templates", "makefiles", "codev_makefile"
+                            )
+                        )
                     ) as file:
                         makefile = file.read()
                     makefile = makefile.format(
                         builddir="../../" + str(builddir),
                         outputdir=str(outputdir),
                     )
-                    # makefile = sub(
-                    #     r"(builddir\s=)(.*)", "\\1 ../../" + str(builddir), makefile
-                    # )
-                    # makefile = sub(
-                    #     r"(outputdir\s=)(.*)", "\\1 " + str(outputdir), makefile
-                    # )
                     file_output.write(makefile)
 
                 try:
                     with open(srcdir + "/.gitignore", "x") as file_output:
                         with open(
-                            # str(xdg_data_home()) + "/pandot/gitignore/codev.gitignore"
                             str(data_dir.joinpath("gitignore", "codev.gitignore"))
                         ) as file:
                             gitignore = file.read()
@@ -467,7 +427,6 @@ def main():
         try:
             with open(".gitignore", "x") as file_output:
                 with open(
-                    # str(xdg_data_home()) + "/pandot/gitignore/project.gitignore"
                     str(data_dir.joinpath("gitignore", "project.gitignore"))
                 ) as file:
                     gitignore = file.read()
@@ -542,7 +501,6 @@ def main():
             try:
                 with open(filename, "x") as file_output:
                     with open(
-                        # str(xdg_data_home()) + "/pandot/templates/documents/diary.md"
                         str(data_dir.joinpath("templates", "documents", "diary.md"))
                     ) as file:
                         diary_template = file.read()
