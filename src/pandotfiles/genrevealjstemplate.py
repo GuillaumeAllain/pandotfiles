@@ -15,9 +15,6 @@ from subprocess import run
 
 def main():
 
-    # with open(str(xdg_data_home()/"pandoc/templates/latex_custom_injection.tex")) as file:
-    #     injection = file.read()
-
     result = run("/usr/local/bin/pandoc -D revealjs", shell=True, capture_output=True)
 
     base_template = decode(result.stdout)

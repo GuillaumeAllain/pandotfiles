@@ -8,7 +8,6 @@ For PDF:
 
     - [pandoc](https://github.com/jgm/pandoc)
     - [pandoc-crossref](https://github.com/lierdakil/pandoc-crossref)
-    - [mermaid-filter](https://github.com/raghur/mermaid-filter)
 
 For CODEV:
 

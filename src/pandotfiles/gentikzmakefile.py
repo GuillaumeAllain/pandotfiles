@@ -1,5 +1,5 @@
 import argparse
-from xdg import xdg_data_home
+from pathlib import Path
 
 from pandotfiles.util.parser import tikzyamlparse
 from pandotfiles.util.makefile_mod import tikzmakefilemod
@@ -35,11 +35,13 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+data_dir = Path(__file__).resolve().parents[0].joinpath("data")
+
 
 def main():
 
     with open(
-        str(xdg_data_home()) + "/pandot/templates/makefiles/auto_tikz_makefile"
+        str(data_dir.joinpath("templates", "makefiles", "auto_tikz_makefile"))
     ) as file:
         makefile = file.read()
 

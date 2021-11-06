@@ -1,5 +1,5 @@
 import argparse
-from xdg import xdg_data_home
+from pathlib import Path
 
 parser = argparse.ArgumentParser(
     description="""Generate a Makefile to compile all tikz (*.tikz) file from a repo.""",
@@ -40,12 +40,12 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+data_dir = Path(__file__).resolve().parents[0].joinpath("data")
+
 
 def main():
 
-    with open(
-        str(xdg_data_home()) + "/pandot/templates/makefiles/pdf_makefile"
-    ) as file:
+    with open(str(data_dir.joinpath("templates", "makefiles", "pdf_makefile"))) as file:
         makefile = file.read()
 
     makefile = str(makefile).format(

@@ -5,8 +5,6 @@ import datetime
 import warnings
 from os import makedirs
 
-from xdg import xdg_data_home
-
 from pandotfiles.panotes.todomd import extract_todo
 from pandotfiles.panotes.tagsmd import extract_tags
 
@@ -32,6 +30,8 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
+
+data_dir = Path(__file__).resolve().parents[0].joinpath("data")
 
 
 def main():
@@ -61,7 +61,7 @@ def main():
         try:
             with open(filename, "x") as file_output:
                 with open(
-                    str(xdg_data_home()) + "/pandot/templates/documents/diary.md"
+                    str(data_dir.joinpath("templates", "documents", "diary.md"))
                 ) as file:
                     diary_template = file.read()
                 file_output.write(

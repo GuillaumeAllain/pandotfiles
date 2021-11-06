@@ -13,7 +13,7 @@ import argparse
 from re import split, findall, MULTILINE, sub
 from codecs import decode
 from subprocess import run
-from xdg import xdg_data_home
+from pathlib import Path
 
 
 parser = argparse.ArgumentParser(
@@ -49,11 +49,13 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+data_dir = Path(__file__).resolve().parents[0].joinpath("data")
+
 
 def main():
 
     with open(
-        str(xdg_data_home() / "pandot/templates/injection/latex_custom_injection.tex")
+        str(data_dir.joinpath("templates", "injection", "latex_custom_injection.tex"))
     ) as file:
         injection = file.read()
 
@@ -84,10 +86,7 @@ def main():
 
         if maindocstyle in ["ulthese", "ulthese-min"]:
             with open(
-                str(
-                    xdg_data_home()
-                    / "pandot/defaults/latex_default_ulthese-pandotfiles.yaml"
-                )
+                str(data_dir.joinpath("defaults", "latex_default_ulthese-pandotfiles"))
             ) as file:
                 yamldefault = file.read()
 
@@ -128,8 +127,9 @@ def main():
         elif maindocstyle == "osa-article":
             with open(
                 str(
-                    xdg_data_home()
-                    / "pandot/defaults/latex_default_osa-article-pandotfiles.yaml"
+                    data_dir.joinpath(
+                        "defaults", "latex_default_osa-article-pandotfiles.yaml"
+                    )
                 )
             ) as file:
                 yamldefault = file.read()

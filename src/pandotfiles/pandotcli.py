@@ -1,14 +1,11 @@
 import argparse
 from os import makedirs
-from glob import glob
 from shutil import copytree, copy, ignore_patterns
 from subprocess import run, PIPE
 import warnings
 import datetime
 
 from pathlib import Path
-
-from xdg import xdg_data_home
 
 from pandotfiles.util.parser import tikzyamlparse
 
@@ -182,7 +179,6 @@ def main():
                 )
                 makedirs(".pandot/pandoc/injection", exist_ok=True)
                 copytree(
-                    # str(xdg_data_home()) + "/pandot/templates/injection/",
                     str(data_dir.joinpath("injection")),
                     ".pandot/pandoc/injection",
                     dirs_exist_ok=True,
@@ -222,7 +218,6 @@ def main():
                         )
                     ) as file:
                         makefile = file.read()
-
 
                     makefile = str(makefile).format(
                         yamlfile="auto_tikz.yaml",
