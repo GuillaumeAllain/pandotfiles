@@ -1,20 +1,20 @@
 from subprocess import run
 from pathlib import Path
 
-data_dir = Path(__file__).resolve().parents[0].joinpath("data")
+data_dir = Path(__file__).resolve().parents[1].joinpath("data")
 
 PANDOC_MARKDOWN_OUTPUT_COMMANDS = (
     "-t markdown+yaml_metadata_block-grid_tables-simple_tables-multiline_tables-latex_macros "
-    + '--data-dir="'
-    + data_dir
-    + '/filters" -L math_spaces.lua'
+    + '-L '
+    + str(data_dir)
+    + '/filters/math_spaces.lua'
     + " -s --markdown-headings=atx --wrap=preserve -V header-includes= -V include-before= -V include-after= "
 )
 PANDOC_MARKDOWN_OUTPUT_COMMANDS_NOYAML = (
     "-t markdown+yaml_metadata_block-grid_tables-simple_tables-multiline_tables-latex_macros"
-    + '--data-dir="'
-    + data_dir
-    + '/filters" -L math_spaces.lua'
+    + '-L '
+    + str(data_dir)
+    + '/filters/math_spaces.lua'
     + " --markdown-headings=atx --wrap=preserve -V header-includes= -V include-before= -V include-after= "
 )
 CLEAN_WHITESPACE = (
@@ -28,7 +28,7 @@ def clean_markdown(file=None):
     """If no input, use Stdin"""
 
     LOCAL_PANDOC_MARKDOWN_COMMAND = (
-        "/usr/local/bin/pandoc {filename} "
+        "pandoc {filename} "
         + PANDOC_MARKDOWN_OUTPUT_COMMANDS
         + CLEAN_WHITESPACE
         + CLEAN_TAGS
