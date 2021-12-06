@@ -65,6 +65,7 @@ def main():
             if option == "pdf":
 
                 builddir = "build/pdf"
+                buildlatexdir = "build/latex"
                 srcdir = "doc"
                 makedirs("doc", exist_ok=True)
                 Path("doc/main.md").touch()
@@ -77,6 +78,7 @@ def main():
                     makefile = str(makefile).format(
                         logdir="log",
                         builddir="../" + builddir,
+                        buildlatexdir="../" + buildlatexdir,
                         pandocfiles="$(wildcard "
                         + str(".")
                         + "/*.md)"
