@@ -1,7 +1,8 @@
-logdir = {logdir}
-builddir = {builddir}
-pandocfiles = {pandocfiles}
-mainfile = {mainfile}
+logdir = log
+builddir = ../build/pdf
+buildlatexdir = ../build/latex
+pandocfiles = $(wildcard ./*.md) $(wildcard ./*.bib)
+mainfile = main.md
 
 PD := /usr/local/bin/pandoc
 
@@ -17,7 +18,7 @@ template_default_loc = $(logdir)
 
 pandocflags  = -f markdown -t latex -s --data-dir="../.pandot/pandoc"
 pandocflags += --natbib --template=$(auto_template_loc) --lua-filter include-files.lua 
-pandocflags += --lua-filter pandoc-gls.lua --lua-filter remove-todo.lua
+pandocflags += --lua-filter pandoc-gls.lua 
 pandocflags += --lua-filter ulresume-to-meta.lua --lua-filter ulabstract-to-meta.lua
 pandocflags += --lua-filter abstract-to-meta.lua
 pandocflags += --lua-filter siunitx.lua 
@@ -28,7 +29,7 @@ ifneq ($(wildcard $(logdir)/template_default_ulthese.yaml),)
     pandocflags += --top-level-division=chapter 
 endif
 
-texflag = -pdflua -pdflualatex='lualatex --interaction=nonstopmode --shell-escape %O "\\def\\OUTPUTDIRECTORY{{$(logdir)}}\\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" -r ../.pandot/latex/defaults/latexmkrc 
+texflag = -pdflua -pdflualatex='lualatex --interaction=nonstopmode --shell-escape %O "\\def\\OUTPUTDIRECTORY{$(logdir)}\\input{%S}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
 
 FIGURETARGETSLOC = $(addprefix ../,$(FIGURETARGETS))
 
@@ -37,7 +38,7 @@ FIGURETARGETSLOC = $(addprefix ../,$(FIGURETARGETS))
 all : $(mainpdf)
 
 clean: 
-	-@ rm -r $(logdir) $(builddir)
+	-@ rm -r $(logdir) $(builddir) $(buildlatexdir)
 
 $(mainpdf): $(mainfile) $(pandocfiles) $(auto_template_loc) $(FIGURETARGETSLOC)
 	$(MAKE) -f $(mkfile_path) pdf
@@ -51,19 +52,33 @@ ifneq ($(wildcard $(logdir)/template_default_osa-article.yaml),)
 pdf:
 	-@ rm $(logdir)/pandoc_backup.tex
 	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(wildcard *.yaml) $(wildcard $(logdir)/template_default*.yaml)
-	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
-	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
+	-@ cp ../.pandot/latex/defaults/latexmkrc .
+	-@ perl -pi -e 's/\(cite.*\){internal-/\1internal{/g' pandoc_backup.tex;\
+	perl -pi -e 's/\\cite[t,p]{/\\cite{/g' pandoc_backup.tex;\
 	latexmk $(texflag) pandoc_backup.tex
+	-@ mkdir -p $(buildlatexdir)
+	-@ echo latexmk $(texflag) pandoc_backup.tex > latex_cmd.sh
+	-@ cp -r ./* $(buildlatexdir)
+	-@ rm $(buildlatexdir)/Makefile
+	-@ rm latex_cmd.sh
 	-@ mv pandoc_backup.tex $(logdir)
+	-@ mv latexmkrc $(logdir)
 	-@ mkdir -p $(builddir)
 	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
 else
 pdf:
 	-@ rm $(logdir)/pandoc_backup.tex
 	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(wildcard *.yaml) $(wildcard $(logdir)/template_default*.yaml)
-	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
+	-@ cp ../.pandot/latex/defaults/latexmkrc .
+	-@ perl -pi -e 's/\(cite.*\){internal-/\1internal{/g' pandoc_backup.tex;\
 	latexmk $(texflag) pandoc_backup.tex
+	-@ mkdir -p $(buildlatexdir)
+	-@ echo latexmk $(texflag) pandoc_backup.tex > latex_cmd.sh
+	-@ cp -r ./* $(buildlatexdir)
+	-@ rm $(buildlatexdir)/Makefile
+	-@ rm latex_cmd.sh
 	-@ mv pandoc_backup.tex $(logdir)
+	-@ mv latexmkrc $(logdir)
 	-@ mkdir -p $(builddir)
 	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
 endif
