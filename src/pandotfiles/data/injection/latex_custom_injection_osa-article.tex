@@ -17,6 +17,7 @@
 % \setprjcopyright
 
 \usepackage{siunitx}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 \usepackage{ifthen}
 % Set the article type
 \ifthenelse{\equal{$osajournal$}{oe}}{
@@ -49,7 +50,8 @@
 
   \title{$title$}
 
-  \author{$author$}
+  \author{$for(author)$$author$$sep$, $endfor$}
+
 
   \ifthenelse{\equal{$osaaddress$}{}}{
     \email{address is needed} %% email address is required

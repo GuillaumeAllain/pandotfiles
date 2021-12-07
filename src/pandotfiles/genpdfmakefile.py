@@ -25,6 +25,13 @@ parser.add_argument(
     help="Pandoc build directory. Default: build",
     default="build",
 )
+parser.add_argument(
+    "-x",
+    "--buildlatexdir",
+    type=str,
+    help="Pandoc build directory. Default: build/latex",
+    default="latex",
+)
 
 parser.add_argument(
     "-s", "--srcdir", type=str, help="Pandoc src directory. Default: .", default="."
@@ -51,6 +58,7 @@ def main():
     makefile = str(makefile).format(
         logdir=args.logdir,
         builddir=args.builddir,
+        buildlatexdir=args.buildlatexdir,
         pandocfiles="$(wildcard "
         + str(args.srcdir)
         + "/*.md)"

@@ -25,7 +25,7 @@
   \newcommand{\osalineno}{$osalineno$}
   \newcommand{\osaaddress}{$osaaddress$}
   \newcommand{\subtitleprint}{$subtitle$}
-  \newcommand{\authorprint}{$author$}
+  \newcommand{\authorprint}{$for(author)$$author$$sep$, $endfor$}
   \newcommand{\acronyms}{$acronyms$}
   \newcommand{\dateprint}{$if(date)$ $date$ $else$ ~ $endif$}
   \newcommand{\yearprint}{$if(year)$ $year$ $else$ \the\year{} $endif$}

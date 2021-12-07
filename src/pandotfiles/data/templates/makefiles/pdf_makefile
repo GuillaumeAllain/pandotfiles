@@ -46,6 +46,7 @@ $(mainpdf): $(mainfile) $(pandocfiles) $(auto_template_loc) $(FIGURETARGETSLOC)
 $(auto_template_loc): $(mainfile)
 	-@ mkdir -p $(logdir)
 	-@ rm $(logdir)/template_default*.yaml
+	-@ rm $(logdir)/*template*
 	../.pandot/pandoc/injection/genlatextemplate_script.py -o $(auto_template_loc) -y $(template_default_loc)/ -m $(mainfile)
 
 ifneq ($(wildcard $(logdir)/template_default_osa-article.yaml),)
@@ -58,7 +59,7 @@ pdf:
 	latexmk $(texflag) pandoc_backup.tex
 	-@ mkdir -p $(buildlatexdir)
 	-@ echo latexmk $(texflag) pandoc_backup.tex > latex_cmd.sh
-	-@ cp -r ./* $(buildlatexdir)
+	-@ rsync -ax --exclude $(buildlatexdir) ./* $(buildlatexdir)
 	-@ rm $(buildlatexdir)/Makefile
 	-@ rm latex_cmd.sh
 	-@ mv pandoc_backup.tex $(logdir)
@@ -74,7 +75,7 @@ pdf:
 	latexmk $(texflag) pandoc_backup.tex
 	-@ mkdir -p $(buildlatexdir)
 	-@ echo latexmk $(texflag) pandoc_backup.tex > latex_cmd.sh
-	-@ cp -r ./* $(buildlatexdir)
+	-@ rsync -ax --exclude $(buildlatexdir) ./* $(buildlatexdir)
 	-@ rm $(buildlatexdir)/Makefile
 	-@ rm latex_cmd.sh
 	-@ mv pandoc_backup.tex $(logdir)

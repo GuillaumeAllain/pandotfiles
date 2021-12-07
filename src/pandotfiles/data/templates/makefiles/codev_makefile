@@ -16,7 +16,7 @@ CC_0 = @ $(ACTUAL_CC)
 CC_1 = $(ACTUAL_CC) -v
 CC = $(CC_$(V))
 
-.PHONY: clean all
+.PHONY: clean all sync
 
 all : $(builddir)/codev_stamp $(completecodevpdf)
 
@@ -36,3 +36,9 @@ $(completecodevpdf) : %.pdf : %_plt.eps
 	-@ codev-style-vie $< > $(builddir)/fig/temp.eps
 	-@ pstopdf $(builddir)/fig/temp.eps -o $@ -p
 	-@ rm $(builddir)/fig/temp.eps
+
+sync:
+	$(CC) -d 
+	-@ rsync -aP output/ $(builddir) -q
+	touch $(builddir)/codev_stamp
+	$(MAKE)
