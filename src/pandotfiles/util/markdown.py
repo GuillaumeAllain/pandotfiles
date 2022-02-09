@@ -21,7 +21,6 @@ CLEAN_WHITESPACE = (
     "| sed '/^$/N;/^\\n$/D' | sed 's/^```\\s*$/```\\n/g' |"
     + " awk '{{if (NR==1 && NF==0) next}};1' | awk 'NR > 1{{print t}} {{t = $0}}END{{if (NF) print }}' "
 )
-CLEAN_TAGS = r"| perl -p -i -e 's/^(#.*)\\(#\S+)/$1$2/g'"
 
 
 def clean_markdown(file=None):
@@ -31,7 +30,6 @@ def clean_markdown(file=None):
         "pandoc {filename} "
         + PANDOC_MARKDOWN_OUTPUT_COMMANDS
         + CLEAN_WHITESPACE
-        + CLEAN_TAGS
     )
     if file is None:
         run(LOCAL_PANDOC_MARKDOWN_COMMAND.format(filename=""), shell=True)
@@ -42,3 +40,6 @@ def clean_markdown(file=None):
             ),
             shell=True,
         )
+
+if __name__ == "__main__":
+    clean_markdown(file="~/scratch/hashtag/test.md")
