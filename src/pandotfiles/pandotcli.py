@@ -69,6 +69,17 @@ def main():
                 srcdir = "doc"
                 makedirs("doc", exist_ok=True)
                 Path("doc/main.md").touch()
+                with open("doc/options.yaml", "x") as file_output:
+                    with open(
+                        str(
+                            data_dir.joinpath(
+                                "defaults", "pdf_default-pandotfiles.yaml"
+                            )
+                        )
+                    ) as file:
+                        options = file.read()
+                    file_output.write(options)
+
                 with open("doc/Makefile", "w+") as file_output:
                     with open(
                         str(data_dir.joinpath("templates", "makefiles", "pdf_makefile"))
