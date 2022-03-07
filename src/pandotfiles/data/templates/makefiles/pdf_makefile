@@ -66,6 +66,7 @@ pdf:
 	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(filter-out options.yaml,$(wildcard *.yaml)) $(wildcard $(logdir)/template_default*.yaml)
 	-@ cp ../.pandot/latex/defaults/latexmkrc .
 	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
+	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
 	latexmk $(texflag) pandoc_backup.tex
 	-@ mkdir -p $(buildlatexdir)
 	-@ echo latexmk $(texflag) pandoc_backup.tex > latex_cmd.sh

@@ -9,7 +9,7 @@ data-dir: ../.pandot/pandoc
 metadata:
   crossrefYaml: ../.pandot/latex/defaults/pandoc-crossref-pandotfiles.yaml
 
-input-file: ../.pandot/latex/defaults/latex_default-pandotfiles.yaml
+metadata-file: ../.pandot/latex/defaults/latex_default-pandotfiles.yaml
 
 filters:
   - include-files.lua
