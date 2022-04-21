@@ -24,6 +24,8 @@ ifneq ($(wildcard $(logdir)/template_default_ulthese.yaml),)
 endif
 
 texflag = -pdflua -pdflualatex='lualatex --interaction=nonstopmode --shell-escape %O "\\def\\OUTPUTDIRECTORY{{$(logdir)}}\\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
+texflagosa = -pdf -pdflatex='pdflatex %O "\\def\\OUTPUTDIRECTORY{$(logdir)}\\input{%S}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
+texflagosabuild = -pdf -pdflatex=\'pdflatex %O \"\\\\def\\\\OUTPUTDIRECTORY{$(logdir)}\\\\input{%S}\"\' -cd -quiet -shell-escape -outdir="$(logdir)" 
 
 FIGURETARGETSLOC = $(addprefix ../,$(FIGURETARGETS))
 
@@ -50,10 +52,11 @@ pdf:
 	-@ cp ../.pandot/latex/defaults/latexmkrc .
 	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
 	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
-	latexmk $(texflag) pandoc_backup.tex
+	latexmk $(texflagosa) pandoc_backup.tex
 	-@ mkdir -p $(buildlatexdir)
-	-@ echo latexmk $(texflag) pandoc_backup.tex > latex_cmd.sh
+	-@ echo latexmk $(texflagosabuild) pandoc_backup.tex > latex_cmd.sh
 	-@ rsync -ax --exclude $(buildlatexdir) ./* $(buildlatexdir)
+	-@ cp -r ../.pandot/latex/cls_sty/osa-article/* $(buildlatexdir)
 	-@ rm $(buildlatexdir)/Makefile
 	-@ rm latex_cmd.sh
 	-@ mv pandoc_backup.tex $(logdir)

@@ -11,7 +11,7 @@ codevfigpdf = $(codevfigepsname:%_plt.eps=%.pdf)
 completecodevpdf = $(addprefix $(builddir)/fig/, $(codevfigpdf))
 
 codevliseq = $(wildcard *.liseq) $(wildcard */*.liseq)
-codevseq = $(codevliseq:%.liseq=%.seq)
+codevseq = $(codevliseq:%.liseq=$(builddir)/bin/%.seq)
 
 V = 0
 ACTUAL_CC = codev-remote 
@@ -38,10 +38,10 @@ $(builddir)/codev_stamp : $(wildcard */*.seq) $(wildcard *.seq) $(forsrcfiles) $
 	-@ rsync -aP $(builddir)/bin/. ./ -q
 	$(CC) -u
 	$(CC)
-	-@ rsync -aP $(outputdir) $(builddir) -q
+	-@ rsync -aP $(outputdir)/ $(builddir) -q
 	touch $(builddir)/codev_stamp
-	$(MAKE)
 	-@ rm -r $(codevliseq:%.liseq=%.seq)
+	$(MAKE)
 
 $(completecodevpdf) : %.pdf : %_plt.eps 
 	-@ codev-style-vie $< > $(builddir)/fig/temp.eps
