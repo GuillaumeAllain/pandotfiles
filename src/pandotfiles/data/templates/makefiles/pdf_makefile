@@ -24,8 +24,8 @@ ifneq ($(wildcard $(logdir)/template_default_ulthese.yaml),)
 endif
 
 texflag = -pdflua -pdflualatex='lualatex --interaction=nonstopmode --shell-escape %O "\\def\\OUTPUTDIRECTORY{{$(logdir)}}\\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
-texflagosa = -pdf -pdflatex='pdflatex %O "\\def\\OUTPUTDIRECTORY{$(logdir)}\\input{%S}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
-texflagosabuild = -pdf -pdflatex=\'pdflatex %O \"\\\\def\\\\OUTPUTDIRECTORY{$(logdir)}\\\\input{%S}\"\' -cd -quiet -shell-escape -outdir="$(logdir)" 
+texflagosa = -pdf -pdflatex='pdflatex %O "\\def\\OUTPUTDIRECTORY{{$(logdir)}}\\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
+texflagosabuild = -pdf -pdflatex=\'pdflatex %O \"\\\\def\\\\OUTPUTDIRECTORY{{$(logdir)}}\\\\input{{%S}}\"\' -cd -quiet -shell-escape -outdir="$(logdir)" 
 
 FIGURETARGETSLOC = $(addprefix ../,$(FIGURETARGETS))
 
