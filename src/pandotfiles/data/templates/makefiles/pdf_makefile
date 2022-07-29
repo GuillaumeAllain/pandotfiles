@@ -36,7 +36,7 @@ all : $(mainpdf)
 clean: 
 	-@ rm -r $(logdir) $(builddir) $(buildlatexdir)
 
-$(mainpdf): $(mainfile) $(pandocfiles) $(auto_template_loc) $(FIGURETARGETSLOC)
+$(mainpdf): $(mainfile) $(pandocfiles) $(auto_template_loc) $(FIGURETARGETSLOC) options.yaml
 	$(MAKE) -f $(mkfile_path) pdf
 
 $(auto_template_loc): $(mainfile)
@@ -55,7 +55,7 @@ pdf:
 	latexmk $(texflagosa) pandoc_backup.tex
 	-@ mkdir -p $(buildlatexdir)
 	-@ echo latexmk $(texflagosabuild) pandoc_backup.tex > latex_cmd.sh
-	-@ rsync -ax --exclude $(buildlatexdir) ./* $(buildlatexdir)
+	-@ rsync -ax --exclude $(buildlatexdir) --exclude '*.md' ./* $(buildlatexdir)
 	-@ cp -r ../.pandot/latex/cls_sty/osa-article/* $(buildlatexdir)
 	-@ rm $(buildlatexdir)/Makefile
 	-@ rm latex_cmd.sh
@@ -73,7 +73,7 @@ pdf:
 	latexmk $(texflag) pandoc_backup.tex
 	-@ mkdir -p $(buildlatexdir)
 	-@ echo latexmk $(texflag) pandoc_backup.tex > latex_cmd.sh
-	-@ rsync -ax --exclude $(buildlatexdir) ./* $(buildlatexdir)
+	-@ rsync -ax --exclude $(buildlatexdir) --exclude '*.md' ./* $(buildlatexdir)
 	-@ rm $(buildlatexdir)/Makefile
 	-@ rm latex_cmd.sh
 	-@ mv pandoc_backup.tex $(logdir)

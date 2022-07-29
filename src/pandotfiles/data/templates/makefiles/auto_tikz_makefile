@@ -9,13 +9,7 @@ tikzpdf = $(addprefix $(builddir)/,$(addsuffix .pdf,$(tikzbname)))
 tikzpng = $(addprefix $(builddir)/,$(addsuffix .png,$(tikzbname)))
 tikzpdflog = $(addprefix $(logdir)/,$(addsuffix .pdf,$(tikzbname)))
 
-texflag = -lualatex -f -cd -quiet -latexoption="-interaction=nonstopmode --shell-escape" -outdir="$(logdir)"
-
-V = 0
-ACTUAL_CC = codev-remote 
-CC_0 = @ $(ACTUAL_CC)
-CC_1 = $(ACTUAL_CC) -v
-CC = $(CC_$(V))
+texflag = -pdflua -pdflualatex='lualatex --interaction=nonstopmode --shell-escape %o "\\def\\outputdirectory{$(logdir)}\\input{%s}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
 
 .PHONY: all clean
 
@@ -27,16 +21,16 @@ clean:
 $(tikzpng): %.png: %.pdf 
 	-@ mogrify -density 600 -format png $<
 
-$(tikzpdf): $(builddir)/tikz_stamp
-	$(Make)
-
 $(builddir)/tikz_stamp: $(logdir)/tikz_stamp 
 	-@ mkdir -p $(builddir)
 	rsync -aP $(tikzpdflog) $(builddir) -q
 	touch $(builddir)/tikz_stamp
 
 $(logdir)/tikz_stamp: $(tikzfiles) $(yamlfile)
+	-@ mkdir -p $(logdir)
+	-@ mkdir -p $(logdir)/log
 	auto_tikz -y $(yamlfile) -o auto_tikz_backup.tex
 	latexmk $(texflag) auto_tikz_backup.tex
 	-@ mv auto_tikz_backup.tex $(logdir)/auto_tikz_backup.tex
 	touch $(logdir)/tikz_stamp
+	$(MAKE)
