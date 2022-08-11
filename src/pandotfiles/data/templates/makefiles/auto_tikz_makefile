@@ -9,7 +9,7 @@ tikzpdf = $(addprefix $(builddir)/,$(addsuffix .pdf,$(tikzbname)))
 tikzpng = $(addprefix $(builddir)/,$(addsuffix .png,$(tikzbname)))
 tikzpdflog = $(addprefix $(logdir)/,$(addsuffix .pdf,$(tikzbname)))
 
-texflag = -pdflua -pdflualatex='lualatex --interaction=nonstopmode --shell-escape %o "\\def\\outputdirectory{$(logdir)}\\input{%s}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
+texflag = -pdflua -pdflualatex='lualatex --interaction=nonstopmode --shell-escape %o "\\def\\outputdirectory{{$(logdir)}}\\input{{%s}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
 
 .PHONY: all clean
 

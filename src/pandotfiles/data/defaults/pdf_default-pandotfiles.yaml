@@ -1,4 +1,4 @@
-from: markdown
+from: markdown-auto_identifiers
 
 to: latex
 

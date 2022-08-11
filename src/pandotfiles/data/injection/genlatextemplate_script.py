@@ -54,7 +54,7 @@ def main():
     with open(str("../.pandot/pandoc/injection/latex_custom_injection.tex")) as file:
         injection = file.read()
 
-    result = run("/usr/local/bin/pandoc -D latex", shell=True, capture_output=True)
+    result = run("pandoc -D latex", shell=True, capture_output=True)
 
     base_template = decode(result.stdout)
 
@@ -110,25 +110,42 @@ def main():
             ) as file_output:
                 file_output.write(yamldefault)
 
-        elif maindocstyle == "osa-article":
-            with open(str("../.pandot/pandoc/injection/latex_custom_injection_osa-article.tex")) as file:
+        elif maindocstyle in ["spie", "osa-article"]:
+            #     with open(str("../.pandot/pandoc/injection/latex_custom_injection_spie.tex")) as file:
+            #         injection = file.read()
+            #     with open(
+            #         str(
+            #             "../.pandot/latex/defaults/latex_default_spie-pandotfiles.yaml"
+            #         )
+            #     ) as file:
+            #         yamldefault = file.read()
+            #     with open(
+            #         args.output_yaml + "template_default_spie.yaml", "w+"
+            #     ) as file_output:
+            #         file_output.write(yamldefault)
+            # elif maindocstyle == "osa-article":
+            with open(
+                str(
+                    f"../.pandot/pandoc/injection/latex_custom_injection_{maindocstyle}.tex"
+                )
+            ) as file:
                 injection = file.read()
             with open(
                 str(
-                    "../.pandot/latex/defaults/latex_default_osa-article-pandotfiles.yaml"
+                    f"../.pandot/latex/defaults/latex_default_{maindocstyle}-pandotfiles.yaml"
                 )
             ) as file:
                 yamldefault = file.read()
 
             with open(
-                args.output_yaml + "template_default_osa-article.yaml", "w+"
+                args.output_yaml + f"template_default_{maindocstyle}.yaml", "w+"
             ) as file_output:
                 file_output.write(yamldefault)
             # template_final = sub(r"\\usepackage{amsmath,amssymb}", r"", template_final)
             base_template = [
                 r"\documentclass[]{$documentclass$}",
                 r"",
-                r"\begin{document}",
+                r"\usepackage{ifthen}" r"\begin{document}",
                 r"$if(has-frontmatter)$",
                 r"\frontmatter",
                 r"$endif$",
@@ -190,6 +207,15 @@ def main():
                 r"\end{document}",
             ]
             base_template = "\n".join(base_template)
+        elif maindocstyle is not None:
+            with open(
+                str("../.pandot/pandoc/injection/latex_custom_injection.tex")
+            ) as file:
+                injection = file.read()
+            with open(
+                str(f"../.pandot/latex/docstyle_latex/docstyle-{maindocstyle}.tex")
+            ) as file:
+                injection += file.read()
 
     template_split = split(r"\\begin{document}", (base_template))
 

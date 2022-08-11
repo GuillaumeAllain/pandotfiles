@@ -4,7 +4,7 @@ buildlatexdir = {buildlatexdir}
 pandocfiles = {pandocfiles}
 mainfile = {mainfile}
 
-PD := /usr/local/bin/pandoc
+PD := pandoc
 
 mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
@@ -24,6 +24,7 @@ ifneq ($(wildcard $(logdir)/template_default_ulthese.yaml),)
 endif
 
 texflag = -pdflua -pdflualatex='lualatex --interaction=nonstopmode --shell-escape %O "\\def\\OUTPUTDIRECTORY{{$(logdir)}}\\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
+texflagspie = -pdf -pdflatex='pdflatex %O "\\def\\OUTPUTDIRECTORY{{$(logdir)}}\\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
 texflagosa = -pdf -pdflatex='pdflatex %O "\\def\\OUTPUTDIRECTORY{{$(logdir)}}\\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
 texflagosabuild = -pdf -pdflatex=\'pdflatex %O \"\\\\def\\\\OUTPUTDIRECTORY{{$(logdir)}}\\\\input{{%S}}\"\' -cd -quiet -shell-escape -outdir="$(logdir)" 
 
@@ -63,11 +64,30 @@ pdf:
 	-@ mv latexmkrc $(logdir)
 	-@ mkdir -p $(builddir)
 	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
+else ifneq ($(wildcard $(logdir)/template_default_spie.yaml),)
+pdf:
+	-@ rm $(logdir)/pandoc_backup.tex
+	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(filter-out options.yaml,$(wildcard *.yaml)) $(wildcard $(logdir)/template_default*.yaml)
+	-@ cp ../.pandot/latex/defaults/latexmkrc .
+	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
+	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
+	latexmk $(texflagspie) pandoc_backup.tex
+	-@ mkdir -p $(buildlatexdir)
+	-@ echo latexmk $(texflagosabuild) pandoc_backup.tex > latex_cmd.sh
+	-@ rsync -ax --exclude $(buildlatexdir) --exclude '*.md' ./* $(buildlatexdir)
+	-@ cp -r ../.pandot/latex/cls_sty/spie/* $(buildlatexdir)
+	-@ rm $(buildlatexdir)/Makefile
+	-@ rm latex_cmd.sh
+	-@ mv pandoc_backup.tex $(logdir)
+	-@ mv latexmkrc $(logdir)
+	-@ mkdir -p $(builddir)
+	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
 else
 pdf:
 	-@ rm $(logdir)/pandoc_backup.tex
 	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(filter-out options.yaml,$(wildcard *.yaml)) $(wildcard $(logdir)/template_default*.yaml)
 	-@ cp ../.pandot/latex/defaults/latexmkrc .
+	-@ cp -r ../.pandot/latex/docstyle_latex/img log/
 	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
 	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
 	latexmk $(texflag) pandoc_backup.tex
