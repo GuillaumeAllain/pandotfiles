@@ -143,7 +143,9 @@ def main():
                 file_output.write(yamldefault)
             # template_final = sub(r"\\usepackage{amsmath,amssymb}", r"", template_final)
             base_template = [
-                r"\documentclass[]{$documentclass$}",
+                r"\documentclass[$if(fontsize)$",
+                r"$fontsize$",
+                "$endif$]{$documentclass$}",
                 r"",
                 r"\usepackage{ifthen}" r"\begin{document}",
                 r"$if(has-frontmatter)$",
@@ -151,11 +153,17 @@ def main():
                 r"$endif$",
                 r"$if(title)$",
                 r"\maketitle",
+                r"$endif$",
                 r"$if(abstract)$",
                 r"\begin{abstract}",
                 r"$abstract$",
                 r"\end{abstract}",
                 r"$endif$",
+                r"$if(keywords)$" r"\keywords{$for(keywords)$$keywords$$sep$,$endfor$}",
+                r"$endif$"
+                r"",
+                r"$if(spie_main_author)$"
+                r"{\noindent \footnotesize\textbf{*}$spie_main_author$}",
                 r"$endif$",
                 r"$for(include-before)$",
                 r"$include-before$",
@@ -200,7 +208,11 @@ def main():
                 r"$if(bibliography)$",
                 r"\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}",
                 r"$endif$",
-                r"$for(include-after)$",
+                r"$if(biography)$" r"\vspace{1ex}",
+                r"\vspace{2ex}\noindent$biography$",
+                r"",
+                r"\noindent Biographies and photographs of the other authors are not available.",
+                r"$endif$" r"$for(include-after)$",
                 r"$include-after$",
                 r"",
                 r"$endfor$",

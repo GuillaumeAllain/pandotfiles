@@ -2,13 +2,17 @@
 documentclass: spieman
 cite-method: biblatex
 lang: en
+fontsize: 12pt
 biblio-style: spiejour
 include-before: |
   ```{=latex}
   \begin{spacing}{2}
   ```
+
 include-after: |
   ```{=latex}
+  \listoffigures
+  \listoftables
   \end{spacing}
   ```
 ---
