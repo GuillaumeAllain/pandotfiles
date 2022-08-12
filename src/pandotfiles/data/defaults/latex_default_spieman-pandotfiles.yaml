@@ -1,0 +1,15 @@
+---
+documentclass: spieman
+cite-method: biblatex
+lang: en
+biblio-style: spiejour
+include-before: |
+  ```{=latex}
+  \begin{spacing}{2}
+  ```
+include-after: |
+  ```{=latex}
+  \end{spacing}
+  ```
+---
+

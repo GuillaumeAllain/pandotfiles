@@ -82,6 +82,24 @@ pdf:
 	-@ mv latexmkrc $(logdir)
 	-@ mkdir -p $(builddir)
 	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
+else ifneq ($(wildcard $(logdir)/template_default_spieman.yaml),)
+pdf:
+	-@ rm $(logdir)/pandoc_backup.tex
+	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(filter-out options.yaml,$(wildcard *.yaml)) $(wildcard $(logdir)/template_default*.yaml)
+	-@ cp ../.pandot/latex/defaults/latexmkrc .
+	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
+	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
+	latexmk $(texflagspie) pandoc_backup.tex
+	-@ mkdir -p $(buildlatexdir)
+	-@ echo latexmk $(texflagosabuild) pandoc_backup.tex > latex_cmd.sh
+	-@ rsync -ax --exclude $(buildlatexdir) --exclude '*.md' ./* $(buildlatexdir)
+	-@ cp -r ../.pandot/latex/cls_sty/spieman/* $(buildlatexdir)
+	-@ rm $(buildlatexdir)/Makefile
+	-@ rm latex_cmd.sh
+	-@ mv pandoc_backup.tex $(logdir)
+	-@ mv latexmkrc $(logdir)
+	-@ mkdir -p $(builddir)
+	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
 else
 pdf:
 	-@ rm $(logdir)/pandoc_backup.tex

@@ -110,7 +110,7 @@ def main():
             ) as file_output:
                 file_output.write(yamldefault)
 
-        elif maindocstyle in ["spie", "osa-article"]:
+        elif maindocstyle in ["spie", "osa-article", "spieman"]:
             #     with open(str("../.pandot/pandoc/injection/latex_custom_injection_spie.tex")) as file:
             #         injection = file.read()
             #     with open(
