@@ -48,8 +48,13 @@ $(completecodevpdf) : %.pdf : %_plt.eps
 	-@ pstopdf $(builddir)/fig/temp.eps -o $@ -p
 	-@ rm $(builddir)/fig/temp.eps
 
-sync:
+sync : $(wildcard */*.seq) $(wildcard *.seq) $(forsrcfiles) $(codevseq)
+	-@ mkdir -p $(builddir)
+	-@ mkdir -p $(outputdir)
+	-@ rsync -aP $(builddir)/bin/. ./ -q
+	$(CC) -p 
 	$(CC) -d 
 	-@ rsync -aP output/ $(builddir) -q
 	touch $(builddir)/codev_stamp
+	-@ rm -r $(codevliseq:%.liseq=%.seq)
 	$(MAKE)
