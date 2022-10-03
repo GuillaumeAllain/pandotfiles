@@ -159,7 +159,7 @@ def main():
                 r"$abstract$",
                 r"\end{abstract}",
                 r"$endif$",
-                r"$if(keywords)$" r"\keywords{$for(keywords)$$keywords$$sep$,$endfor$}",
+                r"$if(keywords)$" r"\keywords{$for(keywords)$$keywords$$sep$, $endfor$}",
                 r"$endif$"
                 r"",
                 r"$if(spie_main_author)$"

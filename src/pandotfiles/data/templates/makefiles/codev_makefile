@@ -46,6 +46,7 @@ $(builddir)/codev_stamp : $(wildcard */*.seq) $(wildcard *.seq) $(forsrcfiles) $
 $(completecodevpdf) : %.pdf : %_plt.eps 
 	-@ codev-style-vie $< > $(builddir)/fig/temp.eps
 	-@ pstopdf $(builddir)/fig/temp.eps -o $@ -p
+	-@ mogrify -density 600 -format png $@
 	-@ rm $(builddir)/fig/temp.eps
 
 sync : $(wildcard */*.seq) $(wildcard *.seq) $(forsrcfiles) $(codevseq)
@@ -55,6 +56,5 @@ sync : $(wildcard */*.seq) $(wildcard *.seq) $(forsrcfiles) $(codevseq)
 	$(CC) -p 
 	$(CC) -d 
 	-@ rsync -aP output/ $(builddir) -q
-	touch $(builddir)/codev_stamp
 	-@ rm -r $(codevliseq:%.liseq=%.seq)
 	$(MAKE)
