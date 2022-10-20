@@ -3,6 +3,7 @@ builddir = {builddir}
 buildlatexdir = {buildlatexdir}
 pandocfiles = {pandocfiles}
 mainfile = {mainfile}
+templatedir = ../.pandot/latex/docstyle_latex/
 
 PD := pandoc
 
@@ -23,10 +24,10 @@ ifneq ($(wildcard $(logdir)/template_default_ulthese.yaml),)
     pandocflags += --top-level-division=chapter 
 endif
 
-texflag = -pdflua -pdflualatex='lualatex --interaction=nonstopmode --shell-escape %O "\\def\\OUTPUTDIRECTORY{{$(logdir)}}\\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
-texflagspie = -pdf -pdflatex='pdflatex %O "\\def\\OUTPUTDIRECTORY{{$(logdir)}}\\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
-texflagosa = -pdf -pdflatex='pdflatex %O "\\def\\OUTPUTDIRECTORY{{$(logdir)}}\\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
-texflagosabuild = -pdf -pdflatex=\'pdflatex %O \"\\\\def\\\\OUTPUTDIRECTORY{{$(logdir)}}\\\\input{{%S}}\"\' -cd -quiet -shell-escape -outdir="$(logdir)" 
+texflag = -pdflua -pdflualatex='lualatex --interaction=nonstopmode --shell-escape %O "\\def\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
+texflagspie = -pdf -pdflatex='pdflatex %O "\\def\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
+texflagosa = -pdf -pdflatex='pdflatex %O "\\def\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
+texflagosabuild = -pdf -pdflatex=\'pdflatex %O \"\\\\def\\\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}\"\' -cd -quiet -shell-escape -outdir="$(logdir)" 
 
 FIGURETARGETSLOC = $(addprefix ../,$(FIGURETARGETS))
 

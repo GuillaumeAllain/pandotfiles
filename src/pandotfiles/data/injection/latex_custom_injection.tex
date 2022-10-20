@@ -53,8 +53,8 @@
 $if(docstyle)$
   \usepackage{graphicx}
   \usepackage{ifthen}
-  \usepackage{shellesc}
-  % \input{\OUTPUTDIRECTORY/template.tex}
+  % \usepackage{shellesc}
+  \input{\TEMPLATEDIR/docstyle-$docstyle$.tex}
 
     $if(acronyms)$
     $for(acronyms)$
