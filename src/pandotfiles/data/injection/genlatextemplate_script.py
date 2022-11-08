@@ -109,6 +109,10 @@ def main():
                 args.output_yaml + "template_default_ulthese.yaml", "w+"
             ) as file_output:
                 file_output.write(yamldefault)
+            with open(
+                str(f"../.pandot/latex/docstyle_latex/docstyle-{maindocstyle}.tex")
+            ) as file:
+                injection += file.read()
 
         elif maindocstyle in ["spie", "osa-article", "spieman"]:
             #     with open(str("../.pandot/pandoc/injection/latex_custom_injection_spie.tex")) as file:
@@ -159,9 +163,9 @@ def main():
                 r"$abstract$",
                 r"\end{abstract}",
                 r"$endif$",
-                r"$if(keywords)$" r"\keywords{$for(keywords)$$keywords$$sep$, $endfor$}",
-                r"$endif$"
-                r"",
+                r"$if(keywords)$"
+                r"\keywords{$for(keywords)$$keywords$$sep$, $endfor$}",
+                r"$endif$" r"",
                 r"$if(spie_main_author)$"
                 r"{\noindent \footnotesize\textbf{*}$spie_main_author$}",
                 r"$endif$",
@@ -220,10 +224,10 @@ def main():
             ]
             base_template = "\n".join(base_template)
         elif maindocstyle is not None:
-            with open(
-                str("../.pandot/pandoc/injection/latex_custom_injection.tex")
-            ) as file:
-                injection = file.read()
+            # with open(
+            #     str("../.pandot/pandoc/injection/latex_custom_injection.tex")
+            # ) as file:
+            #     injection = file.read()
             with open(
                 str(f"../.pandot/latex/docstyle_latex/docstyle-{maindocstyle}.tex")
             ) as file:
