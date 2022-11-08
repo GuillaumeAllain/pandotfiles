@@ -13,7 +13,7 @@ jobs:
     container:
       image: guillaumeallain/pandotfiles
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: make pdf
         run: make pdf
       - uses: actions/upload-artifact@master
@@ -21,6 +21,7 @@ jobs:
           name: Documents
           path: build/pdf/*.pdf
       - uses: actions/upload-artifact@master
+        if: always()
         with:
           name: Logs
           path: doc/log/pandoc_backup.log

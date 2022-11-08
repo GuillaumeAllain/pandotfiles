@@ -11,6 +11,6 @@ RUN tlmgr install lastpage sectsty multibib ulthese pgf preprint cite tocloft
 
 
 # OSA-ARTICLE
-RUN tlmgr install fontaxes xstring silence newtx helvetic txfonts
+RUN tlmgr install fontaxes xstring silence newtx helvetic txfonts collection-fontsrecommended
 RUN luaotfload-tool --update
 ENTRYPOINT make pdf
