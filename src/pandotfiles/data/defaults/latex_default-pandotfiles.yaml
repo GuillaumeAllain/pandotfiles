@@ -3,7 +3,7 @@ natbiboptions: numbers
 biblio-style: unsrtnat
 float_placement: t
 fontsize: 12pt
-papersize: letterpaper
+papersize: letter
 numbersections: true
 figPrefix:
         - "figure"
