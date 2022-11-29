@@ -28,6 +28,8 @@ texflag = -pdflua -pdflualatex='lualatex --interaction=nonstopmode --shell-escap
 texflagspie = -pdf -pdflatex='pdflatex %O "\\def\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
 texflagosa = -pdf -pdflatex='pdflatex %O "\\def\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
 texflagosabuild = -pdf -pdflatex=\'pdflatex %O \"\\\\def\\\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}\"\' -cd -quiet -shell-escape -outdir="$(logdir)" 
+texflagulthese = -pdfxe -xelatex='xelatex %O "\\def\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
+texflagulthesebuild = -pdfxe -xelatex=\'xelatex %O \"\\\\def\\\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}\"\' -cd -quiet -shell-escape -outdir="$(logdir)" 
 
 FIGURETARGETSLOC = $(addprefix ../,$(FIGURETARGETS))
 
@@ -77,6 +79,25 @@ pdf:
 	latexmk $(texflagspie) pandoc_backup.tex
 	-@ mkdir -p $(buildlatexdir)
 	-@ echo latexmk $(texflagosabuild) pandoc_backup.tex > latex_cmd.sh
+	-@ rsync -ax --exclude $(buildlatexdir) --exclude '*.md' ./* $(buildlatexdir)
+	-@ cp -r ../.pandot/latex/cls_sty/spie/* $(buildlatexdir)
+	-@ rm $(buildlatexdir)/Makefile
+	-@ rm latex_cmd.sh
+	-@ mv pandoc_backup.tex $(logdir)
+	-@ mv latexmkrc $(logdir)
+	-@ mkdir -p $(builddir)
+	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
+else ifneq ($(wildcard $(logdir)/template_default_ulthese.yaml),)
+pdf:
+	-@ rm $(logdir)/pandoc_backup.tex
+	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(filter-out options.yaml,$(wildcard *.yaml)) $(wildcard $(logdir)/template_default*.yaml)
+	-@ cp ../.pandot/latex/defaults/latexmkrc .
+	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
+	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
+	perl -pi -0e 's/^\s*\n(\\begin{{align}})/\1/mg; s/^(\\end{{align}}\s*)\n\n/\1\n/mg' pandoc_backup.tex
+	latexmk $(texflagulthese) pandoc_backup.tex
+	-@ mkdir -p $(buildlatexdir)
+	-@ echo latexmk $(texflagulthesebuild) pandoc_backup.tex > latex_cmd.sh
 	-@ rsync -ax --exclude $(buildlatexdir) --exclude '*.md' ./* $(buildlatexdir)
 	-@ cp -r ../.pandot/latex/cls_sty/spie/* $(buildlatexdir)
 	-@ rm $(buildlatexdir)/Makefile

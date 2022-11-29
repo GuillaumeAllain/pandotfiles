@@ -8,7 +8,10 @@ def pdfmakefilemod(makefile_string, logdir, builddir, srcdir, mainfile):
         builddir=escape(builddir),
         pandocfiles="\\1 $(wildcard "
         + escape(str(srcdir))
-        + "/*.md)"
+        + "/*.md) "
+        + "$(wildcard "
+        + escape(str(srcdir))
+        + "/*/*.md) "
         + " $(wildcard "
         + escape(str(srcdir))
         + "/*.bib)",

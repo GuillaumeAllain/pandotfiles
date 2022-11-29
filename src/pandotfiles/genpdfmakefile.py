@@ -61,7 +61,10 @@ def main():
         buildlatexdir=args.buildlatexdir,
         pandocfiles="$(wildcard "
         + str(args.srcdir)
-        + "/*.md)"
+        + "/*.md) "
+        + "$(wildcard "
+        + str(args.srcdir)
+        + "/*/*.md) "
         + " $(wildcard "
         + str(args.srcdir)
         + "/*.bib)",

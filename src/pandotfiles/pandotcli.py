@@ -95,7 +95,10 @@ def main():
                         buildlatexdir="../" + buildlatexdir,
                         pandocfiles="$(wildcard "
                         + str(".")
-                        + "/*.md)"
+                        + "/*.md) "
+                        + "$(wildcard "
+                        + str(".")
+                        + "/*/*.md) "
                         + " $(wildcard "
                         + str(".")
                         + "/*.bib)",
