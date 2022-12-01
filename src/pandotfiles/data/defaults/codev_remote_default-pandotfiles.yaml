@@ -1,7 +1,7 @@
 ---
-directory_extension: "/3Dpup/"
+directory_extension: "/project/"
 
-sync_project_list: [../../codevbin/*]
+sync_project_list: [../../build/codevbin/./*]
 
 sync_local_download_directory: output
 

@@ -1,9 +1,11 @@
 ---
+directory_extension: "/projectbuild/"
+
 sync_project_list: [./src/./fortran/*, ./src/fortran/./Makefile, user.def]
 
 sync_remote_download_list: [./*.dll, ./mkl.dll, ./mkl.lib, libiomp5md.dll]
 
-sync_local_download_directory: output
+sync_local_download_directory: ../../../../build/codevbin/
 
 codev_command: exi y
 

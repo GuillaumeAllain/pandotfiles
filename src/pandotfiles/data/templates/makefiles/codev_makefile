@@ -42,7 +42,6 @@ $(bindir)/fortran_stamp : $(forsrcfiles)
 	-@ mkdir -p $(bindir)
 	$(CC) -k --config_path codev_remote_build.yaml 
 	$(CC) -d --config_path codev_remote_build.yaml 
-	-@ rsync -aP $(outputdir)/*.lib,$(outputdir)/*.dll $(bindir)/ -q
 	-@ touch $(bindir)/fortran_stamp
 
 $(builddir)/codev_stamp : $(codevliseq) $(bindir)/fortran_stamp
@@ -51,6 +50,7 @@ $(builddir)/codev_stamp : $(codevliseq) $(bindir)/fortran_stamp
 	-@ mkdir -p $(bindir)
 	-@ cp -r media/ $(bindir)
 	$(CC)
+	-@ rsync -aP output/ $(builddir) -q
 	-@ touch $(builddir)/codev_stamp
 	$(MAKE)
 
