@@ -4,7 +4,7 @@ from subprocess import run, PIPE
 from pandotfiles.util.markdown import (
     PANDOC_MARKDOWN_OUTPUT_COMMANDS_NOYAML,
     CLEAN_WHITESPACE,
-    CLEAN_TAGS,
+    # CLEAN_TAGS,
 )
 
 from pandotfiles.panotes.file_management import (
@@ -19,7 +19,7 @@ def get_regex_blocks(filename, regex):
         + " -M greppattern={regex} -L ~/.local/share/pandot/filters/greppattern.lua --shift-heading-level-by=1 "
         + PANDOC_MARKDOWN_OUTPUT_COMMANDS_NOYAML
         + CLEAN_WHITESPACE
-        + CLEAN_TAGS
+        # + CLEAN_TAGS
     ).format(filename=filename, regex=regex)
     pandocoutput = run(
         LOCAL_PANDOC_MARKDOWN_COMMAND, shell=True, stdout=PIPE, stderr=PIPE

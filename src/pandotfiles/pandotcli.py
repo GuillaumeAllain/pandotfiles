@@ -362,7 +362,11 @@ def main():
                 srcdir = "src/codev"
                 builddir = "build/codev"
                 outputdir = "output"
+                bindir = "build/codevbin"
                 makedirs(srcdir, exist_ok=True)
+                makedirs(bindir, exist_ok=True)
+                makedirs(srcdir + "/src/liseq", exist_ok=True)
+                makedirs(srcdir + "/src/fortran", exist_ok=True)
                 # copy yaml defaults
                 try:
                     with open(srcdir + "/codev_remote.yaml", "x") as file_output:
@@ -390,8 +394,33 @@ def main():
                     makefile = makefile.format(
                         builddir="../../" + str(builddir),
                         outputdir=str(outputdir),
+                        bindir="../../" + str(bindir),
                     )
                     file_output.write(makefile)
+
+                with open(srcdir + "/src/fortran/Makefile", "w+") as file_output:
+                    with open(
+                        str(
+                            data_dir.joinpath(
+                                "templates", "makefiles", "codev_build_makefile"
+                            )
+                        )
+                    ) as file:
+                        makefile = file.read()
+                    file_output.write(makefile)
+                try:
+                    with open(srcdir + "/codev_remote_build.yaml", "x") as file_output:
+                        with open(
+                            str(
+                                data_dir.joinpath(
+                                    "defaults", "codev_remote_build_default-pandotfiles.yaml"
+                                )
+                            )
+                        ) as file:
+                            codev_remote = file.read()
+                        file_output.write(codev_remote)
+                except FileExistsError:
+                    warnings.warn("Using existing codev_remote_build.yaml config file")
 
                 try:
                     with open(srcdir + "/.gitignore", "x") as file_output:

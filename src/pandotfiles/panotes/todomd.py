@@ -1,6 +1,5 @@
 from subprocess import run, PIPE
 from pathlib import Path
-import datetime
 from pandotfiles.panotes.file_management import (
     escape,
     get_filename_regex,
@@ -9,7 +8,7 @@ from pandotfiles.panotes.file_management import (
 from pandotfiles.util.markdown import (
     PANDOC_MARKDOWN_OUTPUT_COMMANDS,
     CLEAN_WHITESPACE,
-    CLEAN_TAGS,
+    # CLEAN_TAGS,
 )
 
 
@@ -18,7 +17,7 @@ def remove_todo(PATH):
         "/usr/local/bin/pandoc {filename} -L ~/.local/share/pandot/filters/remove-todo.lua "
         + PANDOC_MARKDOWN_OUTPUT_COMMANDS
         + CLEAN_WHITESPACE
-        + CLEAN_TAGS
+        # + CLEAN_TAGS
         + " > tmp ; mv tmp {filename}"
     )
     run(LOCAL_PANDOC_MARKDOWN_COMMAND.format(filename=PATH), shell=True)
