@@ -3,7 +3,6 @@ builddir = {builddir}
 buildlatexdir = {buildlatexdir}
 pandocfiles = {pandocfiles}
 mainfile = {mainfile}
-templatedir = ../.pandot/latex/docstyle_latex/
 
 PD := pandoc
 
@@ -20,16 +19,23 @@ template_default_loc = $(logdir)
 pandocflags += --template=$(auto_template_loc)
 pandocflags += -d options.yaml
 
-ifneq ($(wildcard $(logdir)/template_default_ulthese.yaml),)
+ifneq ($(wildcard $(logdir)/template_default_osa-article.yaml),)
+    texflag = -pdf  -cd -quiet -shell-escape -outdir="$(logdir)" 
+    texflagbuild = -pdf -cd -quiet -shell-escape -outdir="$(logdir)" 
+else ifneq ($(wildcard $(logdir)/template_default_ulthese.yaml),)
+    texflag = -pdfxe -cd -quiet -shell-escape -outdir="$(logdir)" 
+    texflagbuild = -pdfxe -cd -quiet -shell-escape -outdir="$(logdir)" 
     pandocflags += --top-level-division=chapter 
+else ifneq ($(wildcard $(logdir)/template_default_spie.yaml),)
+    texflag = -pdf -cd -quiet -shell-escape -outdir="$(logdir)" 
+    texflagbuild = -pdf -cd -quiet -shell-escape -outdir="$(logdir)" 
+else ifneq ($(wildcard $(logdir)/template_default_spieman.yaml),)
+    texflag = -pdf -cd -quiet -shell-escape -outdir="$(logdir)" 
+    texflagbuild = -pdf -cd -quiet -shell-escape -outdir="$(logdir)" 
+else
+    texflag = -pdflua -cd -quiet -shell-escape -outdir="$(logdir)" 
+    texflagbuild = -pdflua -cd -quiet -shell-escape -outdir="$(logdir)" 
 endif
-
-texflag = -pdflua -pdflualatex='lualatex --interaction=nonstopmode --shell-escape %O "\\def\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
-texflagspie = -pdf -pdflatex='pdflatex %O "\\def\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
-texflagosa = -pdf -pdflatex='pdflatex %O "\\def\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
-texflagosabuild = -pdf -pdflatex=\'pdflatex %O \"\\\\def\\\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}\"\' -cd -quiet -shell-escape -outdir="$(logdir)" 
-texflagulthese = -pdfxe -xelatex='xelatex %O "\\def\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}"' -cd -quiet -shell-escape -outdir="$(logdir)" 
-texflagulthesebuild = -pdfxe -xelatex=\'xelatex %O \"\\\\def\\\\TEMPLATEDIR{{$(templatedir)}}\input{{%S}}\"\' -cd -quiet -shell-escape -outdir="$(logdir)" 
 
 FIGURETARGETSLOC = $(addprefix ../,$(FIGURETARGETS))
 
@@ -49,86 +55,9 @@ $(auto_template_loc): $(mainfile)
 	-@ rm $(logdir)/*template*
 	../.pandot/pandoc/injection/genlatextemplate_script.py -o $(auto_template_loc) -y $(template_default_loc)/ -m $(mainfile)
 
-ifneq ($(wildcard $(logdir)/template_default_osa-article.yaml),)
 pdf:
 	-@ rm $(logdir)/pandoc_backup.tex
-	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(filter-out options.yaml,$(wildcard *.yaml)) $(wildcard $(logdir)/template_default*.yaml)
-	-@ cp ../.pandot/latex/defaults/latexmkrc .
-	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
-	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
-	perl -pi -0e 's/^\s*\n(\\begin{{align}})/\1/mg; s/^(\\end{{align}}\s*)\n\n/\1\n/mg' pandoc_backup.tex
-	latexmk $(texflagosa) pandoc_backup.tex
-	-@ mkdir -p $(buildlatexdir)
-	-@ echo latexmk $(texflagosabuild) pandoc_backup.tex > latex_cmd.sh
-	-@ rsync -ax --exclude $(buildlatexdir) --exclude '*.md' ./* $(buildlatexdir)
-	-@ cp -r ../.pandot/latex/cls_sty/osa-article/* $(buildlatexdir)
-	-@ rm $(buildlatexdir)/Makefile
-	-@ rm latex_cmd.sh
-	-@ mv pandoc_backup.tex $(logdir)
-	-@ mv latexmkrc $(logdir)
-	-@ mkdir -p $(builddir)
-	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
-else ifneq ($(wildcard $(logdir)/template_default_spie.yaml),)
-pdf:
-	-@ rm $(logdir)/pandoc_backup.tex
-	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(filter-out options.yaml,$(wildcard *.yaml)) $(wildcard $(logdir)/template_default*.yaml)
-	-@ cp ../.pandot/latex/defaults/latexmkrc .
-	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
-	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
-	perl -pi -0e 's/^\s*\n(\\begin{{align}})/\1/mg; s/^(\\end{{align}}\s*)\n\n/\1\n/mg' pandoc_backup.tex
-	latexmk $(texflagspie) pandoc_backup.tex
-	-@ mkdir -p $(buildlatexdir)
-	-@ echo latexmk $(texflagosabuild) pandoc_backup.tex > latex_cmd.sh
-	-@ rsync -ax --exclude $(buildlatexdir) --exclude '*.md' ./* $(buildlatexdir)
-	-@ cp -r ../.pandot/latex/cls_sty/spie/* $(buildlatexdir)
-	-@ rm $(buildlatexdir)/Makefile
-	-@ rm latex_cmd.sh
-	-@ mv pandoc_backup.tex $(logdir)
-	-@ mv latexmkrc $(logdir)
-	-@ mkdir -p $(builddir)
-	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
-else ifneq ($(wildcard $(logdir)/template_default_ulthese.yaml),)
-pdf:
-	-@ rm $(logdir)/pandoc_backup.tex
-	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(filter-out options.yaml,$(wildcard *.yaml)) $(wildcard $(logdir)/template_default*.yaml)
-	-@ cp ../.pandot/latex/defaults/latexmkrc .
-	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
-	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
-	perl -pi -0e 's/^\s*\n(\\begin{{align}})/\1/mg; s/^(\\end{{align}}\s*)\n\n/\1\n/mg' pandoc_backup.tex
-	latexmk $(texflagulthese) pandoc_backup.tex
-	-@ mkdir -p $(buildlatexdir)
-	-@ echo latexmk $(texflagulthesebuild) pandoc_backup.tex > latex_cmd.sh
-	-@ rsync -ax --exclude $(buildlatexdir) --exclude '*.md' ./* $(buildlatexdir)
-	-@ cp -r ../.pandot/latex/cls_sty/spie/* $(buildlatexdir)
-	-@ rm $(buildlatexdir)/Makefile
-	-@ rm latex_cmd.sh
-	-@ mv pandoc_backup.tex $(logdir)
-	-@ mv latexmkrc $(logdir)
-	-@ mkdir -p $(builddir)
-	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
-else ifneq ($(wildcard $(logdir)/template_default_spieman.yaml),)
-pdf:
-	-@ rm $(logdir)/pandoc_backup.tex
-	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(filter-out options.yaml,$(wildcard *.yaml)) $(wildcard $(logdir)/template_default*.yaml)
-	-@ cp ../.pandot/latex/defaults/latexmkrc .
-	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
-	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
-	perl -pi -0e 's/^\s*\n(\\begin{{align}})/\1/mg; s/^(\\end{{align}}\s*)\n\n/\1\n/mg' pandoc_backup.tex
-	latexmk $(texflagspie) pandoc_backup.tex
-	-@ mkdir -p $(buildlatexdir)
-	-@ echo latexmk $(texflagosabuild) pandoc_backup.tex > latex_cmd.sh
-	-@ rsync -ax --exclude $(buildlatexdir) --exclude '*.md' ./* $(buildlatexdir)
-	-@ cp -r ../.pandot/latex/cls_sty/spieman/* $(buildlatexdir)
-	-@ rm $(buildlatexdir)/Makefile
-	-@ rm latex_cmd.sh
-	-@ mv pandoc_backup.tex $(logdir)
-	-@ mv latexmkrc $(logdir)
-	-@ mkdir -p $(builddir)
-	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
-else
-pdf:
-	-@ rm $(logdir)/pandoc_backup.tex
-	$(PD) $(pandocflags) -o pandoc_backup.tex $(mainfile) $(filter-out options.yaml,$(wildcard *.yaml)) $(wildcard $(logdir)/template_default*.yaml)
+	$(PD) $(pandocflags) -o pandoc_backup.tex $(wildcard $(logdir)/template_default*.yaml) $(mainfile) $(filter-out options.yaml,$(wildcard *.yaml)) 
 	-@ cp ../.pandot/latex/defaults/latexmkrc .
 	-@ cp -r ../.pandot/latex/docstyle_latex/img log/
 	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
@@ -144,7 +73,6 @@ pdf:
 	-@ mv latexmkrc $(logdir)
 	-@ mkdir -p $(builddir)
 	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
-endif
 
 open:
 	-open $(mainpdf)

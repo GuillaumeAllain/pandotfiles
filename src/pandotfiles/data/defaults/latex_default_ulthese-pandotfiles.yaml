@@ -4,9 +4,9 @@ classoption:
         - ULDIPLOMA
         - round
         - semicolon
-        - authoryear
-        - numbers
         - nobabel
-natbiboptions:
+        - nonatbib
+natbiboptions: numbers,square
 has-frontmatter: ~
+top-level-division: chapter
 ---

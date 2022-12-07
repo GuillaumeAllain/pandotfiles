@@ -14,6 +14,7 @@ from re import split, findall, MULTILINE, sub
 from codecs import decode
 from subprocess import run
 from pathlib import Path
+from os import listdir
 
 
 parser = argparse.ArgumentParser(
@@ -77,6 +78,9 @@ def main():
                 mainfile = file.read()
         except FileNotFoundError as e:
             raise e
+        for x in [f for f in listdir() if "yaml" in f]:
+            with open(x) as file:
+                mainfile += file.read()
         try:
             maindocstyle = findall(r"(?<=docstyle)\s*:\s*(\S*)", mainfile, MULTILINE)[
                 -1
