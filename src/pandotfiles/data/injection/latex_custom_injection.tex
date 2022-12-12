@@ -3,21 +3,6 @@
 \usepackage[acronym,nomain,nonumberlist]{glossaries}
 \makeglossaries
 
-\ExplSyntaxOn
-  \NewDocumentCommand{\getenv}{om}
-   {
-    \sys_get_shell:nnN { kpsewhich ~ --var-value ~ #2 } { } \l_tmpa_tl
-    \tl_trim_spaces:N \l_tmpa_tl
-    \IfNoValueTF { #1 }
-     {
-      \tl_use:N \l_tmpa_tl
-     }
-     {
-      \tl_set_eq:NN #1 \l_tmpa_tl
-     }
-   }
-  \ExplSyntaxOff
-
   \newcommand{\titleprint}{$title$}
   
   \newcommand{\authoremail}{$authoremail$}
@@ -53,12 +38,15 @@
 $if(docstyle)$
   \usepackage{graphicx}
   \usepackage{ifthen}
-  % \usepackage{shellesc}
-  % \input{\TEMPLATEDIR/docstyle-$docstyle$.tex}
 
     $if(acronyms)$
     $for(acronyms)$
     \newacronym{$acronyms.cmd$}{$acronyms.short$}{$acronyms.long$}
+    $endfor$
+    $endif$
+    $if(glossary)$
+    $for(glossary)$
+    \newglossaryentry{$glossary.cmd$}{name={$glossary.short$}, description={$glossary.long$}}
     $endfor$
     $endif$
 $endif$
