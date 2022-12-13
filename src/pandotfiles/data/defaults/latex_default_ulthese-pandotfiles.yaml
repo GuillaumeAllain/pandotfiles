@@ -1,7 +1,7 @@
 ---
 documentclass: ulthese
 classoption:
-        - ULDIPLOMA
+        - PhD
         - round
         - semicolon
         - nobabel

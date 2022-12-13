@@ -1,7 +1,7 @@
 % CUSTOM TEMPLATE
 \usepackage{siunitx}
-\usepackage[acronym,nomain,nonumberlist]{glossaries}
-\makeglossaries
+\usepackage[toc,acronym]{glossaries}
+\usepackage[record]{glossaries-extra}
 
   \newcommand{\titleprint}{$title$}
   
@@ -39,14 +39,7 @@ $if(docstyle)$
   \usepackage{graphicx}
   \usepackage{ifthen}
 
-    $if(acronyms)$
-    $for(acronyms)$
-    \newacronym{$acronyms.cmd$}{$acronyms.short$}{$acronyms.long$}
-    $endfor$
-    $endif$
-    $if(glossary)$
-    $for(glossary)$
-    \newglossaryentry{$glossary.cmd$}{name={$glossary.short$}, description={$glossary.long$}}
-    $endfor$
-    $endif$
+  $if(glossary_file)$
+     \GlsXtrLoadResources[src=$glossary_file$]
+  $endif$
 $endif$

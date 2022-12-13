@@ -9,7 +9,11 @@
 \setdefaultlanguage{french}
 \setotherlanguages{english}
 
-% \bibliographystyle{\XDGDATAHOME/pandot/templates/docstyle_latex/bst/frplain}
+\makeatletter
+  \def\fps@figure{ tbp }
+  \def\fps@table{ tbp }
+\makeatother
+
 
 \renewcommand{\maketitle}{
 
@@ -26,18 +30,14 @@
     \chapter*{Résumé}                      % ne pas numéroter
     \phantomsection\addcontentsline{toc}{chapter}{Résumé} % inclure dans TdM
 
-    \begin{french}
       \ulresume                % résumé français
-    \end{french}
   }
 
   \ifthenelse{\equal{\ulabstract}{}}{}{
     \chapter*{Abstract}                      % ne pas numéroter
     \phantomsection\addcontentsline{toc}{chapter}{Abstract} % inclure dans TdM
 
-    \begin{english}
       \ulabstract              % résumé anglais
-    \end{english}
   }
 
   \ifthenelse{\equal{\ulresume\ulabstract}{}}{}{

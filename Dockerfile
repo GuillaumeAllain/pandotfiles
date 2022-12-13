@@ -7,7 +7,8 @@ RUN ln -s /usr/bin/python3 /usr/bin/python & \
 # CACHE common packages
 RUN tlmgr install latexmk
 RUN tlmgr install selnolig siunitx glossaries mfirstuc xfor datatool tracklang blindtext
-RUN tlmgr install lastpage sectsty multibib ulthese pgf preprint cite tocloft
+RUN tlmgr install lastpage sectsty multibib ulthese pgf preprint cite tocloft glossaries-extra
+RUN tlmgr install francais-bst
 
 
 # OSA-ARTICLE
