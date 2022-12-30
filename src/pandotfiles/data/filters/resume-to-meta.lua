@@ -35,8 +35,8 @@ if PANDOC_VERSION >= { 2, 9, 2 } then
         {
             Blocks = ulresume_from_blocklist,
             Meta = function(meta)
-                if not meta.ulresume and #ulresume > 0 then
-                    meta.ulresume = pandoc.MetaBlocks(ulresume)
+                if not meta.resume and #ulresume > 0 then
+                    meta.resume = pandoc.MetaBlocks(ulresume)
                 end
                 return meta
             end,
@@ -49,8 +49,8 @@ else
             Pandoc = function(doc)
                 local meta = doc.meta
                 local other_blocks = ulresume_from_blocklist(doc.blocks)
-                if not meta.ulresume and #ulresume > 0 then
-                    meta.ulresume = pandoc.MetaBlocks(ulresume)
+                if not meta.resume and #ulresume > 0 then
+                    meta.resume = pandoc.MetaBlocks(ulresume)
                 end
                 return pandoc.Pandoc(other_blocks, meta)
             end,

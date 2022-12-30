@@ -1,3 +1,4 @@
+---
 figPrefix:
         - "figure"
         - "figures"
@@ -10,3 +11,4 @@ lstPrefix:
 secPrefix:
         - "section"
         - "sections"
+---

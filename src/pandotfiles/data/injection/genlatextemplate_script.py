@@ -171,8 +171,8 @@ def main():
                 r"$if(keywords)$"
                 r"\keywords{$for(keywords)$$keywords$$sep$, $endfor$}",
                 r"$endif$" r"",
-                r"$if(spie_main_author)$"
-                r"{\noindent \footnotesize\textbf{*}$spie_main_author$}",
+                r"$if(main_author)$"
+                r"{\noindent \footnotesize\textbf{*}$main_author$}",
                 r"$endif$",
                 r"$for(include-before)$",
                 r"$include-before$",

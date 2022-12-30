@@ -82,6 +82,49 @@ def main():
                         file_output.write(options)
                 except FileExistsError:
                     warnings.warn("Pdf init: Won't overwrite option file")
+                try:
+                    with open("doc/crossref.yaml", "x") as file_output:
+                        with open(
+                            str(
+                                data_dir.joinpath(
+                                    "defaults", "pandoc-crossref-pandotfiles.yaml"
+                                )
+                            )
+                        ) as file:
+                            options = file.read()
+                        file_output.write(options)
+                except FileExistsError:
+                    warnings.warn("Pdf init: Won't overwrite crossref file")
+                try:
+                    with open("doc/metadata.yaml", "x") as file_output:
+                        with open(
+                            str(
+                                data_dir.joinpath(
+                                    "defaults", "metadata_default-pandotfiles.yaml"
+                                )
+                            )
+                        ) as file:
+                            options = file.read()
+                        file_output.write(options)
+                except FileExistsError:
+                    warnings.warn("Pdf init: Won't overwrite metadata file")
+                try:
+                    with open("doc/latexmkrc", "x") as file_output:
+                        with open(
+                            str(data_dir.joinpath("defaults", "latexmkrc"))
+                        ) as file:
+                            options = file.read()
+                        file_output.write(options)
+                except FileExistsError:
+                    warnings.warn("Pdf init: Won't overwrite latexmkrc")
+                try:
+                    copytree(
+                        str(data_dir.joinpath("templates", "latex_classes")),
+                        "doc/texinputs",
+                        dirs_exist_ok=True,
+                    )
+                except FileExistsError:
+                    warnings.warn("Pdf init: Won't overwrite latexmkrc")
 
                 with open("doc/Makefile", "w+") as file_output:
                     with open(
@@ -147,13 +190,13 @@ def main():
                     dirs_exist_ok=True,
                     ignore=ignore_patterns(".*", "_*"),
                 )
-                makedirs(".pandot/latex/texmf/tex", exist_ok=True)
-                copytree(
-                    str(data_dir.joinpath("templates", "latex_classes")),
-                    ".pandot/latex/cls_sty/",
-                    dirs_exist_ok=True,
-                    ignore=ignore_patterns(".*", "_*"),
-                )
+                # makedirs(".pandot/latex/texmf/tex", exist_ok=True)
+                # copytree(
+                #     str(data_dir.joinpath("templates", "latex_classes")),
+                #     ".pandot/latex/texinputs/",
+                #     dirs_exist_ok=True,
+                #     ignore=ignore_patterns(".*", "_*"),
+                # )
                 makedirs(".github/workflows/", exist_ok=True)
                 copy(
                     str(
@@ -181,17 +224,17 @@ def main():
                     ),
                     ".pandot/pandoc/filters/",
                 )
-                copy(
-                    str(
-                        data_dir.joinpath(
-                            "filters",
-                            "lua-filters",
-                            "abstract-to-meta",
-                            "abstract-to-meta.lua",
-                        )
-                    ),
-                    ".pandot/pandoc/filters/",
-                )
+                # copy(
+                #     str(
+                #         data_dir.joinpath(
+                #             "filters",
+                #             "lua-filters",
+                #             "abstract-to-meta",
+                #             "abstract-to-meta.lua",
+                #         )
+                #     ),
+                #     ".pandot/pandoc/filters/",
+                # )
                 copy(
                     str(data_dir.joinpath("filters", "pandoc-gls", "pandoc-gls.lua")),
                     ".pandot/pandoc/filters/",
@@ -413,7 +456,8 @@ def main():
                         with open(
                             str(
                                 data_dir.joinpath(
-                                    "defaults", "codev_remote_build_default-pandotfiles.yaml"
+                                    "defaults",
+                                    "codev_remote_build_default-pandotfiles.yaml",
                                 )
                             )
                         ) as file:

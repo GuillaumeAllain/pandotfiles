@@ -24,7 +24,7 @@ keywords:
 - lasers
 - journal manuscripts
 - LaTeX template
-spie_main_author: Fourth author name, [myemail@university.edu](myemail@university.edu)
+main_author: Fourth author name, [myemail@university.edu](myemail@university.edu)
 title: "SPIE journal papers: sample manuscript showing style and formatting specifications"
 ---
 

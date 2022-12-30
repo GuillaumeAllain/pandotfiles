@@ -14,8 +14,7 @@ metadata-file: ../.pandot/latex/defaults/latex_default-pandotfiles.yaml
 filters:
   - include-files.lua
   - pandoc-gls.lua
-  - ulresume-to-meta.lua
-  - ulabstract-to-meta.lua
+  - resume-to-meta.lua
   - abstract-to-meta.lua
   - siunitx.lua
   - pandoc-crossref

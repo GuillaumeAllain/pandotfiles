@@ -21,6 +21,7 @@ CC_0 = @ $(ACTUAL_CC)
 CC_1 = $(ACTUAL_CC) -v
 CC = $(CC_$(V))
 
+
 .PHONY: clean all sync
 
 all : $(bindir)/fortran_stamp $(builddir)/codev_stamp $(completecodevpdf)
@@ -32,8 +33,8 @@ clean:
 	$(CC) -c
 	$(CC) -c --config_path codev_remote_build.yaml 
 
-$(codevseq): $(builddir)/%.seq: $(liseqsrcdir)/%.liseq 
-	-@ mkdir -p $(builddir)/$(subst $(liseqsrcdir)/,,$(dir $<))
+$(codevseq): $(bindir)/%.seq: $(liseqsrcdir)/%.liseq 
+	-@ mkdir -p $(bindir)/$(subst $(liseqsrcdir)/,,$(dir $<))
 	-@ liseq $< -o $@
 
 $(bindir)/fortran_stamp : $(forsrcfiles)
@@ -44,7 +45,7 @@ $(bindir)/fortran_stamp : $(forsrcfiles)
 	$(CC) -d --config_path codev_remote_build.yaml 
 	-@ touch $(bindir)/fortran_stamp
 
-$(builddir)/codev_stamp : $(codevliseq) $(bindir)/fortran_stamp
+$(builddir)/codev_stamp : $(codevseq) $(bindir)/fortran_stamp
 	-@ mkdir -p $(builddir)
 	-@ mkdir -p $(outputdir)
 	-@ mkdir -p $(bindir)

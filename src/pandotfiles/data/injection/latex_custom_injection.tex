@@ -1,7 +1,5 @@
 % CUSTOM TEMPLATE
 \usepackage{siunitx}
-\usepackage[toc,acronym]{glossaries}
-\usepackage[record]{glossaries-extra}
 
   \newcommand{\titleprint}{$title$}
   
@@ -10,21 +8,10 @@
   \newcommand{\authorprint}{$for(author)$$author$$sep$, $endfor$}
   \newcommand{\acronyms}{$acronyms$}
   \newcommand{\dateprint}{$if(date)$ $date$ $else$ ~ $endif$}
-  \newcommand{\yearprint}{$if(year)$ $year$ $else$ \the\year{} $endif$}
-  \newcommand{\docstyleprint}{$docstyle$}
-  \newcommand{\idonly}{$if(id)$ $id$ $endif$}
   \newcommand{\idprint}{$if(id)$ id: \idonly $else$ ~ $endif$}
   \newcommand{\tagsprint}{$tagsh$}
   \newcommand{\bibliographyinternefile}{$bibliography-internal$}
   % specific docstyle
-  \newcommand{\uldirector}{$uldirector$}
-  \newcommand{\uldepot}{$uldepot$}
-  \newcommand{\ulprogram}{$ulprogram$}
-  \newcommand{\ulabstract}{$ulabstract$}
-  \newcommand{\ulresume}{$ulresume$}
-  \newcommand{\ulepigraphe}{$ulepigraphe$}
-  \newcommand{\uldedicace}{$uldedicace$}
-  \newcommand{\ulremerciements}{$ulremerciements$}
   \newcommand{\osajournal}{$if(osajournal)$ $osajournal$ $else$ $journal$ $endif$}
   \newcommand{\osalineno}{$if(osalineno)$ $osalineno$ $else$ $lineno$ $endif$}
   \newcommand{\osaaddress}{$if(osaaddress)$ $osaaddress$ $else$ $address$ $endif$}
@@ -40,6 +27,8 @@ $if(docstyle)$
   \usepackage{ifthen}
 
   $if(glossary_file)$
-     \GlsXtrLoadResources[src=$glossary_file$]
+    \usepackage[acronym,$if(glossaries_options)$ $for(glossaries_options)$$glossaries_options$$sep$, $endfor$ $endif$]{glossaries}
+    \usepackage[record,$if(glossaries_extra_options)$ $for(glossaries_extra_options)$$glossaries_extra_options$$sep$, $endfor$ $endif$]{glossaries-extra}
+    \GlsXtrLoadResources[src=$glossary_file$]
   $endif$
 $endif$

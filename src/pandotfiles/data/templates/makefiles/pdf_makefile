@@ -19,34 +19,41 @@ template_default_loc = $(logdir)
 pandocflags += --template=$(auto_template_loc)
 pandocflags += -d options.yaml
 
-ifneq ($(wildcard $(logdir)/template_default_osa-article.yaml),)
-    texflag = -pdf  -cd -quiet -shell-escape -outdir="$(logdir)" 
-    texflagbuild = -pdf -cd -quiet -shell-escape -outdir="$(logdir)" 
-else ifneq ($(wildcard $(logdir)/template_default_ulthese.yaml),)
-    texflag = -pdfxe -cd -quiet -shell-escape -outdir="$(logdir)" 
-    texflagbuild = -pdfxe -cd -quiet -shell-escape -outdir="$(logdir)" 
-    pandocflags += --top-level-division=chapter 
-else ifneq ($(wildcard $(logdir)/template_default_spie.yaml),)
-    texflag = -pdf -cd -quiet -shell-escape -outdir="$(logdir)" 
-    texflagbuild = -pdf -cd -quiet -shell-escape -outdir="$(logdir)" 
-else ifneq ($(wildcard $(logdir)/template_default_spieman.yaml),)
-    texflag = -pdf -cd -quiet -shell-escape -outdir="$(logdir)" 
-    texflagbuild = -pdf -cd -quiet -shell-escape -outdir="$(logdir)" 
-else
-    texflag = -pdflua -cd -quiet -shell-escape -outdir="$(logdir)" 
-    texflagbuild = -pdflua -cd -quiet -shell-escape -outdir="$(logdir)" 
-endif
+docstyle = $(shell cat metadata.yaml | grep "^docstyle" | perl -pe "s/(docstyle:\s*)(.*)/\2/")
+
+ifeq ($(docstyle), osa-article)
+    texflag = -pdf
+    texflagbuild = -pdf
+else ifeq ($(docstyle), opticameet)
+    texflag = -pdf
+    texflagbuild = -pdf
+else ifeq ($(docstyle), spie)
+    texflag = -pdf
+    texflagbuild = -pdf
+else ifeq ($(docstyle), spieman)
+    texflag = -pdf
+    texflagbuild = -pdf
+else ifeq ($(docstyle), ulthese)
+    texflag = -pdfxe
+    texflagbuild = -pdfxe
+else 
+    texflag = -pdflua
+    texflagbuild = -pdflua
+endif 
+
+texflag += -cd -quiet -shell-escape -outdir="$(logdir)" 
+texflagbuild += -cd -quiet -shell-escape -outdir="$(logdir)" 
 
 FIGURETARGETSLOC = $(addprefix ../,$(FIGURETARGETS))
 
-.PHONY: all clean open pdf
+.PHONY: all clean open pdf latex
 
-all : $(mainpdf)
+all : $(mainpdf) 
 
 clean: 
 	-@ rm -r $(logdir) $(builddir) $(buildlatexdir)
 
-$(mainpdf): $(mainfile) $(pandocfiles) $(auto_template_loc) $(FIGURETARGETSLOC) options.yaml
+$(mainpdf): $(mainfile) $(pandocfiles) $(auto_template_loc) $(FIGURETARGETSLOC) $(wildcard *.yaml)
 	$(MAKE) -f $(mkfile_path) pdf
 
 $(auto_template_loc): $(mainfile)
@@ -58,21 +65,20 @@ $(auto_template_loc): $(mainfile)
 pdf:
 	-@ rm $(logdir)/pandoc_backup.tex
 	$(PD) $(pandocflags) -o pandoc_backup.tex $(wildcard $(logdir)/template_default*.yaml) $(mainfile) $(filter-out options.yaml,$(wildcard *.yaml)) 
-	-@ cp ../.pandot/latex/defaults/latexmkrc .
-	-@ cp -r ../.pandot/latex/docstyle_latex/img log/
 	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
 	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
 	perl -pi -0e 's/^\s*\n(\\begin{{align}})/\1/mg; s/^(\\end{{align}}\s*)\n\n/\1\n/mg' pandoc_backup.tex
 	latexmk $(texflag) pandoc_backup.tex
-	-@ mkdir -p $(buildlatexdir)
-	-@ echo latexmk $(texflag) pandoc_backup.tex > latex_cmd.sh
-	-@ rsync -ax --exclude $(buildlatexdir) --exclude '*.md' ./* $(buildlatexdir)
-	-@ rm $(buildlatexdir)/Makefile
-	-@ rm latex_cmd.sh
 	-@ mv pandoc_backup.tex $(logdir)
-	-@ mv latexmkrc $(logdir)
 	-@ mkdir -p $(builddir)
 	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
+	$(MAKE) -f $(mkfile_path) latex
+
+latex:
+	-@ mkdir -p $(buildlatexdir)
+	-@ echo latexmk $(texflagbuild) log/pandoc_backup.tex > $(buildlatexdir)/latex_cmd.sh
+	-@ rsync -ax --exclude $(buildlatexdir) --exclude '*.md,*.yaml' ./* $(buildlatexdir)
+	-@ rm $(buildlatexdir)/Makefile
 
 open:
 	-open $(mainpdf)

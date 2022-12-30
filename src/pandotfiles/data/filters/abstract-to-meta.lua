@@ -7,49 +7,61 @@ License:   MIT – see LICENSE file for details
 local abstract = {}
 
 --- Extract abstract from a list of blocks.
-function abstract_from_blocklist (blocks)
-  local body_blocks = {}
-  local looking_at_abstract = false
+function abstract_from_blocklist(blocks)
+    local body_blocks = {}
+    local looking_at_abstract = false
 
-  for _, block in ipairs(blocks) do
-    if block.t == 'Header' and block.level == 1 then
-      if block.identifier == 'abstract' then
-        looking_at_abstract = true
-      else
-        looking_at_abstract = false
-        body_blocks[#body_blocks + 1] = block
-      end
-    elseif looking_at_abstract then
-      abstract[#abstract + 1] = block
-    else
-      body_blocks[#body_blocks + 1] = block
+    for _, block in ipairs(blocks) do
+        if block.t == "Header" and block.level == 1 then
+            if block.identifier == "abstract" then
+                looking_at_abstract = true
+            else
+                looking_at_abstract = false
+                body_blocks[#body_blocks + 1] = block
+            end
+        elseif looking_at_abstract then
+            abstract[#abstract + 1] = block
+        else
+            body_blocks[#body_blocks + 1] = block
+        end
     end
-  end
 
-  return body_blocks
+    return body_blocks
 end
 
-if PANDOC_VERSION >= {2,9,2} then
-  -- Check all block lists with pandoc 2.9.2 or later
-  return {{
-      Blocks = abstract_from_blocklist,
-      Meta = function (meta)
-        if not meta.abstract and #abstract > 0 then
-          meta.abstract = pandoc.MetaBlocks(abstract)
-        end
-        return meta
-      end
-  }}
+if PANDOC_VERSION >= { 2, 9, 2 } then
+    -- Check all block lists with pandoc 2.9.2 or later
+    return {
+        {
+            Blocks = abstract_from_blocklist,
+            Meta = function(meta)
+                if not meta.abstract and #abstract > 0 then
+                    if meta.docstyle[1] == pandoc.Str("ulthese") then
+                        meta.ulabstract = pandoc.MetaBlocks(abstract)
+                    else
+                        meta.abstract = pandoc.MetaBlocks(abstract)
+                    end
+                end
+                return meta
+            end,
+        },
+    }
 else
-  -- otherwise, just check the top-level block-list
-  return {{
-      Pandoc = function (doc)
-        local meta = doc.meta
-        local other_blocks = abstract_from_blocklist(doc.blocks)
-        if not meta.abstract and #abstract > 0 then
-          meta.abstract = pandoc.MetaBlocks(abstract)
-        end
-        return pandoc.Pandoc(other_blocks, meta)
-      end,
-  }}
+    -- otherwise, just check the top-level block-list
+    return {
+        {
+            Pandoc = function(doc)
+                local meta = doc.meta
+                local other_blocks = abstract_from_blocklist(doc.blocks)
+                if not meta.abstract and #abstract > 0 then
+                    if meta.docstyle[1] == pandoc.Str("ulthese") then
+                        meta.ulabstract = pandoc.MetaBlocks(abstract)
+                    else
+                        meta.abstract = pandoc.MetaBlocks(abstract)
+                    end
+                end
+                return pandoc.Pandoc(other_blocks, meta)
+            end,
+        },
+    }
 end

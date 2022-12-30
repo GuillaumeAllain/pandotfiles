@@ -1,0 +1,24 @@
+\usepackage{opticameet3} %% use version 3 for proper copyright statement
+
+\newcommand\authormark[1]{\textsuperscript{#1}}
+
+\usepackage{amsmath,amssymb}
+
+\renewcommand{\maketitle}{
+\title{$title$}
+
+$if(author)$\author{$for(author/allbutlast)$$it.name$,$if(it.affil)$\authormark{$it.affil$}$endif$$endfor$ and $for(author/last)$$it.name$$if(it.affil)$\authormark{$it.affil$}$endif$$endfor$}
+$endif$
+
+$if(affil)$
+\address{
+$for(affil)$\authormark{$affil.id$}$affil.content$$sep$\\
+$endfor$}
+$endif$
+
+\ifthenelse{\equal{$email$}{}}{
+  \email{address is needed} %% email address is required
+}{
+  \email{\authormark{*}$email$} %% email address is required
+}
+}

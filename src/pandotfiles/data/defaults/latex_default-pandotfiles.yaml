@@ -5,6 +5,7 @@ float_placement: t
 fontsize: 12pt
 papersize: letter
 numbersections: true
+lang: fr
 figPrefix:
         - "figure"
         - "figures"
@@ -17,5 +18,4 @@ lstPrefix:
 secPrefix:
         - "section"
         - "sections"
-lang: fr
 ---

@@ -1,9 +1,10 @@
-\titre{\titleprint}
-\soustitre{\subtitleprint}
-\auteur{\authorprint}
-\annee{\yearprint}
-\programme{\ulprogram}
-\direction{\uldirector}
+\titre{$title$}
+\soustitre{$subtitle$}
+\auteur{$for(author)$$if(author.name)$$author.name$$else$$author$$endif$$sep$, $endfor$}
+\annee{$if(year)$ $year$ $else$ \the\year{} $endif$}
+
+\programme{$program$}
+\direction{$director$}
 
 \usepackage{polyglossia}
 \setdefaultlanguage{french}
@@ -19,30 +20,35 @@
 
   \frontmatter                    % pages liminaires
 
-  \ifthenelse{\equal{\uldepot}{}}{
-    \pagetitre                     % production des pages de titre
+  $if(depot)$
     \frontispice
-  }{
+  $else$
+    \pagetitre
     \frontispice
-  }
+  $endif$
   
-  \ifthenelse{\equal{\ulresume}{}}{}{
+  $if(resume)$
     \chapter*{Résumé}                      % ne pas numéroter
     \phantomsection\addcontentsline{toc}{chapter}{Résumé} % inclure dans TdM
 
-      \ulresume                % résumé français
-  }
+      $resume$
+  $endif$
 
-  \ifthenelse{\equal{\ulabstract}{}}{}{
+  $if(ulabstract)$
     \chapter*{Abstract}                      % ne pas numéroter
     \phantomsection\addcontentsline{toc}{chapter}{Abstract} % inclure dans TdM
 
-      \ulabstract              % résumé anglais
-  }
+      % \ulabstract              % résumé anglais
+    $ulabstract$
+  $endif$
 
-  \ifthenelse{\equal{\ulresume\ulabstract}{}}{}{
+  $if(resume)$
     \cleardoublepage
-  }
+  $else$
+  $if(abstract)$
+    \cleardoublepage
+  $endif$
+  $endif$
 
   \setcounter{tocdepth}{2}
   \tableofcontents                % production de la TdM
@@ -55,26 +61,22 @@
   \cleardoublepage
 
 
-  \ifthenelse{\equal{\acronyms}{}}{}{
-  \printglossary[type=\acronymtype,title=Acronymes]
+  $if(dedicace)$
+    \dedicace{$dedicace$}
     \cleardoublepage
-  }
+  $endif$
 
-  \ifthenelse{\equal{\uldedicace}{}}{}{
-    \dedicace{\uldedicace}
+  $if(epigraphe)$
+    \epigraphe{$epigraphe$}
     \cleardoublepage
-  }
+  $endif$
 
-  \ifthenelse{\equal{\ulepigraphe}{}}{}{
-    \epigraphe{\ulepigraphe}
-    \cleardoublepage
-  }
-
-  \ifthenelse{\equal{\ulremerciements}{}}{}{
+  $if(remerciements)$
     \chapter*{Remerciements}         % ne pas numéroter
-    \phantomsection\addcontentsline{toc}{chapter}{Remerciements} % inclure dans TdM
-    \ulremerciements         % remerciements
-  }
+    \phantomsection\addcontentsline{toc}{chapter}{Remerciements}
+    $remerciements$
+  $endif$
+
 \mainmatter                     % corps du document
 
 }
