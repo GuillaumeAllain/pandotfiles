@@ -27,6 +27,8 @@ ifeq ($(docstyle), osa-article)
 else ifeq ($(docstyle), opticameet)
     texflag = -pdf
     texflagbuild = -pdf
+    paraction = touch texinputs/parskip.sty
+    parcleanup = rm texinputs/parskip.sty
 else ifeq ($(docstyle), spie)
     texflag = -pdf
     texflagbuild = -pdf
@@ -60,7 +62,7 @@ $(auto_template_loc): $(mainfile)
 	-@ mkdir -p $(logdir)
 	-@ rm $(logdir)/template_default*.yaml
 	-@ rm $(logdir)/*template*
-	../.pandot/pandoc/injection/genlatextemplate_script.py -o $(auto_template_loc) -y $(template_default_loc)/ -m $(mainfile)
+	python ../.pandot/pandoc/injection/genlatextemplate_script.py -o $(auto_template_loc) -y $(template_default_loc)/ -m $(mainfile)
 
 pdf:
 	-@ rm $(logdir)/pandoc_backup.tex
@@ -68,11 +70,13 @@ pdf:
 	-@ perl -pi -e 's/\(cite.*\){{internal-/\1internal{{/g' pandoc_backup.tex;\
 	perl -pi -e 's/\\cite[t,p]{{/\\cite{{/g' pandoc_backup.tex;\
 	perl -pi -0e 's/^\s*\n(\\begin{{align}})/\1/mg; s/^(\\end{{align}}\s*)\n\n/\1\n/mg' pandoc_backup.tex
+	$(paraction)
 	latexmk $(texflag) pandoc_backup.tex
 	-@ mv pandoc_backup.tex $(logdir)
 	-@ mkdir -p $(builddir)
 	-@ cp $(logdir)/pandoc_backup.pdf $(mainpdf)
 	$(MAKE) -f $(mkfile_path) latex
+	$(parcleanup)
 
 latex:
 	-@ mkdir -p $(buildlatexdir)

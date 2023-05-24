@@ -3,7 +3,7 @@ from os import listdir
 from pathlib import Path
 from os.path import splitext
 
-from ruamel_yaml import YAML
+from ruamel.yaml import YAML
 
 
 def tikzyamlparse(file_path):

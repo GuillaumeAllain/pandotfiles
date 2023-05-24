@@ -118,6 +118,21 @@ def main():
                 str(f"../.pandot/latex/docstyle_latex/docstyle-{maindocstyle}.tex")
             ) as file:
                 injection += file.read()
+        elif maindocstyle in ["opticameet"]:
+            with open(
+                str(
+                    f"../.pandot/latex/defaults/latex_default_{maindocstyle}-pandotfiles.yaml"
+                )
+            ) as file:
+                yamldefault = file.read()
+            with open(
+                args.output_yaml + f"template_default_{maindocstyle}.yaml", "w+"
+            ) as file_output:
+                file_output.write(yamldefault)
+            with open(
+                str(f"../.pandot/latex/docstyle_latex/docstyle-{maindocstyle}.tex")
+            ) as file:
+                injection += file.read()
 
         elif maindocstyle in ["spie", "osa-article", "spieman"]:
             #     with open(str("../.pandot/pandoc/injection/latex_custom_injection_spie.tex")) as file:

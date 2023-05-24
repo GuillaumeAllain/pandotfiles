@@ -37,11 +37,18 @@
 \renewcommand{\headrulewidth}{0.5pt}
 \renewcommand{\footrulewidth}{0.5pt}
 \fancyhead{}
-\fancyhead[L]{\footnotesize\raisebox{-.4\height}{\includegraphics[height=1cm]{../.pandot/latex/docstyle_latex/img/logo_ga.png}}}
-\fancyhead[R]{\rule[-2.5ex]{0pt}{2.5ex}\footnotesize \titleprint}
+\fancyhead[L]{\footnotesize\includegraphics[height=1cm]{pandot_img/logo_GA.png}}
+$if(title)$
+\fancyhead[R]{\rule[-2.5ex]{0pt}{2.5ex}\footnotesize $title$}
+$endif$
 \fancyfoot{}
-\fancyfoot[L]{\rule[1.5ex]{0pt}{1.5ex}\footnotesize \authorprint}
+$if(author)$
+  \fancyfoot[L]{\rule[1.5ex]{0pt}{1.5ex}\footnotesize $author$}
+$endif$
 \fancyfoot[R]{\rule[1.5ex]{0pt}{1.5ex}\footnotesize \thepage/\pageref*{LastPage}}
+$if(website)$
+  \fancyfoot[C]{\rule[-2.5ex]{0pt}{2.5ex}\footnotesize $website$}
+$endif$
 
 
 %commando om titelpagina te maken

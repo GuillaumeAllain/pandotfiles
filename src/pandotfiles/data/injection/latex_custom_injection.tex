@@ -17,8 +17,8 @@
   \newcommand{\osaaddress}{$if(osaaddress)$ $osaaddress$ $else$ $address$ $endif$}
   \newcommand{\spieuthorprint}{$for(author)$$author[a]$$sep$\\ $endfor$}
   \makeatletter
-    \def\fps@figure{$if(float_placement)$ $float_placement$ $else$ htbp $endif$}
-    \def\fps@table{$if(float_placement)$ $float_placement$ $else$ htbp $endif$}
+    $if(float_placement)$\def\fps@figure{ $float_placement$}$endif$
+    $if(float_placement)$\def\fps@table{ $float_placement$}$endif$
   \makeatother
 
 % Docstyle injection

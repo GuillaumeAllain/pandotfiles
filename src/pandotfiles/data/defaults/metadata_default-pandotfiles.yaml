@@ -1,9 +1,9 @@
 ---
 natbiboptions: numbers
 biblio-style: unsrtnat
-float_placement: t
 fontsize: 12pt
 papersize: letter
-numbersections: true
 lang: fr
+glossaries_options: toc
+glossaries_extra_options: nostyles, toc, section=section
 ---

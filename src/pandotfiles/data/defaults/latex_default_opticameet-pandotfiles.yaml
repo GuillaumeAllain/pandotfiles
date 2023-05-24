@@ -3,6 +3,7 @@ documentclass: article
 lang: en
 fontsize: 10pt
 biblio-style: opticajnl
+numbersections: true
 classoption:
   - letterpaper
 ---
