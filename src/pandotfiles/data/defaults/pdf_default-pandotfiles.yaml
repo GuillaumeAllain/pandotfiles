@@ -7,9 +7,9 @@ standalone: true
 data-dir: ../.pandot/pandoc
 
 metadata:
-  crossrefYaml: ../.pandot/latex/defaults/pandoc-crossref-pandotfiles.yaml
+  crossrefYaml: crossref.yaml
 
-metadata-file: ../.pandot/latex/defaults/latex_default-pandotfiles.yaml
+metadata-file: metadata.yaml
 
 filters:
   - include-files.lua

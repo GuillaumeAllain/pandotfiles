@@ -125,6 +125,14 @@ def main():
                     )
                 except FileExistsError:
                     warnings.warn("Pdf init: Won't overwrite latexmkrc")
+                try:
+                    copytree(
+                        str(data_dir.joinpath("templates", "bst")),
+                        "doc/texinputs/bst",
+                        dirs_exist_ok=True,
+                    )
+                except FileExistsError:
+                    warnings.warn("Pdf init: Won't overwrite latexmkrc")
 
                 with open("doc/Makefile", "w+") as file_output:
                     with open(

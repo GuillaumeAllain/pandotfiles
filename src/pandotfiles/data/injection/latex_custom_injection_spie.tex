@@ -59,6 +59,11 @@ $endfor$
 $for(affil)$
 \affil[$affil.id$]{$affil.content$}
 $endfor$
+\ifthenelse{\equal{$authorinfo$}{}}{
+   \authorinfo{authorinfo ex:\\Further author information: (Send correspondence to A.A.A.)\\A.A.A.: E-mail: aaa@tbk2.edu, Telephone: 1 505 123 1234\\  B.B.A.: E-mail: bba@cmp.com, Telephone: +33 (0)1 98 76 54 32} %% email address is required
+}{
+   \authorinfo{$authorinfo$} %% email address is required
+}
 
 % \affil[a]{Affiliation1, Address, City, Country}
 % \renewcommand{\maketitle}{
@@ -73,11 +78,6 @@ $endfor$
     %     \email{\spieaddress} %% email address is required
     % }
 
-    % \ifthenelse{\equal{$authorinfo$}{}}{
-    %     \authorinfo{authorinfo ex:\\Further author information: (Send correspondence to A.A.A.)\\A.A.A.: E-mail: aaa@tbk2.edu, Telephone: 1 505 123 1234\\  B.B.A.: E-mail: bba@cmp.com, Telephone: +33 (0)1 98 76 54 32} %% email address is required
-    % }{
-    %     \authorinfo{salut} %% email address is required
-    % }
 
 % }
 

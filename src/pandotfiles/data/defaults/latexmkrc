@@ -1,5 +1,6 @@
 push @generated_exts, 'glstex', 'glg';
 ensure_path( 'TEXINPUTS', 'texinputs//' );
+ensure_path( 'BSTINPUTS', 'texinputs//bst//' );
 
 add_cus_dep('aux', 'glstex', 0, 'run_bib2gls');
 

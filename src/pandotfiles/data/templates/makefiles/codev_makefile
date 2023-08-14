@@ -29,7 +29,7 @@ all : $(bindir)/fortran_stamp $(builddir)/codev_stamp $(completecodevpdf)
 fortran: $(builddir)/fortran_stamp
 
 clean: 
-	-@ rm -r $(outputdir) $(builddir)
+	-@ $(RM) -f -r $(outputdir) $(builddir)
 	$(CC) -c
 	$(CC) -c --config_path codev_remote_build.yaml 
 
@@ -59,7 +59,7 @@ $(completecodevpdf) : %.pdf : %_plt.eps
 	-@ codev-style-vie $< > $(outputdir)/fig/temp.eps
 	-@ pstopdf $(outputdir)/fig/temp.eps -o $@ -p
 	-@ mogrify -transparent-color white -density 600 -format png $@
-	-@ rm $(outputdir)/fig/temp.eps
+	-@ $(RM) -f $(outputdir)/fig/temp.eps
 
 sync : $(bindir)/fortran_stamp $(codevseq)
 	-@ mkdir -p $(builddir)
@@ -68,5 +68,5 @@ sync : $(bindir)/fortran_stamp $(codevseq)
 	$(CC) -p -d
 	-@ rsync -aP output/ $(builddir) -q
 	touch $(builddir)/codev_stamp
-	-@ rm -r $(codevliseq:%.liseq=%.seq)
+	-@ $(RM) -f -r $(codevliseq:%.liseq=%.seq)
 	# $(MAKE)
