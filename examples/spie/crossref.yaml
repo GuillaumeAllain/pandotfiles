@@ -1,6 +1,4 @@
 ---
-figureTitle: "Figure"
-tableTitle: "Tableau"
 figPrefix:
         - "figure"
         - "figures"
@@ -13,6 +11,4 @@ lstPrefix:
 secPrefix:
         - "section"
         - "sections"
-lotTitle: "Liste des tableaux"
-lofTitle: "Liste des figures"
 ---

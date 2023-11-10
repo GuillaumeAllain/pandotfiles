@@ -19,6 +19,10 @@
 \usepackage{siunitx}
 \usepackage{float}
 \floatplacement{figure}{t}
+\makeatletter
+  $if(float_placement)$\def\fps@figure{ $float_placement$}$endif$
+  $if(float_placement)$\def\fps@table{ $float_placement$}$endif$
+\makeatother
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 % \usepackage{ifthen}
 % Set the article type

@@ -1,0 +1,17 @@
+# Fdb version 4
+["xdvipdfmx"] 0 "log/latex_custom_injection_spie.xdv" "log/latex_custom_injection_spie.pdf" "log/latex_custom_injection_spie" 0 -1
+  "log/latex_custom_injection_spie.xdv" 0 -1 0 "xelatex"
+  (generated)
+  "log/latex_custom_injection_spie.pdf"
+  (rewritten before read)
+["xelatex"] 1692236595 "latex_custom_injection_spie.tex" "log/latex_custom_injection_spie.xdv" "latex_custom_injection_spie" 1692236595 2
+  "/usr/local/texlive/2023/texmf-dist/web2c/texmf.cnf" 1677365944 40745 87bb86a62d462f93a1efc6b0c65c872e ""
+  "/usr/local/texlive/2023/texmf-var/web2c/xetex/xelatex.fmt" 1680101576 10502802 fe4ed958cd910bd8b72a10ee8c076d2d ""
+  "/usr/local/texlive/2023/texmf.cnf" 1678822455 577 1b2b1af17af2508fb20dd85783af4050 ""
+  "latex_custom_injection_spie.tex" 1692236595 2857 a3affc948a06579bb21faa5996aad9d9 ""
+  "log/latex_custom_injection_spie.aux" 1692236595 32 3985256e7290058c681f74d7a3565a19 "xelatex"
+  (generated)
+  "log/latex_custom_injection_spie.aux"
+  "log/latex_custom_injection_spie.log"
+  "log/latex_custom_injection_spie.xdv"
+  (rewritten before read)

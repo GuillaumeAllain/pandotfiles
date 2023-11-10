@@ -1,0 +1,28 @@
+---
+natbiboptions: numbers
+biblio-style: unsrtnat
+docstyle: spie
+affil:
+- content: Affiliation1, Address, City, Country
+  id: a
+- content: Affiliation2, Address, City, Country
+  id: b
+author:
+- affil: a
+  name: Anna A. Author
+- affil: b
+  name: Barry B. Author
+keywords:
+- Manuscript format
+- template
+- SPIE Proceedings
+- LaTeX
+lang: en-us
+title: "SPIE Proceedings: Style template and guidelines for authors"
+authorinfo: |
+  Further author information: (Send correspondence to A.A.A.)\
+  A.A.A.: E-mail: aaa@tbk2.edu, Telephone: 1 505 123 1234\
+  B.B.A.: E-mail: bba@cmp.com, Telephone: +33 (0)1 98 76 54 32
+bibliography: report.bib
+float_placement: ht
+---

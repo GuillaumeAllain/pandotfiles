@@ -1,9 +1,12 @@
 ---
 natbiboptions: numbers
 biblio-style: unsrtnat
+babel-lang: french
+babel-otherlangs: english
 fontsize: 12pt
 papersize: letter
 lang: fr
+crossrefYaml: crossref.yaml
 glossaries_options: toc
 glossaries_extra_options: nostyles, toc, section=section
 ---

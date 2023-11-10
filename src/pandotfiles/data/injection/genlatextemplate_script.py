@@ -260,7 +260,7 @@ def main():
     )
 
     # temp fix for lualatex
-    template_final = sub("bidi=basic", "bidi=default", template_final)
+    # template_final = sub("bidi=basic", "bidi=default", template_final)
 
     if (args.output is not None) and (args.output != "T"):
         with open(args.output, "w+") as file_output:

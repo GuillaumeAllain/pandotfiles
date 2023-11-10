@@ -6,6 +6,9 @@ standalone: true
 
 data-dir: ../.pandot/pandoc
 
+metadata:
+  crossrefYaml: crossref.yaml
+
 metadata-file: metadata.yaml
 
 filters:
