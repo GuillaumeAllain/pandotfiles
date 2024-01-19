@@ -1,8 +1,11 @@
 %% Select the journal you're submitting to
 %% oe, boe, ome, osac, osajournal
-\journal{$osajournal$}
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\journal{opticajournal}
+\articletype{Research Article}
+
+% \providecommand{\tightlist}{%
+% \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
 % Key:
 % Express journals must have the correct journal selected:
 % {oe} Optics Express
@@ -23,34 +26,14 @@
   $if(float_placement)$\def\fps@figure{ $float_placement$}$endif$
   $if(float_placement)$\def\fps@table{ $float_placement$}$endif$
 \makeatother
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-% \usepackage{ifthen}
-% Set the article type
-\ifthenelse{\equal{$osajournal$}{oe}}{
-  \articletype{Research Article}
-  }{
-}
-\ifthenelse{\equal{$osajournal$}{boe}}{
-  \articletype{Research Article}
-  }{
-}
-\ifthenelse{\equal{$osajournal$}{ome}}{
-  \articletype{Research Article}
-  }{
-}
-\ifthenelse{\equal{$osajournal$}{osac}}{
-  \articletype{Research Article}
-  }{
-}
-% Note that article type is not required for Express journals (OE, BOE, OME and OSAC)
+% \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 
-
-\ifthenelse{\equal{$osalineno$}{}}{}{
+\ifthenelse{\equal{$lineno$}{}}{}{
   \usepackage{lineno}
 }
-\usepackage{amsmath,amsfonts,amssymb}
+%\usepackage{amsmath,amsfonts,amssymb}
 
-\ifthenelse{\equal{$osalineno$}{}}{}{
+\ifthenelse{\equal{$lineno$}{}}{}{
 %% Patch 'normal' math environments:
 \usepackage{etoolbox} %% <- for \pretocmd, \apptocmd and \patchcmd
 \newcommand*\linenomathpatch[1]{%
@@ -85,30 +68,30 @@
 }
 
 
-  \renewcommand{\maketitle}{
+\renewcommand{\maketitle}{
 
 
-  \title{$title$}
+    \title{$title$}
 
-  \author{$for(author)$$author$$sep$, $endfor$}
+    $if(author)$\author{$for(author/allbutlast)$$it.name$,$if(it.affil)$\authormark{$it.affil$}$endif$$endfor$ and $for(author/last)$$it.name$$if(it.affil)$\authormark{$it.affil$}$endif$$endfor$}
+    $endif$
 
+        $if(affil)$
+        \address{
+            $for(affil)$\authormark{$affil.id$}$affil.content$$sep$\\
+                $endfor$}
+    $endif$
 
-  \ifthenelse{\equal{$osaaddress$}{}}{
-    \email{address is needed} %% email address is required
-    }{
-    \email{$osaaddress$} %% email address is required
-  }
-
-  \ifthenelse{\equal{$authoremail$}{}}{
-    \email{email is needed} %% email address is required
-    }{
-    \email{$authoremail$} %% email address is required
-  }
+        \ifthenelse{\equal{$email$}{}}{
+            \email{address is needed} %% email address is required
+        }{
+            \email{\authormark{*}$email$} %% email address is required
+        }
 
 }
-\medskip
 
 % Docstyle injection
-\ifthenelse{\equal{$osalineno$}{}}{}{
+\ifthenelse{\equal{$lineno$}{}}{}{
   \linenumbers
 }
+

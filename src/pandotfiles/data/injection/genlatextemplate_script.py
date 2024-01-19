@@ -51,7 +51,6 @@ args = parser.parse_args()
 
 
 def main():
-
     with open(str("../.pandot/pandoc/injection/latex_custom_injection.tex")) as file:
         injection = file.read()
 
@@ -118,6 +117,21 @@ def main():
                 str(f"../.pandot/latex/docstyle_latex/docstyle-{maindocstyle}.tex")
             ) as file:
                 injection += file.read()
+        # elif maindocstyle in ["optica-article"]:
+        #     with open(
+        #         str(
+        #             f"../.pandot/latex/defaults/latex_default_{maindocstyle}-pandotfiles.yaml"
+        #         )
+        #     ) as file:
+        #         yamldefault = file.read()
+        #     with open(
+        #         args.output_yaml + f"template_default_{maindocstyle}.yaml", "w+"
+        #     ) as file_output:
+        #         file_output.write(yamldefault)
+        #     with open(
+        #         str(f"../.pandot/latex/docstyle_latex/docstyle-{maindocstyle}.tex")
+        #     ) as file:
+        #         injection += file.read()
         elif maindocstyle in ["opticameet"]:
             with open(
                 str(
@@ -134,7 +148,7 @@ def main():
             ) as file:
                 injection += file.read()
 
-        elif maindocstyle in ["spie", "osa-article", "spieman"]:
+        elif maindocstyle in ["spie", "osa-article", "spieman", "optica-article"]:
             #     with open(str("../.pandot/pandoc/injection/latex_custom_injection_spie.tex")) as file:
             #         injection = file.read()
             #     with open(

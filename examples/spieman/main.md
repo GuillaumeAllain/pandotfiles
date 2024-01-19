@@ -1,31 +1,5 @@
 ---
-affil:
-- content: University Name, Faculty Group, Department, Street Address, City, Country, Postal Code
-  id: a
-- content: Company Name, Street Address, City, Country, Postal Code
-  id: b
-author:
-- affil: a
-  name: First Author
-- affil: a
-  name: Second Author
-- affil: b
-  name: Third Author
-- affil: a,b,\*
-  name: Fourth Author
-bibliography: report.bib
-biography: |
-  *First Author* is an assistant professor at the University of Optical Engineering. He received his BS and MS degrees in physics from the University of Optics in 1985 and 1987, respectively, and his PhD degree in optics from the Institute of Technology in 1991. He is the author of more than 50 journal papers and has written three book chapters. His current research interests include optical interconnects, holography, and optoelectronic systems. He is a member of SPIE.
-docstyle: spieman
-keywords:
-- optics
-- photonics
-- light
-- lasers
-- journal manuscripts
-- LaTeX template
-main_author: Fourth author name, [myemail@university.edu](myemail@university.edu)
-title: "SPIE journal papers: sample manuscript showing style and formatting specifications"
+lang: en
 ---
 
 # Abstract
@@ -124,7 +98,7 @@ Brief appendices may be included when necessary, such as derivations of equation
 
 ## Disclosures
 
-Conflicts of interest should be declared under a separate header, above Acknowledgments. If the authors have no competing interests to declare, then a statement should be included declaring no conflicts of interest. For assistance generating a disclosure statement, see the form available from the International Committee of Medical Journal Editors website: \linkable{http://www.icmje.org/conflicts-of-interest/}
+Conflicts of interest should be declared under a "Disclosures" header. If the authors have no relevant financial interests in the manuscript and no other potential conflicts of interest to disclose, a statement to this effect should also be included in the manuscript.
 
 ## Acknowledgments
 
@@ -132,13 +106,13 @@ Acknowledgments and funding information should be added after the conclusion, an
 
 ## Data, Materials, and Code Availability
 
-Availability of data, materials, and/or code used in the research results reported in the manuscript may be declared under the heading "Data, Materials, and Code Availability," following the Acknowledgments section. As relevant, provide specific access information or restrictions for data, materials, and computer code (i.e., links to repository access addresses with guidance on commercial or public access).
+Conflicts of interest should be declared under a separate header, above Acknowledgments. If the authors have no competing interests to declare, then a statement should be included declaring no conflicts of interest. For assistance generating a disclosure statement, see the form available from the International Committee of Medical Journal Editors website: \linkable{http://www.icmje.org/conflicts-of-interest/}
 
 ## References
 
 The References section lists books, articles, and reports that are cited in the paper. This section does not have a section number. The references are numbered in the order in which they are cited. Examples of the format to be followed are given at the end of this document.
 
-The reference list at the end of this document is created using BibTeX, which looks through the file `report.bib` for the entries cited in the LaTeX source file. The format of the reference list is determined by the bibliography style file `spiejour.bst`, as specified in the \\ \verb|\bibliographystyle{spiejour}| command. Alternatively, the references may be directly formatted in the LaTeX source file.
+The reference list at the end of this document is created using BibTeX, which looks through the file `report.bib` for the entries cited in the LaTeX source file. The format of the reference list is determined by the bibliography style file `spiejour.bst`, as specified in the \newline \verb|\bibliographystyle{spiejour}| command. Alternatively, the references may be directly formatted in the LaTeX source file.
 
 For books\cite{Lamport94,Alred03,Goossens97} the listing includes the list of authors (initials plus last name), book title (in italics), page or chapter numbers, publisher, city, and year of publication. Journal-article references \cite{Metropolis53,Harris06} include the author list, title of the article (in quotes), journal name (in italics, properly abbreviated), volume number (in bold), inclusive page numbers or citation identifier, and year. A reference to a proceedings paper or a chapter in an edited book\cite{Gull89a} includes the author list, title of the article (in quotes), conference name (in italics), editors (if appropriate), volume title (in italics), volume number if applicable (in bold), inclusive page numbers, publisher, city, and year. References to an article in the SPIE Proceedings may include the conference name, as shown in Ref.\~\citenum{Hanson93c}.
 
@@ -241,16 +215,16 @@ At times it may be desired, for formatting reasons, to break a line without star
 
 ## Formatting Equations
 
-Equations may appear inline with the text, if they are simple, short, and not of major importance; for example, $\beta = b/r$. Important equations appear on their own line. Such equations are centered. For example, \`\`The expression for the field of view is
+Equations may appear inline with the text, if they are simple, short, and not of major importance; for example, $\beta = b/r$. Important equations appear on their own line. Such equations are centered. For example, The expression for the field of view is \`\`The expression for the field of view is
 \begin{equation}
 \label{eq:fov}
 2 a = \frac{(b + 1)}{3c} \, ,
 \end{equation}
-where $a$ is the ...'' Principal equations are numbered, with the equation number placed within parentheses and right justified.
+where $a$ is the ...\'\' Principal equations are numbered, with the equation number placed within parentheses and right justified.
 
 Equations are considered to be part of a sentence and should be punctuated accordingly. In the above example, a comma appears after the equation because the next line is a subordinate clause. If the equation ends the sentence, a period should follow the equation. The line following an equation should not be indented unless it is meant to start a new paragraph. Indentation after an equation is avoided in LaTeX by not leaving a blank line between the equation and the subsequent text.
 
-References to equations include the equation number in parentheses, for example, `Equation~(\ref{eq:fov}) shows ...'' or`Combining Eqs.\~(2) and (3), we obtain...'' Note that the word `Equation'' is spelled out if it begins a sentence, but is abbreviated as`Eq.'' otherwise. Using a tilde in the LaTeX source file between two characters avoids unwanted line breaks, for example between \`\`Eq.'' and the following equation number..
+References to equations include the equation number in parentheses, for example, \`\`Equation (\ref{eq:fov}) shows ...\'\' or \`\`Combining Eqs. (2) and (3), we obtain...\'\' Note that the word \`\`Equation\'\' is spelled out if it begins a sentence, but is abbreviated as \`\`Eq.\'\' otherwise. Using a tilde in the LaTeX source file between two characters avoids unwanted line breaks, for example between \`\`Eq.'' and the following equation number..
 
 ## Formatting Theorems
 
@@ -261,10 +235,6 @@ To include theorems in a formal way, the theorem identification should appear in
 ```
 
 \noindent{\footnotesize\textbf{Theorem 1.} For any unbiased estimator...}
-
-```{=html}
-<!-- \% \disclosures  -->
-```
 
 ## Disclosures {#disclosures-1 .unnumbered}
 
@@ -277,75 +247,3 @@ This unnumbered section is used to identify those who have aided the authors in 
 ## Data, Materials, and Code Availability {#data-materials-and-code-availability-1 .unnumbered}
 
 As relevant, the availability of data, materials, and/or software code used in the research results reported in the manuscript may be declared in this section. (Note: this section is required for the \textit{Journal of Biomedical Optics} and \textit{Neurophotonics}.) Provide specific access information or restrictions for data, materials, and computer code (i.e., links to repository access addresses with guidance on commercial or public access).
-
-```{=html}
-<!-- %%%%% References %%%%% -->
-```
-
-```{=html}
-<!-- ```{=tex} -->
-```
-
-```{=html}
-<!-- \bibliography{report} -->
-```
-
-```{=html}
-<!-- ``` -->
-```
-
-```{=html}
-<!-- \% bibliography data in report.bib -->
-```
-
-```{=html}
-<!-- ```{=tex} -->
-```
-
-```{=html}
-<!-- \bibliographystyle{spiejour} -->
-```
-
-```{=html}
-<!-- ``` -->
-```
-
-```{=html}
-<!-- \% makes bibtex use spiejour.bst -->
-```
-
-```{=html}
-<!-- %%%%% Biographies of authors %%%%% -->
-```
-
-```{=html}
-<!-- ```{=tex} -->
-```
-
-```{=html}
-<!-- \vspace{2ex} -->
-```
-
-```{=html}
-<!-- ``` -->
-```
-
-```{=html}
-<!-- \noindent\textbf{First Author} is an assistant professor at the University of Optical Engineering. He received his BS and MS degrees in physics from the University of Optics in 1985 and 1987, respectively, and his PhD degree in optics from the Institute of Technology in 1991. He is the author of more than 50 journal papers and has written three book chapters. His current research interests include optical interconnects, holography, and optoelectronic systems. He is a member of SPIE. -->
-```
-
-```{=html}
-<!-- ```{=tex} -->
-```
-
-```{=html}
-<!-- \vspace{1ex} -->
-```
-
-```{=html}
-<!-- ``` -->
-```
-
-```{=html}
-<!-- \noindent Biographies and photographs of the other authors are not available. -->
-```

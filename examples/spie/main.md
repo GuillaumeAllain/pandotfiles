@@ -213,7 +213,7 @@ Here is a sample illustration and caption for a multimedia file:
 \end{table}
 ```
 
-\appendix    %\>\>\>\> this command starts appendixes
+\appendix    
 
 # MISCELLANEOUS FORMATTING DETAILS
 

@@ -24,6 +24,9 @@ docstyle = $(shell cat metadata.yaml | grep "^docstyle" | perl -pe "s/(docstyle:
 ifeq ($(docstyle), osa-article)
     texflag = -pdf
     texflagbuild = -pdf
+else ifeq ($(docstyle), optica-article)
+    texflag = -pdf
+    texflagbuild = -pdf
 else ifeq ($(docstyle), opticameet)
     texflag = -pdf
     texflagbuild = -pdf
