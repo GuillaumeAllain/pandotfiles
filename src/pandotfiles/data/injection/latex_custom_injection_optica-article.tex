@@ -73,7 +73,7 @@
 
     \title{$title$}
 
-    $if(author)$\author{$for(author/allbutlast)$$it.name$,$if(it.affil)$\authormark{$it.affil$}$endif$$endfor$ and $for(author/last)$$it.name$$if(it.affil)$\authormark{$it.affil$}$endif$$endfor$}
+    $if(author)$\author{$for(author/allbutlast)$$it.name$,$if(it.affil)$\authormark{$it.affil$} $endif$$endfor$and $for(author/last)$$it.name$$if(it.affil)$\authormark{$it.affil$}$endif$$endfor$}
     $endif$
 
         $if(affil)$
