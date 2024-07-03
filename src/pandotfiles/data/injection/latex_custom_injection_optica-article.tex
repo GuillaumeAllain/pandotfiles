@@ -2,6 +2,7 @@
 %% oe, boe, ome, osac, osajournal
 \journal{opticajournal}
 \articletype{Research Article}
+\providecommand{\tightlist}{}
 
 % \providecommand{\tightlist}{%
 % \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
@@ -26,7 +27,7 @@
   $if(float_placement)$\def\fps@figure{ $float_placement$}$endif$
   $if(float_placement)$\def\fps@table{ $float_placement$}$endif$
 \makeatother
-% \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 
 \ifthenelse{\equal{$lineno$}{}}{}{
   \usepackage{lineno}
