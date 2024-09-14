@@ -4,6 +4,8 @@
   \usepackage{lineno}
 }
 \usepackage{amsmath,amsfonts,amssymb}
+\usepackage{longtable}
+\usepackage{booktabs}
 
 \ifthenelse{\equal{$spielineno$}{}}{}{
 %% Patch 'normal' math environments:
@@ -39,10 +41,20 @@
 \linenomathpatchAMS{flalign}
 }
 \usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 \usepackage{siunitx}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \renewcommand{\baselinestretch}{1.0} % Change to 1.65 for double spacing
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 \makeatletter
   $if(float_placement)$\def\fps@figure{ $float_placement$}$endif$
   $if(float_placement)$\def\fps@table{ $float_placement$}$endif$
