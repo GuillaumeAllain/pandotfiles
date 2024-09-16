@@ -15,4 +15,4 @@ RUN tlmgr install fontaxes xstring silence newtx helvetic txfonts collection-fon
 RUN tlmgr install lineno
 RUN luaotfload-tool --update
 
-ENTRYPOINT make pdf
+ENTRYPOINT make pdf 
