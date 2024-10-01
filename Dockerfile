@@ -8,7 +8,7 @@ RUN ln -s /usr/bin/python3 /usr/bin/python & \
 RUN tlmgr install latexmk 
 RUN tlmgr install selnolig siunitx glossaries mfirstuc xfor datatool tracklang blindtext
 RUN tlmgr install lastpage sectsty multibib ulthese pgf preprint cite tocloft glossaries-extra
-RUN tlmgr install francais-bst bib2gls pdfpages xpatch
+RUN tlmgr install francais-bst bib2gls pdfpages xpatch polyglossia
 
 # OSA-ARTICLE
 RUN tlmgr install fontaxes xstring silence newtx helvetic txfonts collection-fontsrecommended
