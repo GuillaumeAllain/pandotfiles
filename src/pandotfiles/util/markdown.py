@@ -12,7 +12,7 @@ PANDOC_MARKDOWN_OUTPUT_COMMANDS = (
     + " -s --markdown-headings=atx --wrap=preserve -V header-includes= -V include-before= -V include-after= "
 )
 PANDOC_MARKDOWN_OUTPUT_COMMANDS_NOYAML = (
-    "-t markdown+yaml_metadata_block-grid_tables-simple_tables-multiline_tables-latex_macros"
+    "-t markdown+yaml_metadata_block-grid_tables-simple_tables-multiline_tables-latex_macros "
     + "-L "
     + str(data_dir)
     + "/filters/math_spaces.lua"
@@ -20,9 +20,10 @@ PANDOC_MARKDOWN_OUTPUT_COMMANDS_NOYAML = (
 )
 CLEAN_COMMENTS = r"|sed 's/^\\<!--\(.*\)--\\>/<!--\1-->/g' "
 CLEAN_WHITESPACE = (
-    "| sed '/^$/N;/^\\n$/D' | sed 's/^```\\s*$/```\\n/g' |"
+    "| sed '/^$/N;/^\\n$/D' | sed 's/^```[[:space:]]*$/```\\n/g' |"
     + " awk '{{if (NR==1 && NF==0) next}};1' | awk 'NR > 1{{print t}} {{t = $0}}END{{if (NF) print }}' "
 )
+CLEAN_CODEBLOCKS = "|sed 's/^```[[:space:]]/```/g' "
 
 
 def clean_markdown(file=None):
@@ -33,6 +34,7 @@ def clean_markdown(file=None):
         + PANDOC_MARKDOWN_OUTPUT_COMMANDS
         + CLEAN_WHITESPACE
         + CLEAN_COMMENTS
+        + CLEAN_CODEBLOCKS
     )
     if file is None:
         run(LOCAL_PANDOC_MARKDOWN_COMMAND.format(filename=""), shell=True)
