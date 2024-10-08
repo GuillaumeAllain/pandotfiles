@@ -20,7 +20,7 @@ PANDOC_MARKDOWN_OUTPUT_COMMANDS_NOYAML = (
 )
 CLEAN_COMMENTS = r"|sed 's/^\\<!--\(.*\)--\\>/<!--\1-->/g' "
 CLEAN_WHITESPACE = (
-    "| sed '/^$/N;/^\\n$/D' | sed 's/^```[[:space:]]*$/```\\n/g' |"
+    "| sed '/^$/N;/^\\n$/D' | sed 's/^```$/```\\n/g' |"
     + " awk '{{if (NR==1 && NF==0) next}};1' | awk 'NR > 1{{print t}} {{t = $0}}END{{if (NF) print }}' "
 )
 CLEAN_CODEBLOCKS = "|sed 's/^```[[:space:]]/```/g' "
