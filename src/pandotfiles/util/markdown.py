@@ -1,49 +1,49 @@
 from subprocess import run
-from pathlib import Path
+from pathlib import path
 
-data_dir = Path(__file__).resolve().parents[1].joinpath("data")
+data_dir = path(__file__).resolve().parents[1].joinpath("data")
 
-PANDOC_MARKDOWN_OUTPUT_COMMANDS = (
+pandoc_markdown_output_commands = (
     "-f markdown-raw_html "
     "-t markdown+yaml_metadata_block-grid_tables-simple_tables-multiline_tables-latex_macros "
-    + "-L "
+    + "-l "
     + str(data_dir)
     + "/filters/math_spaces.lua"
-    + " -s --markdown-headings=atx --wrap=preserve -V header-includes= -V include-before= -V include-after= "
+    + " -s --markdown-headings=atx --wrap=preserve -v header-includes= -v include-before= -v include-after= "
 )
-PANDOC_MARKDOWN_OUTPUT_COMMANDS_NOYAML = (
+pandoc_markdown_output_commands_noyaml = (
     "-t markdown+yaml_metadata_block-grid_tables-simple_tables-multiline_tables-latex_macros "
-    + "-L "
+    + "-l "
     + str(data_dir)
     + "/filters/math_spaces.lua"
-    + " --markdown-headings=atx --wrap=preserve -V header-includes= -V include-before= -V include-after= "
+    + " --markdown-headings=atx --wrap=preserve -v header-includes= -v include-before= -v include-after= "
 )
-CLEAN_COMMENTS = r"|sed 's/^\\<!--\(.*\)--\\>/<!--\1-->/g' "
-CLEAN_WHITESPACE = (
-    "| sed '/^$/N;/^\\n$/D' | sed 's/^```$/```\\n/g' |"
-    + " awk '{{if (NR==1 && NF==0) next}};1' | awk 'NR > 1{{print t}} {{t = $0}}END{{if (NF) print }}' "
+clean_comments = r"|sed 's/^\\<!--\(.*\)--\\>/<!--\1-->/g' "
+clean_whitespace = (
+    "| sed '/^$/n;/^\\n$/d' | sed 's/^```$/```\\n/g' |"
+    + " awk '{{if (nr==1 && nf==0) next}};1' | awk 'nr > 1{{print t}} {{t = $0}}end{{if (nf) print }}' "
 )
-CLEAN_CODEBLOCKS = "|sed 's/^```[[:space:]]/```/g' "
+clean_codeblocks = "|sed 's/^```[[:space:]]/```/g' "
 
 
-def clean_markdown(file=None):
-    """If no input, use Stdin"""
+def clean_markdown(file=none):
+    """if no input, use stdin"""
 
-    LOCAL_PANDOC_MARKDOWN_COMMAND = (
+    local_pandoc_markdown_command = (
         "pandoc {filename} "
-        + PANDOC_MARKDOWN_OUTPUT_COMMANDS
-        + CLEAN_WHITESPACE
-        + CLEAN_COMMENTS
-        + CLEAN_CODEBLOCKS
+        + pandoc_markdown_output_commands
+        + clean_whitespace
+        + clean_comments
+        + clean_codeblocks
     )
-    if file is None:
-        run(LOCAL_PANDOC_MARKDOWN_COMMAND.format(filename=""), shell=True)
+    if file is none:
+        run(local_pandoc_markdown_command.format(filename=""), shell=true)
     else:
         run(
-            (LOCAL_PANDOC_MARKDOWN_COMMAND + " > tmp ; mv tmp {filename}").format(
+            (local_pandoc_markdown_command + " > tmp ; mv tmp {filename}").format(
                 filename=file
             ),
-            shell=True,
+            shell=true,
         )
 
 
